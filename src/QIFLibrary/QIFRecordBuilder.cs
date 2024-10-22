@@ -20,6 +20,8 @@ internal class QIFRecordBuilder(QIFDocumentType dataType) : IBuilder<QIFRecord>
         return dataType switch
         {
             QIFDocumentType.Investment => buildInvestment(),
+            QIFDocumentType.Bank => buildBankRecord(),
+            QIFDocumentType.Category => buildCategory(),
             _ => new QIFRecord(Date(), Amount(), Memo(), Status())
         };
     }
@@ -34,6 +36,16 @@ internal class QIFRecordBuilder(QIFDocumentType dataType) : IBuilder<QIFRecord>
         _details.Clear();
         return this;
     }
+
+    private QIFCategoryRecord buildCategory()
+        => new QIFCategoryRecord(Category(), Memo(), Budgeted());
+
+    private QIFBankRecord buildBankRecord()
+        => new QIFBankRecord(Date(), Amount(), Memo(), Status(),
+            Payee(),
+            Category(),
+            Address(),
+            Check(), Flagged());
 
     private QIFInvestment buildInvestment()
     {
@@ -56,7 +68,7 @@ internal class QIFRecordBuilder(QIFDocumentType dataType) : IBuilder<QIFRecord>
                 "CGShortX" => throw new NotSupportedException(),
                 "Div" => new QIFInvestment(Date(), Amount(), Memo(), Status(), Check(), Payee(), Address(), Category(), investmentType, SecurityName(), Price(), Quantity(), Commission(), SplitAmount()),
                 "DivX" => throw new NotSupportedException(),
-                "IntInc" => throw new NotSupportedException(),
+                "IntInc" => new QIFInvestment(Date(), Amount(), Memo(), Status(), Check(), Payee(), Address(), Category(), investmentType, SecurityName(), Price(), Quantity(), Commission(), SplitAmount()),
                 "IntIncX" => throw new NotSupportedException(),
                 "ReinvDiv" => throw new NotSupportedException(),
                 "ReinvInt" => throw new NotSupportedException(),
@@ -104,36 +116,21 @@ internal class QIFRecordBuilder(QIFDocumentType dataType) : IBuilder<QIFRecord>
     private Decimal Quantity() => Value('Q', ParseDecimal);
     private Decimal Commission() => Value('O', ParseDecimal);
     private Decimal AmountTransferred() => Value('$', ParseDecimal);
-    private string Budgeted() => Value('B');
+    private Decimal Budgeted() => Value('B', ParseDecimal);
     private string ExtendedData() => Value('X');
 
-    private string Value(char key) => Value(key, s => s, String.Empty);
+    private string Value(char key)
+        => Value(key, s => s, String.Empty);
 
     private T Value<T>(char key, Func<string, T> f) where T : struct
-    {
-        return _details.TryGetValue(key, out string? value) ? f(value) : default;
-    }
+        => _details.TryGetValue(key, out string? value) ? f(value) : default;
 
     private T Value<T>(char key, Func<string, T> f, T defaultValue)
-    {
-        return _details.TryGetValue(key, out string? value) ? f(value) : defaultValue;
-    }
+        => _details.TryGetValue(key, out string? value) ? f(value) : defaultValue;
 
-    private static decimal ParseDecimal(string s) => Decimal.TryParse(s, out var decimalValue) ? decimalValue : 0;
+    private static decimal ParseDecimal(string s)
+        => Decimal.TryParse(s, out var decimalValue) ? decimalValue : 0;
 
     private static DateTime ParseQIFDate(string s)
-    {
-        s = s.Replace("'", "/");
-        if (DateTime.TryParse(s, out DateTime result) ||
-            DateTime.TryParseExact(s, "M/d/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
-            DateTime.TryParseExact(s, "MM/d/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
-            DateTime.TryParseExact(s, "M/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
-            DateTime.TryParseExact(s, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
-            DateTime.TryParseExact(s, "M/d/yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out result) ||
-            DateTime.TryParse(s, out result))
-        {
-            return result;
-        }
-        return DateTime.MinValue;
-    }
+        => DateTime.TryParse(s.Replace("'", "/"), out DateTime result) ? result : DateTime.MinValue;
 }
