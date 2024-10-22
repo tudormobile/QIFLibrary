@@ -52,6 +52,10 @@ public class QIFReader
         {
             yield return record;
         }
+        if (record is QIFCategoryRecord)
+        {
+            yield return record;    // support only 1 category record? I do not know the category QIF format.
+        }
     }
 
     /// <summary>
