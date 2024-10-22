@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RootNamespace>Tudormobile.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <MajorMinorVer>1.0</MajorMinorVer>
+    <BuildVer>$([System.DateTime]::Now.ToString('yyMM'))</BuildVer>
+    <RevVer>$([System.DateTime]::Now.ToString('dd'))</RevVer>
+    <AssemblyVersion>$(MajorMinorVer).$(BuildVer).100$(RevVer)</AssemblyVersion>
+    <FileVersion>$(MajorMinorVer).$(BuildVer).100$(RevVer)</FileVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <PackageVersion>$(MajorMinorVer).$(BuildVer)</PackageVersion>
+    <Authors>WH Tudor</Authors>
+    <Title>QIF Library</Title>
+    <Description>Tools for accessing and manipulating QIF data</Description>
+    <Copyright>COPYRIGHT(C) TUDORMOBILE LLC</Copyright>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
+
+</Project>
