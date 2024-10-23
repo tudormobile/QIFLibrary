@@ -16,7 +16,11 @@ namespace Tudormobile.QIFLibrary;
 /// <param name="status">Cleared status.</param>
 public class QIFRecord(DateTime date, Decimal amount, String memo, String status)
 {
+    /// <summary>
+    /// An empty (invalid) QIF record.
+    /// </summary>
     public static QIFRecord Empty = new QIFRecord(DateTime.MinValue, 0, String.Empty, String.Empty);
+
     /// <summary>
     /// Date of the item.
     /// </summary>
