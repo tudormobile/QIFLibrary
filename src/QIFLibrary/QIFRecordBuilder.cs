@@ -17,6 +17,10 @@ internal class QIFRecordBuilder(QIFDocumentType dataType) : IBuilder<QIFRecord>
     /// <returns>A new QIF Record.</returns>
     public QIFRecord Build()
     {
+        if (Value('!') == "Account" || dataType == QIFDocumentType.Account)
+        {
+            return new QIFAccountRecord(Check(), Value('D'), Value('T'), Value('$', ParseDecimal), Value('L', ParseDecimal));
+        }
         return dataType switch
         {
             QIFDocumentType.Investment => buildInvestment(),

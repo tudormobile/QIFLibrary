@@ -33,6 +33,7 @@ public class QIFReader
         _builder.Clear();
 
         string? line = await _reader.ReadLineAsync();
+        if (line == null) return QIFRecord.Empty;
         while (line != null && line != "^")
         {
             _builder.Add(line);

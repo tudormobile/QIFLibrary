@@ -78,7 +78,7 @@ Q107
     public void DateFormatsTest()
     {
         var expected = 6;
-        var ms = new MemoryStream(Encoding.UTF8.GetBytes(_dateData));
+        using var ms = new MemoryStream(Encoding.UTF8.GetBytes(_dateData));
         var target = QIFReader.FromStream(ms);
         var actual = target.ReadRecordsAsync().ToBlockingEnumerable().Cast<QIFBankRecord>().ToList();
         target.Close();
@@ -97,7 +97,7 @@ Q107
     public void CategoryTest()
     {
         var expected = 1;
-        var ms = new MemoryStream(Encoding.UTF8.GetBytes(_catData));
+        using var ms = new MemoryStream(Encoding.UTF8.GetBytes(_catData));
         var target = QIFReader.FromStream(ms);
         var actual = target.ReadRecordsAsync().ToBlockingEnumerable().Cast<QIFCategoryRecord>().ToList();
         target.Close();
@@ -106,11 +106,65 @@ Q107
         Assert.AreEqual("Test Category", actual[0].Memo);
         Assert.AreEqual(1000m, actual[0].Budgeted);
         Assert.AreEqual("Investments:Stocks", actual[0].Category);
+    }
+
+    [TestMethod]
+    public void AccountTest()
+    {
+        var expected = 3;
+        using var ms = new MemoryStream(Encoding.UTF8.GetBytes(_accountData));
+        var target = QIFReader.FromStream(ms);
+        var actual = target.ReadRecordsAsync().ToBlockingEnumerable().ToList();
+        target.Close();
+        Assert.AreEqual(expected, actual.Count, "Failed to parse the correct number of records.");
+
+        var actual1 = (actual[0] as QIFAccountRecord)!;
+        var actual2 = (actual[1] as QIFAccountRecord)!;
+        var actual3 = (actual[2] as QIFAccountRecord)!;
+
+        // validate all properties
+        Assert.AreEqual("Name of the account", actual1.Name);
+        Assert.AreEqual("Description of the account", actual1.Description);
+        Assert.AreEqual("Type of account", actual1.AccountType);
+        Assert.AreEqual(12345m, actual1.Balance);
+        Assert.AreEqual(5678.00m, actual1.CreditLimit);
+
+        Assert.AreEqual("BofA", actual2.Name);
+        Assert.AreEqual("Bank of America Checking", actual2.Description);
+        Assert.AreEqual("Checking", actual2.AccountType);
+        Assert.AreEqual(2433m, actual2.Balance);
+        Assert.AreEqual(0m, actual2.CreditLimit);
+
+        Assert.AreEqual("Discover", actual3.Name);
+        Assert.AreEqual("Discover credit card", actual3.Description);
+        Assert.AreEqual("", actual3.AccountType);
+        Assert.AreEqual(0m, actual3.Balance);
+        Assert.AreEqual(7000m, actual3.CreditLimit);
 
     }
 
 
     // Test Data below
+    // N=name, D=description, T=type of account, $=balance, L=credit card limit
+    private string _accountData = @"!Account
+NName of the account
+DDescription of the account
+TType of account
+$12,345
+L5678
+^
+!Account
+NBofA
+DBank of America Checking
+TChecking
+$2,433
+^
+!Account
+NDiscover
+DDiscover credit card
+L7000
+^";
+
     private string _catData = @"!Type:Cat
 MTest Category
 B1000
