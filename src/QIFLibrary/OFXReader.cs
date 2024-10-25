@@ -4,13 +4,25 @@ using System.Runtime.CompilerServices;
 
 namespace Tudormobile.QIFLibrary;
 
+/// <summary>
+/// Provides mechanisms to read OFX data.
+/// </summary>
 public class OFXReader
 {
+    private bool _ignoreWhitespace;
     private TextReader _reader;
+    private readonly Lazy<OFXTokenReader> _tokenReader;
 
-    public OFXReader(TextReader reader)
+    /// <summary>
+    /// Creates and initializes a new instance.
+    /// </summary>
+    /// <param name="reader">Text reader to use as the data source.</param>
+    /// <param name="ignoreWhitespace">True if whitespace should be ignored.</param>
+    public OFXReader(TextReader reader, bool ignoreWhitespace = true)
     {
         _reader = reader;
+        _ignoreWhitespace = ignoreWhitespace;
+        _tokenReader = new Lazy<OFXTokenReader>(() => new OFXTokenReader(_reader));
     }
 
     /// <summary>

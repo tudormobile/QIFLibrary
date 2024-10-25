@@ -50,4 +50,16 @@ public class OFXHeadersTests
         Assert.AreEqual(expected, target["VERSION"]);
         Assert.AreNotSame(target, OFXHeaders.Default(), "Must return new instance for each default method call.");
     }
+
+    [TestMethod]
+    public void AsEnumerableTest()
+    {
+        var target = new OFXHeaders()
+            .Add("one", "1")
+            .Add("two", "2")
+            .Add("three", "3");
+
+        var actual = target.AsEnumerable().ToList();
+        Assert.AreEqual(3, actual.Count);
+    }
 }

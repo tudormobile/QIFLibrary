@@ -13,6 +13,9 @@ namespace Tudormobile.QIFLibrary;
 /// </summary>
 public class OFXDocument
 {
+    private const string DEFAULT_VERSION = "102";
+    private string? _version;
+
     /// <summary>
     /// HTTP COntent Type
     /// </summary>
@@ -22,6 +25,15 @@ public class OFXDocument
     /// Default file extension.
     /// </summary>
     public static readonly string FILE_EXTENSION = "ofx";
+
+    /// <summary>
+    /// OFX Document Verion.
+    /// </summary>
+    public string Version
+    {
+        get => _version ?? DEFAULT_VERSION;
+        set => _version = value;
+    }
 
     /// <summary>
     /// Document headers.
