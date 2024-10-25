@@ -81,8 +81,7 @@ public class OFXDocument
                     while (xmlReader.Read())
                     {
                         Debug.WriteLine(xmlReader.Name);
-                       xmlReader.ReadString();
-                        xmlReader.ReadEndElement();
+                        var s = xmlReader.ReadOuterXml();
                     }
                 }
             }
