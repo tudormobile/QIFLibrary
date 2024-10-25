@@ -23,7 +23,7 @@ public class OFXTokenReader
     /// <summary>
     /// Create and initialize a new instance.
     /// </summary>
-    /// <param name="reader"></param>
+    /// <param name="reader">Text reader to use as the data source.</param>
     public OFXTokenReader(TextReader reader)
     {
         _reader = reader;

@@ -19,6 +19,16 @@ public class OFXDocumentTests
         Assert.AreEqual("application/x-ofx", OFXDocument.CONTENT_TYPE);
         Assert.AreEqual("ofx", OFXDocument.FILE_EXTENSION);
         Assert.AreEqual(0, target.MessageSets.Count, "Must contain initialized message list of zero message sets.");
+        Assert.AreEqual("102", target.Version, "Default value for 'Version' property must be 102");
+    }
+
+    [TestMethod]
+    public void VersionTest()
+    {
+        var expected = "1234";
+        var target = new OFXDocument() { Version = expected };
+        var actual = target.Version;
+        Assert.AreEqual(expected, actual);
     }
 
     [TestMethod]
