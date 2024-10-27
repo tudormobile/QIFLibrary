@@ -1,4 +1,6 @@
-﻿namespace Tudormobile.QIFLibrary;
+﻿using System.Numerics;
+
+namespace Tudormobile.QIFLibrary;
 
 /// <summary>
 /// OFX Message.
@@ -14,6 +16,11 @@ public class OFXMessage
     /// Message name (identifies type).
     /// </summary>
     public string Name { get; set; } = "";
+
+    /// <summary>
+    /// Properties associated with the message.
+    /// </summary>
+    public IList<OFXProperty> Properties { get; } = [];
 
     /// <summary>
     /// Message status.

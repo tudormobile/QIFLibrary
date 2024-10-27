@@ -11,7 +11,19 @@ namespace Tudormobile.QIFLibrary;
 /// </summary>
 public class OFXHeaders
 {
+    private const string DEFAULT_VERSION = "100";
+    private const string VERSION_KEY = "OFXHEADER";
+    private string? _version;
     private Dictionary<string, string> _headers = [];
+
+    /// <summary>
+    /// OFX Headers Version.
+    /// </summary>
+    public string Version
+    {
+        get => _version ?? (_headers.ContainsKey(VERSION_KEY) ? _headers[VERSION_KEY] : DEFAULT_VERSION);
+        set => _version = value;
+    }
 
     /// <summary>
     /// Gets or sets the value associated with the specified key.
