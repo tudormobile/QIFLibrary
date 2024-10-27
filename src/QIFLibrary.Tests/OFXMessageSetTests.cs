@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tudormobile.QIFLibrary.Tests;
+namespace QIFLibrary.Tests;
 
 [TestClass]
 public class OFXMessageSetTests

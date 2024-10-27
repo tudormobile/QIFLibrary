@@ -14,6 +14,7 @@ namespace Tudormobile.QIFLibrary;
 public class OFXDocument
 {
     private const string DEFAULT_VERSION = "102";
+    private const string VERSION_KEY = "VERSION";
     private string? _version;
 
     /// <summary>
@@ -27,11 +28,11 @@ public class OFXDocument
     public static readonly string FILE_EXTENSION = "ofx";
 
     /// <summary>
-    /// OFX Document Verion.
+    /// OFX Document Version.
     /// </summary>
     public string Version
     {
-        get => _version ?? DEFAULT_VERSION;
+        get => _version ?? (Headers[VERSION_KEY].Length > 0 ? Headers[VERSION_KEY] : DEFAULT_VERSION);
         set => _version = value;
     }
 
@@ -74,34 +75,21 @@ public class OFXDocument
             var result = new OFXDocument();
             var ofxReader = new OFXReader(reader);
 
+            // Read the headers
             while (ofxReader.TryReadHeader(out var header))
             {
                 result.Headers[header.Key] = header.Value;
             }
 
-            var settings = new XmlReaderSettings()
+            // Move to the start of the OFX data
+            if (ofxReader.TryMoveToStart(out OFXTokenReader.OFXToken? token, "OFX"))
             {
-                IgnoreWhitespace = true,
-            };
-            var xmlReader = XmlReader.Create(reader, settings);
-            try
-            {
-                xmlReader.Read();
-                if (xmlReader.IsStartElement("OFX"))
+                // Parse into MessageSets
+                while (ofxReader.TryReadMessageSet(out var messageSet))
                 {
-                    // Read all the message sets.
-                    while (xmlReader.Read())
-                    {
-                        Debug.WriteLine(xmlReader.Name);
-                        var s = xmlReader.ReadOuterXml();
-                    }
+                    result.MessageSets.Add(messageSet);
                 }
             }
-            finally
-            {
-                xmlReader.Close();
-            }
-
             return result;
         }
         finally

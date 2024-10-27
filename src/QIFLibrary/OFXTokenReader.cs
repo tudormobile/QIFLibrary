@@ -21,6 +21,15 @@ public class OFXTokenReader
     private OFXToken? _peek;
 
     /// <summary>
+    /// True to ignore whitespace tokens.
+    /// </summary>
+    /// <remarks>
+    /// The default value is (false). This value can be changed
+    /// anytime and affects both Peek() and Read() methods.
+    /// </remarks>
+    public bool IgnoreWhiteSpace { get; set; } = false;
+
+    /// <summary>
     /// Create and initialize a new instance.
     /// </summary>
     /// <param name="reader">Text reader to use as the data source.</param>
@@ -46,6 +55,7 @@ public class OFXTokenReader
     public OFXToken Read()
     {
         var result = _peek ?? readImpl();
+        if (IgnoreWhiteSpace && result.TokenType == OFXTokenType.WhiteSpace) return Read();
         _peek = null;
         return result;
     }
@@ -112,7 +122,7 @@ public class OFXTokenReader
         /// Start of an OFX tag.
         /// </summary>
         /// <remarks>This whitespace is contained in the data.</remarks>
-        Whitespace,
+        WhiteSpace,
 
         /// <summary>
         /// Content.
@@ -157,7 +167,7 @@ public class OFXTokenReader
 
         // Whitespace?
         string tag = Encoding.UTF8.GetString(_buffer, 0, _position);
-        if (String.IsNullOrWhiteSpace(tag)) return new OFXToken(OFXTokenType.Whitespace, tag);
+        if (String.IsNullOrWhiteSpace(tag)) return new OFXToken(OFXTokenType.WhiteSpace, tag);
 
         // start or end element?
         if (_position > 2 && tag[_position - 1] == '>') return tag[1] == '/' ?

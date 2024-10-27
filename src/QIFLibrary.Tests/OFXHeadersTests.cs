@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 using Tudormobile.QIFLibrary;
@@ -16,7 +17,27 @@ public class OFXHeadersTests
     {
         var target = new OFXHeaders();
         Assert.IsFalse(target.HasValue(""));
+        Assert.AreEqual(0, target.Count, "Must be initialized with zero headers.");
     }
+
+    [TestMethod]
+    public void VersionTest()
+    {
+        var target = new OFXHeaders();
+        Assert.AreEqual("100", target.Version, "Default value must be set.");
+
+        var expected = "101";
+        target.Add("OFXHEADER", expected);
+        var actual = target.Version;
+        Assert.AreEqual(expected, actual, "Header value for version overrides.");
+
+        expected = "102";
+        target.Version = expected;
+        actual = target.Version;
+        Assert.AreEqual(expected, actual, "Explicitly set version overrides headers and default.");
+
+    }
+
     [TestMethod]
     public void ValueTest()
     {
