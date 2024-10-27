@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics;
+using System.Globalization;
 
 namespace Tudormobile.QIFLibrary;
 
@@ -84,5 +85,22 @@ public static class OFXPropertyExtensions
             'f' => false,
             _ => defaultValue,
         } : defaultValue;
+
+    /// <summary>
+    /// Convert to current type.
+    /// </summary>
+    /// <param name="property">Property to convert.</param>
+    /// <param name="defaultCurrency">Default value to use.</param>
+    /// <returns>Property value converted to the currency type, or the default value if conversion is not successful.</returns>
+    public static OFXCurrencyType AsCurrency(this OFXProperty property, OFXCurrencyType defaultCurrency = OFXCurrencyType.USD)
+        => Enum.TryParse<OFXCurrencyType>(property.Value, ignoreCase: true, out var currency) ? currency : defaultCurrency;
+
+    /// <summary>
+    /// Convert to transaction type.
+    /// </summary>
+    /// <param name="property">Property to convert.</param>
+    /// <returns>Property value converted to the transaction type, or 'OTHER' if not successful.</returns>
+    public static OFXTransactionType AsTransactionType(this OFXProperty property)
+        => Enum.TryParse<OFXTransactionType>(property.Value, ignoreCase: true, out var transactionType) ? transactionType : OFXTransactionType.OTHER;
 
 }
