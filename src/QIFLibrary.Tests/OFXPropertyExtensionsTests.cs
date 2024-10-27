@@ -12,6 +12,33 @@ namespace QIFLibrary.Tests;
 public class OFXPropertyExtensionsTests
 {
     [TestMethod]
+    public void AsTransactionTypeTest()
+    {
+        var name = "Some Name";
+        var value = "Fee";
+        var expected = OFXTransactionType.FEE;
+
+        var target = new OFXProperty(name, value);
+        Assert.AreEqual(expected, target.AsTransactionType());
+
+        // check the other type
+        var actual = new OFXProperty("Bad", "Value").AsTransactionType();
+        Assert.AreEqual(OFXTransactionType.OTHER, actual);
+    }
+
+    [TestMethod]
+    public void AsCurrencyTest()
+    {
+        var expected = OFXCurrencyType.USD;
+        var target = new OFXProperty("name", "value");
+        Assert.AreEqual(expected, target.AsCurrency(expected), "Failed too utilize default value.");
+        Assert.AreEqual(expected, target.AsCurrency(), "Failed too utilize default value USD when unrecognized and not explicit default provided.");
+
+        var actual = new OFXProperty("CURDEF", "CaD").AsCurrency(); // case should not matter?
+        Assert.AreEqual(OFXCurrencyType.CAD, actual);
+    }
+
+    [TestMethod]
     public void AsDateTest1()
     {
         var expected = new DateTime(1964, 3, 11, 2, 50, 0, DateTimeKind.Utc);
