@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tudormobile.QIFLibrary.Converters;
+using Tudormobile.QIFLibrary.Entities;
 using Tudormobile.QIFLibrary.Interfaces;
 
 namespace Tudormobile.QIFLibrary;
@@ -24,7 +25,7 @@ public class OFXPropertyConverter
     {
         var runtimeType = typeof(T);
 
-        if (runtimeType == typeof(OFXInstitution)) return GetInstitution(root) as T;
+        if (runtimeType == typeof(Institution)) return Convert(root, new InstitutionConverter()) as T;
 
         throw new NotSupportedException();
     }
@@ -39,6 +40,4 @@ public class OFXPropertyConverter
     public T? Convert<T>(OFXProperty root, IPropertyConverter<T> converter)
         => converter.Convert(root);
 
-    // move this to extensions class?
-    public OFXInstitution? GetInstitution(OFXProperty root) => new InstitutionConverter().Convert(root);
 }

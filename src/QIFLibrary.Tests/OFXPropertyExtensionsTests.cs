@@ -12,6 +12,16 @@ namespace QIFLibrary.Tests;
 public class OFXPropertyExtensionsTests
 {
     [TestMethod]
+    public void AsLanguageTest()
+    {
+        var target = new OFXProperty("name", "ENG");
+        Assert.AreEqual(OFXLanguage.ENG, target.AsLanguage());
+
+        target.Value = "bad value";
+        Assert.AreEqual(OFXLanguage.UNKNOWN, target.AsLanguage());
+    }
+
+    [TestMethod]
     public void IsEmptyTest()
     {
         var target = new OFXProperty("name");

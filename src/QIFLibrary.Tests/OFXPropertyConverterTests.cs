@@ -9,6 +9,8 @@ using System.Net.Http.Headers;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography.X509Certificates;
 using Tudormobile.QIFLibrary.Interfaces;
+using Tudormobile.QIFLibrary.Entities;
+using Tudormobile.QIFLibrary.Converters;
 
 namespace QIFLibrary.Tests;
 
@@ -54,7 +56,7 @@ public class OFXPropertyConverterTests
         Assert.AreEqual(name, result!.Name);
         Assert.AreEqual(id, result.Id);
 
-        result = target.Convert<OFXInstitution>(p);
+        result = target.Convert<Institution>(p);
         Assert.AreEqual(name, result!.Name);
         Assert.AreEqual(id, result!.Id);
     }
@@ -79,7 +81,7 @@ public class OFXPropertyConverterTests
         Assert.AreEqual(name, result!.Name);
         Assert.AreEqual(id, result.Id);
 
-        result = target.Convert<OFXInstitution>(p);
+        result = target.Convert<Institution>(p);
         Assert.AreEqual(name, result!.Name);
         Assert.AreEqual(id, result!.Id);
     }

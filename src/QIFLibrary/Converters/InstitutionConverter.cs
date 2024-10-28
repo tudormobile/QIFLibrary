@@ -1,11 +1,12 @@
-﻿using Tudormobile.QIFLibrary.Interfaces;
+﻿using Tudormobile.QIFLibrary.Entities;
+using Tudormobile.QIFLibrary.Interfaces;
 
 namespace Tudormobile.QIFLibrary.Converters
 {
     /// <summary>
     /// Provides mechanism for converting an OFX property to an Institution.
     /// </summary>
-    public class InstitutionConverter : PropertyConverterBase<OFXInstitution>
+    public class InstitutionConverter : PropertyConverterBase<Institution>
     {
         /// <summary>
         /// Key property for this entity.
@@ -13,14 +14,28 @@ namespace Tudormobile.QIFLibrary.Converters
         public static string KEY = "FI";
 
         /// <inheritdoc/>
-        public override OFXInstitution? Convert(OFXProperty root)
+        public override Institution? Convert(OFXProperty root)
         {
             var p = digForProperty(root, KEY);
-            return p == null ? null : new OFXInstitution()
+            return p == null ? null : new Institution()
             {
                 Name = p.Children["ORG"].Value,
                 Id = p.Children["FID"].Value
             };
         }
     }
+
+    /// <inheritdoc/>
+    public static partial class OFXPropertyConverterExtensions
+    {
+        /// <summary>
+        /// Converts OFX property to institution.
+        /// </summary>
+        /// <param name="converter">Converter to extend.</param>
+        /// <param name="root">Root property.</param>
+        /// <returns>Intitusion if successful; otherwise (null).</returns>
+        public static Institution? GetInstitution(this OFXPropertyConverter converter, OFXProperty root)
+            => new InstitutionConverter().Convert(root);
+    }
+
 }
