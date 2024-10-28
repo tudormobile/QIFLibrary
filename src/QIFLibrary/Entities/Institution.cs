@@ -4,20 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tudormobile.QIFLibrary;
+namespace Tudormobile.QIFLibrary.Entities;
 
 /// <summary>
 /// Financial institution.
 /// </summary>
-public class OFXInstitution
+public class Institution
 {
     /// <summary>
     /// Name of the institution.
     /// </summary>
-    public String Name { get; set; } = String.Empty;
+    public string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// Financial institution identifier.
     /// </summary>
-    public String Id { get; set; } = String.Empty;
+    public string Id { get; set; } = string.Empty;
 }
