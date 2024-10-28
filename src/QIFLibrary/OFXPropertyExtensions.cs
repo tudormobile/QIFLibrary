@@ -11,6 +11,20 @@ public static class OFXPropertyExtensions
     private static char[] splitChars = ['[', ']', ':'];
 
     /// <summary>
+    /// Determine if a property is empty.
+    /// </summary>
+    /// <param name="property">Property to extend.</param>
+    /// <returns>True if property is empty; otherwise false.</returns>
+    public static bool IsEmpty(this OFXProperty property) => string.IsNullOrEmpty(property.Value);
+
+    /// <summary>
+    /// Determine if a property has a value.
+    /// </summary>
+    /// <param name="property">Property to extend.</param>
+    /// <returns>True if property is empty; otherwise false.</returns>
+    public static bool HasValue(this OFXProperty property) => !property.IsEmpty();
+
+    /// <summary>
     /// Convert a property value to a date.
     /// </summary>
     /// <param name="property">Property to convert.</param>

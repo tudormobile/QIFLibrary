@@ -12,6 +12,22 @@ namespace QIFLibrary.Tests;
 public class OFXPropertyExtensionsTests
 {
     [TestMethod]
+    public void IsEmptyTest()
+    {
+        var target = new OFXProperty("name");
+        Assert.IsTrue(target.IsEmpty());
+        Assert.IsFalse(target.HasValue());
+    }
+
+    [TestMethod]
+    public void HasValueTest()
+    {
+        var target = new OFXProperty("name", "value");
+        Assert.IsFalse(target.IsEmpty());
+        Assert.IsTrue(target.HasValue());
+    }
+
+    [TestMethod]
     public void AsTransactionTypeTest()
     {
         var name = "Some Name";
