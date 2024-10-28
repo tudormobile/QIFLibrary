@@ -5,12 +5,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tudormobile.QIFLibrary;
+using Tudormobile.QIFLibrary.Entities;
 
 namespace QIFLibrary.Tests;
 
 [TestClass]
 public class OFXPropertyExtensionsTests
 {
+    [TestMethod]
+    public void AsAccountTypeTest()
+    {
+        var expected = OFXAccountType.CREDITLINE;
+        var target = new OFXProperty("name", expected.ToString());
+
+        var actual = target.AsAccountType();
+        Assert.AreEqual(expected, actual);
+
+        target.Value = "bad value";
+        Assert.AreEqual(OFXAccountType.UNKNOWN, target.AsAccountType());
+    }
+
     [TestMethod]
     public void AsLanguageTest()
     {
