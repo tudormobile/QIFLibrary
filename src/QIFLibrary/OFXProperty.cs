@@ -18,7 +18,7 @@ public class OFXProperty
     /// <summary>
     /// Child Properties.
     /// </summary>
-    public List<OFXProperty> Children { get; } = new List<OFXProperty>();
+    public OFXPropertyCollection Children { get; } = [];
 
     /// <summary>
     /// Create and initialize a new instance.

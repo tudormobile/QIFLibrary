@@ -144,6 +144,10 @@ NEWFILEUID:NONE
         Assert.AreEqual(OFXStatus.StatusSeverity.INFO, target.MessageSets[1].Messages[0].Status.Severity);
         Assert.AreEqual("STMTRS", target.MessageSets[1].Messages[0].Properties[0].Name);
         Assert.AreEqual(5, target.MessageSets[1].Messages[0].Properties[0].Children.Count);
+
+        // some converters?
+        var actual = new Tudormobile.QIFLibrary.Converters.InstitutionConverter().Convert(target.MessageSets[0].Messages[0].Properties[2]);
+
     }
 
 }
