@@ -47,6 +47,11 @@ public class OFXDocument
     public IList<OFXMessageSet> MessageSets { get; } = [];
 
     /// <summary>
+    /// Root element, if it exists.
+    /// </summary>
+    public OFXProperty Root { get; private set; } = new OFXProperty("");
+
+    /// <summary>
     /// Parses data into a OFX Document.
     /// </summary>
     /// <param name="utf8Stream">OFX text to parse.</param>
@@ -84,10 +89,22 @@ public class OFXDocument
             // Move to the start of the OFX data
             if (ofxReader.TryMoveToStart(out OFXTokenReader.OFXToken? token, "OFX"))
             {
+                result.Root = new OFXProperty("OFX");
                 // Parse into MessageSets
                 while (ofxReader.TryReadMessageSet(out var messageSet))
                 {
                     result.MessageSets.Add(messageSet);
+                    var messageSetProp = new OFXProperty(messageSet.MessageSetType.ToString());
+                    foreach (var m in messageSet.Messages)
+                    {
+                        var messageProp = new OFXProperty(m.Name);
+                        foreach (var child in m.Properties)
+                        {
+                            messageProp.Children.Add(child);
+                        }
+                        messageSetProp.Children.Add(messageProp);
+                    }
+                    result.Root.Children.Add(messageSetProp);
                 }
             }
             return result;

@@ -125,4 +125,12 @@ public static class OFXPropertyExtensions
     public static OFXLanguage AsLanguage(this OFXProperty property)
         => Enum.TryParse<OFXLanguage>(property.Value, ignoreCase: true, out var transactionType) ? transactionType : OFXLanguage.UNKNOWN;
 
+    /// <summary>
+    /// Convert to account type.
+    /// </summary>
+    /// <param name="property">Property to convert.</param>
+    /// <returns>Property value converted to the transaction type, or 'UNKNOWN' if not successful.</returns>
+    public static OFXAccountType AsAccountType(this OFXProperty property)
+        => Enum.TryParse<OFXAccountType>(property.Value, ignoreCase: true, out var transactionType) ? transactionType : OFXAccountType.UNKNOWN;
+
 }

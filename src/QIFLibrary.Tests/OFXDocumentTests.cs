@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tudormobile.QIFLibrary;
+using Tudormobile.QIFLibrary.Converters;
+using Tudormobile.QIFLibrary.Entities;
 
 namespace QIFLibrary.Tests;
 
@@ -147,6 +149,12 @@ NEWFILEUID:NONE
 
         // some converters?
         var actual = new Tudormobile.QIFLibrary.Converters.InstitutionConverter().Convert(target.MessageSets[0].Messages[0].Properties[2]);
+
+        var account = new OFXPropertyConverter().GetAccount(target.Root);
+
+        Assert.AreEqual("221379824", account.InstitutionId);
+        Assert.AreEqual("67035K90", account.AccountId);
+        Assert.AreEqual(Account.AccountTypes.CHECKING, account.AccountType);
 
     }
 
