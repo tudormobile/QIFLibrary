@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Tudormobile.QIFLibrary.Entities;
 
+/// <summary>
+/// Represents a financial transaction.
+/// </summary>
 public class Transaction
 {
     /*
@@ -16,11 +19,35 @@ public class Transaction
         <NAME>ACH Withdrawal
         <MEMO>VIKING RIVER CRU - 8182271234
     */
+
+    /// <summary>
+    /// Type of the transaction.
+    /// </summary>
     public TransactionTypes TransactionType { get; set; } = TransactionTypes.UNKNOWN;
+
+    /// <summary>
+    /// Date posted.
+    /// </summary>
     public DateTime DatePosted { get; set; } = default;
+
+    /// <summary>
+    /// Amount.
+    /// </summary>
     public decimal Amount { get; set; } = default;
+
+    /// <summary>
+    /// Unique transaction identifier.
+    /// </summary>
     public string Id { get; set; }
+
+    /// <summary>
+    /// Name of the transaction.
+    /// </summary>
     public String Name { get; set; } = String.Empty;
+
+    /// <summary>
+    /// Memo.
+    /// </summary>
     public String Memo { get; set; } = String.Empty;
 
     /// <summary>
@@ -126,5 +153,5 @@ public class TransactionList
     /// <summary>
     /// Transaction items.
     /// </summary>
-    public IList<Transaction> Items { get; } = new List<Transaction>();
+    public IList<Transaction> Items { get; } = [];
 }

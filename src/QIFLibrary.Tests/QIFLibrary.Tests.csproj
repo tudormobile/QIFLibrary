@@ -15,6 +15,7 @@
     <None Remove="TestAssets\bonds.qif" />
     <None Remove="TestAssets\Quicken.qfx" />
     <None Remove="TestAssets\retirement.qif" />
+    <None Remove="TestAssets\temp.ofx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +32,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="TestAssets\retirement.qif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestAssets\temp.ofx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -6,12 +6,39 @@ using System.Text;
 using System.Threading.Tasks;
 using Tudormobile.QIFLibrary;
 using Tudormobile.QIFLibrary.Entities;
+using static Tudormobile.QIFLibrary.Entities.Position;
 
 namespace QIFLibrary.Tests;
 
 [TestClass]
 public class OFXPropertyExtensionsTests
 {
+    [TestMethod]
+    public void AsPositionAccountTypeTest()
+    {
+        var expected = OFXPositionAccountTypes.MARGIN;
+        var target = new OFXProperty("name", expected.ToString());
+
+        var actual = target.AsPositionAccountType();
+        Assert.AreEqual(expected, actual);
+
+        target.Value = "bad value";
+        Assert.AreEqual(OFXPositionAccountTypes.OTHER, target.AsPositionAccountType());
+    }
+
+    [TestMethod]
+    public void AsPositionTypeTest()
+    {
+        var expected = OFXPositionTypes.LONG;
+        var target = new OFXProperty("name", expected.ToString());
+
+        var actual = target.AsPositionType();
+        Assert.AreEqual(expected, actual);
+
+        target.Value = "bad value";
+        Assert.AreEqual(OFXPositionTypes.UNKNOWN, target.AsPositionType());
+    }
+
     [TestMethod]
     public void AsAccountTypeTest()
     {

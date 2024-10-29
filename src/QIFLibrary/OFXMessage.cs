@@ -26,5 +26,12 @@ public class OFXMessage
     /// Message status.
     /// </summary>
     public OFXStatus Status { get; set; } = new OFXStatus();
+
+    public OFXProperty AsProperty()
+    {
+        var result = new OFXProperty(Name);
+        result.Children.AddRange(Properties);
+        return result;
+    }
 }
 

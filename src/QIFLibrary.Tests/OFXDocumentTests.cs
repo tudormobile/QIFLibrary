@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -152,6 +153,7 @@ NEWFILEUID:NONE
 
         var account = new OFXPropertyConverter().GetAccount(target.Root);
 
+        Assert.IsNotNull(account);
         Assert.AreEqual("221379824", account.InstitutionId);
         Assert.AreEqual("67035K90", account.AccountId);
         Assert.AreEqual(Account.AccountTypes.CHECKING, account.AccountType);
@@ -162,4 +164,30 @@ NEWFILEUID:NONE
 
     }
 
+    [TestMethod]
+    public void OFXInvestmentFileTest()
+    {
+        var filename = Path.Combine("TestAssets", "temp.ofx");
+        var target = OFXDocument.ParseFile(filename);
+
+        // find a position list
+        var positions = new OFXPropertyConverter().GetPositionList(target.Root);
+
+        var seclist = target.MessageSets[2].Messages[0].AsProperty();
+        var securities = new OFXPropertyConverter().GetSecurityList(seclist);
+
+        Assert.IsNotNull(positions);
+        Assert.IsNotNull(securities);
+        foreach (var item in positions.Items)
+        {
+            var id = item.SecurityId;
+            Debug.WriteLine($"Position: {id} was found (of {positions.Items.Count} total):");
+
+            var security = securities.Items.FirstOrDefault(x => x.Id == id);
+
+            Assert.IsNotNull(security);
+            Debug.WriteLine($">>>Security: '{security.Name}' ({security.Id}) was found with position {item.Units} shares at ${item.UnitPrice}");
+        }
+
+    }
 }

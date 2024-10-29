@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Tudormobile.QIFLibrary.Entities.Transaction;
 
 namespace Tudormobile.QIFLibrary.Entities
 {
@@ -12,6 +13,48 @@ namespace Tudormobile.QIFLibrary.Entities
     public class Security
     {
         // allowed types = stock, mutual fund, option, debt, or other.
+
+        /// <summary>
+        /// Allow security types.
+        /// </summary>
+        public enum SecurityTypes
+        {
+            /// <summary>
+            /// Unknown or unset type.
+            /// </summary>
+            UNKNOWN = 0,
+
+            /// <summary>
+            /// Stock.
+            /// </summary>
+            STOCK,
+
+            /// <summary>
+            /// Mutual Fund.
+            /// </summary>
+            MUTUALFUND,
+
+            /// <summary>
+            /// Option.
+            /// </summary>
+            OPTION,
+
+            /// <summary>
+            /// Debt.
+            /// </summary>
+            DEBT,
+
+            /// <summary>
+            /// Other security type.
+            /// </summary>
+            OTHER
+        }
+
+        /// <summary>
+        /// Type of this security.
+        /// </summary>
+        public SecurityTypes SecurityType { get; set; } = SecurityTypes.UNKNOWN;
+
 
         /// <summary>
         /// Unique identifier.
@@ -64,6 +107,6 @@ namespace Tudormobile.QIFLibrary.Entities
         /// <summary>
         /// Security items.
         /// </summary>
-        public IList<Security> Items { get; } = new List<Security>();
+        public IList<Security> Items { get; } = [];
     }
 }
