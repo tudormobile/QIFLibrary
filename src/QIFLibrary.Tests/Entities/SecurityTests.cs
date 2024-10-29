@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QIFLibrary.Tests;
+namespace QIFLibrary.Tests.Entities;
 
 [TestClass]
 public class SecurityTests

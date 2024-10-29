@@ -148,13 +148,17 @@ NEWFILEUID:NONE
         Assert.AreEqual(5, target.MessageSets[1].Messages[0].Properties[0].Children.Count);
 
         // some converters?
-        var actual = new Tudormobile.QIFLibrary.Converters.InstitutionConverter().Convert(target.MessageSets[0].Messages[0].Properties[2]);
+        var actual = new InstitutionConverter().Convert(target.MessageSets[0].Messages[0].Properties[2]);
 
         var account = new OFXPropertyConverter().GetAccount(target.Root);
 
         Assert.AreEqual("221379824", account.InstitutionId);
         Assert.AreEqual("67035K90", account.AccountId);
         Assert.AreEqual(Account.AccountTypes.CHECKING, account.AccountType);
+
+        var transactions = new OFXPropertyConverter().GetTransactionList(target.Root);
+        Assert.IsNotNull(transactions);
+        Assert.AreEqual(7, transactions.Items.Count);
 
     }
 
