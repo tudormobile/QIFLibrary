@@ -189,7 +189,6 @@ public class OFXReader
                     result = true;
                 }
             }
-            Debug.WriteLine($"{tag.TokenType} - {tag.Data}");
         }
 
         return result;

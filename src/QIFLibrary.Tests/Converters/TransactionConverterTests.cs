@@ -43,6 +43,7 @@ public class TransactionConverterTests
         Assert.AreEqual(Transaction.TransactionTypes.CASH, actual.TransactionType);
 
         var list = (target as IPropertyConverter<TransactionList>).Convert(root);
+        Assert.IsNotNull(list);
         Assert.AreEqual(1, list.Items.Count);
         Assert.AreEqual(new DateTime(2024, 10, 21, 10, 43, 15, DateTimeKind.Utc).ToLocalTime(), list.Start);
         Assert.AreEqual(new DateTime(2024, 10, 21, 10, 43, 16, DateTimeKind.Utc).ToLocalTime(), list.End);
@@ -88,8 +89,7 @@ public class TransactionConverterTests
     {
         var root = new OFXProperty("Bad Root");
 
-        var target = new OFXPropertyConverter(
-            );
+        var target = new OFXPropertyConverter();
         var actual = target.GetTransaction(root);
 
         Assert.IsNull(actual);

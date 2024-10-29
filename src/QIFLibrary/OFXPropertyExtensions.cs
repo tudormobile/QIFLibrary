@@ -129,8 +129,24 @@ public static class OFXPropertyExtensions
     /// Convert to account type.
     /// </summary>
     /// <param name="property">Property to convert.</param>
-    /// <returns>Property value converted to the transaction type, or 'UNKNOWN' if not successful.</returns>
+    /// <returns>Property value converted to the account type, or 'UNKNOWN' if not successful.</returns>
     public static OFXAccountType AsAccountType(this OFXProperty property)
-        => Enum.TryParse<OFXAccountType>(property.Value, ignoreCase: true, out var transactionType) ? transactionType : OFXAccountType.UNKNOWN;
+        => Enum.TryParse<OFXAccountType>(property.Value, ignoreCase: true, out var accountType) ? accountType : OFXAccountType.UNKNOWN;
+
+    /// <summary>
+    /// Convert to position account type.
+    /// </summary>
+    /// <param name="property">Property to convert.</param>
+    /// <returns>Property value converted to the position account type, or 'OTHER' if not successful.</returns>
+    public static OFXPositionAccountTypes AsPositionAccountType(this OFXProperty property)
+        => Enum.TryParse<OFXPositionAccountTypes>(property.Value, ignoreCase: true, out var positionAccountType) ? positionAccountType : OFXPositionAccountTypes.OTHER;
+
+    /// <summary>
+    /// Convert to position type.
+    /// </summary>
+    /// <param name="property">Property to convert.</param>
+    /// <returns>Property value converted to the position type, or 'UNKNOWN' if not successful.</returns>
+    public static OFXPositionTypes AsPositionType(this OFXProperty property)
+        => Enum.TryParse<OFXPositionTypes>(property.Value, ignoreCase: true, out var positionType) ? positionType : OFXPositionTypes.UNKNOWN;
 
 }

@@ -60,7 +60,6 @@ public class OFXTokenReaderTests
             actual = target.Read();
             Assert.AreEqual(expected.TokenType, actual.TokenType);
             Assert.AreEqual(expected.Data, actual.Data);
-            Debug.WriteLine($"{actual.TokenType}, [{actual.Data}]");
         } while (target.Peek().TokenType != OFXTokenReader.OFXTokenType.EndOfFile);
     }
 }

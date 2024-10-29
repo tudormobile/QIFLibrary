@@ -26,6 +26,7 @@ public class SecurityTests
         Assert.AreEqual(name, target.Name);
         Assert.AreEqual(price, target.UnitPrice);
         Assert.AreEqual(date, target.UnitPriceDate);
+        Assert.AreEqual(Security.SecurityTypes.UNKNOWN, target.SecurityType);
     }
 
     [TestMethod]
@@ -36,15 +37,18 @@ public class SecurityTests
         var tick = "ABC";
         var id = "id";
         var price = 123.45m;
+        var sectype = Security.SecurityTypes.MUTUALFUND;
         var target = new Security("", "", "")
         {
             Name = name,
             UnitPrice = price,
             UnitPriceDate = date,
             Ticker = tick,
-            Id = id
+            Id = id,
+            SecurityType = sectype
         };
 
+        Assert.AreEqual(sectype, target.SecurityType);
         Assert.AreEqual(id, target.Id);
         Assert.AreEqual(tick, target.Ticker);
         Assert.AreEqual(name, target.Name);
