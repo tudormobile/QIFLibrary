@@ -64,13 +64,13 @@ jobs:
       shell: pwsh
       run: |
         pwd
-        ls -Recurse
-      #    compress-archive -Path src/QIFLibrary/bin/release/*.nupkg -Destination package.zip -Force
+        ls -lR
+        compress-archive -Path src/QIFLibrary/bin/Release/*.nupkg -Destination package.zip -Force
     - name: Get version
       id: vars
       shell: pwsh
       run: |
-        $env:ver = Get-Content src/QIFLibrary/bin/release/ver.txt
+        $env:ver = Get-Content src/QIFLibrary/bin/Release/ver.txt
         echo version=$env:ver >> $env:GITHUB_OUTPUT
     - name: Test output
       run: echo ${{ steps.vars.outputs.version }}      
@@ -92,4 +92,4 @@ jobs:
         echo "Adding local repo as nuget source"
         dotnet nuget add source --username tudormobile --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/tudormobile/index.json"
         echo "Pushing package"
-        dotnet nuget push "src/QIFLibrary/bin/release/*.nupkg" --source "github" --skip-duplicate
+        dotnet nuget push "src/QIFLibrary/bin/Release/*.nupkg" --source "github" --skip-duplicate
