@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Tudormobile.QIFLibrary;
 
@@ -42,6 +43,33 @@ public class OFXMessageSet
         Version = version;
         MessageSetType = messageSetType;
         Direction = direction;
+    }
+
+    /// <summary>
+    /// Convert this instance to a string.
+    /// </summary>
+    /// <returns>String representation of the property.</returns>
+    public override string ToString()
+        => string.Concat(ToStrings());
+
+    /// <summary>
+    /// Convert this instance to strings.
+    /// </summary>
+    /// <returns>Enumeration of string reprenting the property.</returns>
+    /// <remarks>
+    /// This method is provided to allow serializers to customize their output streams.
+    /// </remarks>
+    public IEnumerable<String> ToStrings()
+    {
+        yield return $"<{MessageSetType}MSGSETV{Version}>";
+
+        // Messages
+        foreach (var m in Messages)
+        {
+            foreach (var s in m.ToStrings()) yield return s;
+        }
+
+        yield return $"</{MessageSetType}MSGSETV{Version}>";
     }
 }
 

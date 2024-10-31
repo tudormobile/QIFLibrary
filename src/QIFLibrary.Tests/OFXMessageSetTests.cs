@@ -41,4 +41,20 @@ public class OFXMessageSetTests
         Assert.AreEqual(type, target.MessageSetType);
     }
 
+    [TestMethod]
+    public void ToStringTest()
+    {
+        var direction = OFXMessageDirection.RESPONSE;
+        var type = OFXMessageSetTypes.UNKNOWN;
+
+        var target = new OFXMessageSet(type, direction);
+        target.Messages.Add(new OFXMessage() { Name = "child" });
+
+        var actual = target.ToString();
+
+        Assert.IsTrue(actual.Contains("UNKNOWNMSGSETV1"));
+        Assert.IsTrue(actual.Contains("CHILD"));
+
+        Assert.AreEqual(4, target.ToStrings().Count());
+    }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -45,6 +46,38 @@ namespace QIFLibrary.Tests
             var target = new OFXStatus() { Severity = expected };
             var actual = target.Severity;
             Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void ToStringTest()
+        {
+            var target = new OFXStatus()
+            {
+                Severity = OFXStatus.StatusSeverity.UNKNOWN,
+                Code = 123,
+                Message = "",
+            };
+            var actual = target.ToString();
+
+            Assert.IsTrue(actual.Contains("123"));
+            Assert.IsTrue(actual.Contains("UNKNOWN"));
+            Assert.IsFalse(actual.Contains("MESSAGE"));
+
+            target.Message = "m";
+            Assert.IsTrue(target.ToString().Contains("MESSAGE"));
+        }
+
+        [TestMethod]
+        public void ToStringsTest()
+        {
+            var target = new OFXStatus()
+            {
+                Severity = OFXStatus.StatusSeverity.UNKNOWN,
+                Code = 123,
+                Message = "this is a test",
+            };
+            var actual = target.ToStrings();
+            Assert.AreEqual(5, actual.Count());
         }
 
     }

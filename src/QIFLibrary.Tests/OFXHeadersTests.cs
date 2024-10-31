@@ -83,4 +83,17 @@ public class OFXHeadersTests
         var actual = target.AsEnumerable().ToList();
         Assert.AreEqual(3, actual.Count);
     }
+
+    [TestMethod]
+    public void ToStringTest()
+    {
+        var target = new OFXHeaders()
+            .Add("one", "1")
+            .Add("two", "2")
+            .Add("three", "3");
+        var actual = target.ToString().Split(Environment.NewLine);
+        Assert.AreEqual(5, actual.Length);
+        Assert.AreEqual(String.Empty, actual[^1]);
+        Assert.AreEqual(String.Empty, actual[^2]);
+    }
 }
