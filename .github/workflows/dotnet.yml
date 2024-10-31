@@ -60,9 +60,12 @@ jobs:
         path: docs/_site
         if-no-files-found: ignore        
 # Release stuff
-#    - name: Create Zip for Release
-#      shell: pwsh
-#      run: compress-archive -Path src/QIFLibrary/bin/release/*.nupkg -Destination package.zip -Force
+    - name: Create Zip for Release
+      shell: pwsh
+      run: |
+        pwd
+        ls -Recurse
+      #    compress-archive -Path src/QIFLibrary/bin/release/*.nupkg -Destination package.zip -Force
     - name: Get version
       id: vars
       shell: pwsh
