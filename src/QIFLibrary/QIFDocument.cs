@@ -88,6 +88,7 @@ public sealed class QIFDocument
         "!Type:Cat" => QIFDocumentType.Category,
         "!Type:Class" => QIFDocumentType.Class,
         "!Type:Memorized" => QIFDocumentType.Memorized,
+        "!Account" => QIFDocumentType.Account,
         _ => QIFDocumentType.UNKNOWN,
     };
 

@@ -47,4 +47,12 @@ public class QIFInvestmentTests
 
         Assert.IsFalse(string.IsNullOrEmpty(target.ToString()));
     }
+
+    [TestMethod]
+    public void EmptyTest()
+    {
+        var actual = QIFInvestment.Empty;
+        Assert.AreEqual(DateTime.MinValue, actual.Date);
+        Assert.AreEqual(QIFInvestmentType.UNKNOWN, actual.InvestmentAction);
+    }
 }

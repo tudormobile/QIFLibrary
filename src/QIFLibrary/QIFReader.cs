@@ -33,6 +33,7 @@ public class QIFReader
         _builder.Clear();
 
         string? line = await _reader.ReadLineAsync();
+        if (line == null) return QIFRecord.Empty;
         while (line != null && line != "^")
         {
             _builder.Add(line);
@@ -51,6 +52,10 @@ public class QIFReader
         while ((record = await ReadRecordAsync()).Date != DateTime.MinValue)
         {
             yield return record;
+        }
+        if (record is QIFCategoryRecord)
+        {
+            yield return record;    // support only 1 category record? I do not know the category QIF format.
         }
     }
 
