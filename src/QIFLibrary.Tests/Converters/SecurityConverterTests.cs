@@ -66,7 +66,7 @@ public class SecurityConverterTests
         Assert.IsNotNull(actual);
         Assert.AreEqual("ABC", actual.Ticker);
         Assert.AreEqual("ABC Company", actual.Name);
-        Assert.AreEqual(new DateTime(2024, 10, 21, 6, 43, 15), actual.UnitPriceDate);
+        Assert.AreEqual(new DateTime(2024, 10, 21, 10, 43, 15, DateTimeKind.Utc), actual.UnitPriceDate!.Value.ToUniversalTime());
         Assert.AreEqual(1.23m, actual.UnitPrice);
         Assert.AreEqual("ABC", actual.Id);
 
