@@ -1,0 +1,234 @@
+!Type:Invst
+D1/31'2019
+MCUSIP 9128285Z9, Rate 2.500%, Discount 9964.56
+T9,964.56
+NBuy
+YUS Treasury 5 Year Note
+I0.996456
+Q10,000
+^
+D11/15'2019
+MCUSIP 91282CFV8, Rate 4.5%, Discount 9987.82
+T9,987.82
+NBuy
+YUS Treasury 10 Year Note
+I0.998782
+Q10,000
+^
+D1/31'2020
+MCUSIP 912828Z52, Rate 1.375%, Discount 9964.12
+T9,964.12
+NBuy
+YUS Treasury 5 Year Note
+I0.996412
+Q10,000
+^
+D11/30'2020
+MCUSIP 91282CAZ4, Rate 0.375%, Discount 9990.60
+T9,990.60
+NBuy
+YUS Treasury 5 Year Note
+I0.99906
+Q10,000
+^
+D12/31'2020
+MCUSIP 91282CBC4, Rate 0.375%, Discount 9990.06
+T9,990.60
+NBuy
+YUS Treasury 5 Year Note
+I0.99906
+Q10,000
+^
+D1/15'2021
+MCUSIP 91282CBE0, Rate 0.125%, Discount 9967.43
+T9,967.43
+NBuy
+YUS Treasury 3 Year Note
+I0.996743
+Q10,000
+^
+D1/30'2021
+MCUSPI 91282CBH3, Rate 0.375%, Discount 9975.90
+T9,975.90
+NBuy
+YUS Treasury 5 Year Note
+I0.99759
+Q10,000
+^
+D2/15'2021
+MCUSIP 91282CBM2, Rate 0.125%, Discount 9978.82
+T9,978.82
+NBuy
+YUS Treasury 3 Year Note
+I0.997882
+Q10,000
+^
+D3/30'2021
+MCUSIP 91282CBT7, Rate 0.750%, Discount 9951.15
+T9,951.15
+NBuy
+YUS Treasury 5 Year Note
+I0.995115
+Q10,000
+^
+D5/15'2021
+MCUSIP 91282CCC3, Rate 0.250%, Discount 9976.62
+T9,976.62
+NBuy
+YUS Treasury 3 Year Note
+I0.997662
+Q10,000
+^
+D6/30'2021
+MCUSIP 91282CCJ8, Rate 0.875%, Discount 9985.85
+T9,985.85
+NBuy
+YUS Treasury 5 Year Note
+I0.998585
+Q10,000
+^
+D8/31'2021
+MCUSIP 91282CCW9, Rate 0.750%, Discount 9960.41
+T9,960.41
+NBuy
+YUS Treasury 5 Year Note
+I0.996041
+Q10,000
+^
+D11/30'2021
+MCUSIP 91282CDK4, Discount 9995.23, Rate 1.750%
+T9,995.23
+NBuy
+YUS Treasury 5 Year Note
+I0.999523
+Q10,000
+^
+D12/15'2021
+MCUSIP 91282CDN8, Discount 9966.29, Rate 1.00%
+T9,966.29
+NBuy
+YUS Treasury 3 Year Note
+I0.996629
+Q10,000
+^
+D1/28'2022
+MCUSIP 91282CDW8, Rate 1.750%, Discount 9987.54
+T9,987.54
+NBuy
+YUS Treasury 7 Year Note
+I0.998754
+Q10,000
+^
+D2/28'2022
+MCUSIP 91282CEC1, Rate 1.875%, Discount 9997.62
+T9,997.62
+NBuy
+YUS Treasury 5 Year Note
+I0.999762
+Q10,000
+^
+D4/28'2022
+MCUSIP 91282CEM9, Rate 2.875%, Discount 9979.23
+T9,979.23
+NBuy
+YUS Treasury 7 Year Note
+I0.997923
+Q10,000
+^
+D5/31'2022
+MCUSIP 91282CET4, Discount 9948.36, Rate 2.625%
+T9,948.36
+NBuy
+YUS Treasury 5 Year Note
+I0.994836
+Q10,000
+^
+D6/15'2022
+MCUSIP 91282CEU1, Discount 9985.16, Rate 2.875%
+T9,985.16
+NBuy
+YUS Treasury 3 Year Note
+I0.998516
+Q10,000
+^
+D10/30'2022
+MCUSIP 91282CFU0, Discount 9970.06, Rate 4.125%
+T9,970.06
+NBuy
+YUS Treasury 5 Year Note
+I0.997006
+Q10,000
+^
+D7/15'2023
+MCUSIP 91282CHM6, Rate 4.500%, Discount 9992.97
+T9,992.97
+NBuy
+YUS Treasury 3 Year Note
+I0.999297
+Q10,000
+^
+D10/31'2023
+MCUSIP 91282CJF9, Rate 4.875%, Discount 9989.47
+T9,989.47
+NBuy
+YUS Treasury 5 Year Note
+I0.998947
+Q10,000
+^
+D11/30'2023
+MCUSIP91282CJN2, Rate 4.375%, Discount 9980.01
+T9,980.01
+NBuy
+YUS Treasury 5 Year Note
+I0.998001
+Q10,000
+^
+D1/2'2024
+MCUSIP 91282CJR3, Rate 3.750%, Discount 9979.02
+T9,979.02
+NBuy
+YUS Treasury 5 Year Note
+I0.997695
+Q10,000
+O2.07
+^
+D1/15'2024
+T10,000.00
+NIntInc
+YUS Treasury 3 Year Note
+I
+Q10,000
+LInvestment Income:Capital Gains
+^
+D1/31'2024
+T10,000.00
+NIntInc
+YUS Treasury 5 Year Note
+I
+Q10,000
+LInvestment Income:Capital Gains
+^
+D2/15'2024
+T10,000.00
+NIntInc
+YUS Treasury 3 Year Note
+I
+Q10,000
+LInvestment Income:Capital Gains
+^
+D5/13'2024
+T10,000.00
+NIntInc
+YUS Treasury 3 Year Note
+I
+Q10,000
+LInvestment Income:Capital Gains
+^
+D5/15'2024
+MCUSP=91282CKR1, Rate= 4.5%; Discount=$9,979.02
+T9,970.89
+NBuy
+YUS Treasury 3 Year Note
+I0.997089
+Q10,000
+^

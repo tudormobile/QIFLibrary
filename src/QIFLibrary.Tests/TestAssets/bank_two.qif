@@ -1,0 +1,123 @@
+!Type:Bank
+D12/30'2023
+T0.00
+CX
+POpening Balance
+L[Brokerage HSA (Schwab) (Cash)]
+^
+D12/30'2023
+T353.56
+PContributions
+^
+D1/5'2024
+T284.65
+PContributions
+^
+D1/19'2024
+T1,184.62
+PContributions
+^
+D1/22'2024
+T0.09
+Pinterest
+^
+D1/27'2024
+Mtax year 2023
+T500.00
+PContributions
+^
+D2/2'2024
+Mtax year 2023
+T284.65
+PContributions
+^
+D2/20'2024
+Mtax year 2023
+T284.62
+PContributions
+^
+D2/20'2024
+T0.11
+Pinterest
+^
+D3/3'2024
+Mtax year 2023
+T284.64
+PContributions
+^
+D3/21'2024
+Mtax year 2023
+T284.62
+PContributions
+^
+D3/30'2024
+T0.04
+Pinterest
+^
+D4/3'2024
+Mtax year 2023
+T284.64
+PContributions
+^
+D4/4'2024
+T-460.00
+Pxfer to HSA
+^
+D4/29'2024
+T0.04
+Pinterest
+^
+D5/16'2024
+T-1,400.00
+Pxfer to HSA
+L[HSABank HSA]
+^
+D5/21'2024
+MDIVIDEND
+T0.01
+Pinterest
+^
+D6/17'2024
+MDIVIDEND
+T0.04
+Pinterest
+^
+D6/27'2024
+T-1,300.00
+L[HSABank HSA]
+^
+D7/16'2024
+T-1,100.00
+Pxfer to HSA
+L[HSABank HSA]
+^
+D8/3'2024
+MDIVIDEND
+T0.18
+Pinterest
+^
+D8/16'2024
+MDIVIDEND
+T0.03
+Pinterest
+^
+D9/26'2024
+T0.03
+Pinterest
+^
+D9/27'2024
+T-97.41
+L[HSABank HSA]
+^
+D10/1'2024
+T-37.24
+L[HSABank HSA]
+^
+D10/10'2024
+T-0.30
+L[HSABank HSA]
+^
+D10/17'2024
+T0.01
+Pinterest
+^

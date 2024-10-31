@@ -1,0 +1,29 @@
+!Type:Bank
+D1/2'2024
+T0.00
+CX
+POpening Balance
+L[Treasury Direct]
+^
+D1/2'2024
+MTREASURY DIRECT - TREAS DRCT
+T9,979.02
+Pxfer to TreasuryDirect
+L[Sunmark Checkin]
+^
+D1/16'2024
+T-10,000.00
+L[Sunmark Checkin]
+^
+D1/31'2024
+T-10,000.00
+L[Sunmark Checkin]
+^
+D2/15'2024
+T-10,000.00
+L[Sunmark Checkin]
+^
+D5/15'2024
+T-29.11
+L[Sunmark Checkin]
+^

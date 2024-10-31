@@ -10,7 +10,7 @@ public class QIFInvestment : QIFRecord
     /// <summary>
     /// An empty (invalid) record.
     /// </summary>
-    public static readonly QIFInvestment Empty = new();
+    public static new readonly QIFInvestment Empty = new();
 
     /// <summary>
     /// Check Number.
