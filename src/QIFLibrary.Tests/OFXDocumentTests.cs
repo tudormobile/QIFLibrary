@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,35 @@ public class OFXDocumentTests
         Assert.AreEqual("ofx", OFXDocument.FILE_EXTENSION);
         Assert.AreEqual(0, target.MessageSets.Count, "Must contain initialized message list of zero message sets.");
         Assert.AreEqual("102", target.Version, "Default value for 'Version' property must be 102");
+    }
+
+    [TestMethod, ExcludeFromCodeCoverage]
+    public void SaveTest()
+    {
+        var path = Path.Combine(Path.GetTempPath(), Path.GetTempFileName());
+        var target = new OFXDocument();
+        target.Save(path);
+        if (File.Exists(path))
+        {
+            var actual = File.ReadAllText(path);
+            File.Delete(path);
+            Assert.IsTrue(actual.Contains("<OFX>"));
+            Assert.IsTrue(actual.Contains("</OFX>"));
+            return;
+        }
+        Assert.Fail("Failed to create file");
+    }
+
+    [TestMethod]
+    public void DefaultHeadersTest()
+    {
+        var target = new OFXDocument();
+        var expected = target.Version;
+
+        Assert.AreSame(target, target.DefaultHeaders(), "Failed to return instance if self.");
+
+        var actual = target.Headers["VERSION"];
+        Assert.AreEqual(expected, actual);
     }
 
     [TestMethod]

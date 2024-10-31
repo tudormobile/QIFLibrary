@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
+using Tudormobile.QIFLibrary.Entities;
 
 namespace Tudormobile.QIFLibrary;
 
@@ -23,6 +24,13 @@ public static class OFXPropertyExtensions
     /// <param name="property">Property to extend.</param>
     /// <returns>True if property is empty; otherwise false.</returns>
     public static bool HasValue(this OFXProperty property) => !property.IsEmpty();
+
+    /// <summary>
+    /// Determine if a property has children.
+    /// </summary>
+    /// <param name="property">Property to extend.</param>
+    /// <returns>True if property has children; otherwise false.</returns>
+    public static bool HasChildren(this OFXProperty property) => property.Children.Count > 0;
 
     /// <summary>
     /// Convert a property value to a date.
@@ -148,5 +156,45 @@ public static class OFXPropertyExtensions
     /// <returns>Property value converted to the position type, or 'UNKNOWN' if not successful.</returns>
     public static OFXPositionTypes AsPositionType(this OFXProperty property)
         => Enum.TryParse<OFXPositionTypes>(property.Value, ignoreCase: true, out var positionType) ? positionType : OFXPositionTypes.UNKNOWN;
+
+    /// <summary>
+    /// Add language to a property list.
+    /// </summary>
+    /// <param name="list">List to extend.</param>
+    /// <param name="language">Language to add.</param>
+    /// <returns>Fluent reference to the list.</returns>
+    public static IList<OFXProperty> Add(this IList<OFXProperty> list, OFXLanguage language)
+    {
+        list.Add(new OFXProperty("LANGUAGE", language.ToString()));
+        return list;
+    }
+
+    /// <summary>
+    /// Add financial institution to a property list.
+    /// </summary>
+    /// <param name="list">List to extend.</param>
+    /// <param name="institution">Financial institution to add.</param>
+    /// <returns>Fluent reference to the list.</returns>
+    public static IList<OFXProperty> Add(this IList<OFXProperty> list, Institution institution)
+    {
+        var prop = new OFXProperty("FI");
+        prop.Children.Add(new OFXProperty("ORG", institution.Name));
+        prop.Children.Add(new OFXProperty("FID", institution.Id));
+        list.Add(prop);
+        return list;
+    }
+
+    /// <summary>
+    /// Add a date to a property list.
+    /// </summary>
+    /// <param name="list">List to extend.</param>
+    /// <param name="date">Date to add.</param>
+    /// <param name="dateType">Type of the date.</param>
+    /// <returns>Fluent reference to the list.</returns>
+    public static IList<OFXProperty> Add(this IList<OFXProperty> list, DateTime date, string dateType)
+    {
+        list.Add(new OFXProperty($"DT{dateType}", date.ToUniversalTime().ToString("YYYYMMddhhmmss")));
+        return list;
+    }
 
 }

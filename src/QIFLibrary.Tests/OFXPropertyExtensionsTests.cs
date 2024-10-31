@@ -14,6 +14,41 @@ namespace QIFLibrary.Tests;
 public class OFXPropertyExtensionsTests
 {
     [TestMethod]
+    public void HasChildrenTest()
+    {
+        var name = "name";
+        var target = new OFXProperty(name);
+        Assert.IsFalse(target.HasChildren());
+        target.Children.Add(new OFXProperty(name));
+        Assert.IsTrue(target.HasChildren());
+    }
+
+    [TestMethod]
+    public void ListAddLanguageTest()
+    {
+        var target = new List<OFXProperty>().Add(new OFXLanguage());
+        Assert.AreEqual("LANGUAGE", target.First().Name);
+    }
+
+    [TestMethod]
+    public void ListAddInstitutionTest()
+    {
+        var target = new List<OFXProperty>().Add(new Institution());
+        Assert.AreEqual("FI", target.First().Name);
+    }
+
+    [TestMethod]
+    public void ListAddDateTest()
+    {
+        var expected = "suffix";
+        var target = new List<OFXProperty>().Add(DateTime.Now, expected);
+        var actual = target.First().Name;
+
+        Assert.IsTrue(actual.StartsWith("DT"));
+        Assert.IsTrue(actual.EndsWith(expected));
+    }
+
+    [TestMethod]
     public void AsPositionAccountTypeTest()
     {
         var expected = OFXPositionAccountTypes.MARGIN;

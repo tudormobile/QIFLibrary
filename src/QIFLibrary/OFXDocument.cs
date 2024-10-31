@@ -52,6 +52,19 @@ public class OFXDocument
     public OFXProperty Root { get; private set; } = new OFXProperty("");
 
     /// <summary>
+    /// Adds default headers, overwriting any existing of the same name.
+    /// </summary>
+    /// <returns>Fluent-reference to this document.</returns>
+    public OFXDocument DefaultHeaders()
+    {
+        foreach (var x in OFXHeaders.Default(version: this.Version).AsEnumerable())
+        {
+            Headers[x.Key] = x.Value;
+        }
+        return this;
+    }
+
+    /// <summary>
     /// Parses data into a OFX Document.
     /// </summary>
     /// <param name="utf8Stream">OFX text to parse.</param>
@@ -72,6 +85,16 @@ public class OFXDocument
     /// <param name="path">The path to the file to be parsed.</param>
     /// <returns>An OFXDocument representation of the data.</returns>
     public static OFXDocument ParseFile(string path) => parse(File.OpenText(path));
+
+    /// <summary>
+    /// Save data to a file.
+    /// </summary>
+    /// <param name="path">Pathname to the file.</param>
+    public void Save(string path)
+    {
+        using var s = new StreamWriter(File.OpenWrite(path));
+        new OFXWriter(s).Write(this, indent: true);
+    }
 
     private static OFXDocument parse(TextReader reader, bool leaveOpen = false)
     {

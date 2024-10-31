@@ -50,4 +50,36 @@ public class OFXPropertyTests
         var actual = target.Value;
         Assert.AreEqual(value, actual);
     }
+
+    [TestMethod]
+    public void SimpleToStringTest()
+    {
+        var name = "some name";
+        var value = "some value";
+
+        var target = new OFXProperty(name, value);
+        var actual = target.ToString();
+
+        Assert.IsTrue(actual.Contains(name.ToUpperInvariant()));
+        Assert.IsTrue(actual.Contains(value));
+    }
+
+    [TestMethod]
+    public void ComplexToStringTest()
+    {
+        var name = "some name";
+        var value = "some value";
+
+        var target = new OFXProperty(name, value);
+        target.Children.Add(new OFXProperty("child", "data"));
+        var actual = target.ToString();
+
+        Assert.IsTrue(actual.Contains(name.ToUpperInvariant()));
+        Assert.IsTrue(actual.Contains("CHILD"));
+        Assert.IsTrue(actual.Contains("data"));
+        Assert.IsFalse(actual.Contains(value));
+
+        Assert.AreEqual(3, target.ToStrings().Count());
+    }
+
 }

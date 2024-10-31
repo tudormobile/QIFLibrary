@@ -59,10 +59,10 @@ public class OFXHeaders
     /// </summary>
     /// <returns>Default headers.</returns>
     /// <remarks>Default() uses version 1.02 of OFX specification.</remarks>
-    public static OFXHeaders Default() => new OFXHeaders()
+    public static OFXHeaders Default(string? version = null) => new OFXHeaders()
         .Add("OFXHEADER", "100")
         .Add("DATA", "OFXSGML")
-        .Add("VERSION", "102")
+        .Add("VERSION", version ?? "102")
         .Add("SECURITY", "NONE")
         .Add("ENCODING", "USASCII")
         .Add("CHARSET", "1252")
@@ -81,5 +81,20 @@ public class OFXHeaders
         this[key] = value;
         return this;
     }
+
+    /// <summary>
+    /// Convert headers to a string.
+    /// </summary>
+    /// <returns>String representation of headers.</returns>
+    public override string ToString()
+        => ToString(Environment.NewLine);
+
+    /// <summary>
+    /// Convert headers to a string.
+    /// </summary>
+    /// <param name="newLine">Newline sequence to use.</param>
+    /// <returns>String representation of headers.</returns>
+    public string ToString(string newLine)
+        => string.Join(newLine, this.AsEnumerable().Select(x => $"{x.Key}:{x.Value}").Append(newLine));
 
 }
