@@ -22,7 +22,7 @@ namespace QIFLibrary.Tests.Converters
             var actual = target.Convert(root);
 
             Assert.AreEqual(-123.45m, actual!.Value);
-            Assert.AreEqual(new DateTime(2024, 10, 21, 1, 43, 15), actual.Value.Date);
+            Assert.AreEqual(new DateTime(2024, 10, 21, 5, 43, 15), actual.Value.Date!.Value.ToUniversalTime());
         }
 
         [TestMethod]
