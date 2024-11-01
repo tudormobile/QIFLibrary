@@ -64,11 +64,27 @@ public class CSVDocument
     /// <param name="path">Pathname of the file.</param>
     /// <returns>A CSVDocument representing the file.</returns>
     public static CSVDocument ParseFile(string path)
+        => Parse(File.ReadAllLines(path), Path.GetFileNameWithoutExtension(path));
+
+    /// <summary>
+    /// Parse CSV data.
+    /// </summary>
+    /// <param name="data">CSV data to parse.</param>
+    /// <param name="name">Name of the document.</param>
+    /// <returns>A CSVDocument representing the data.</returns>
+    public static CSVDocument Parse(string data, string? name = null)
+        => Parse(data.Split("\n"), name);
+
+    /// <summary>
+    /// Parse CSV data.
+    /// </summary>
+    /// <param name="csvData">Lines of CSV data.</param>
+    /// <param name="name">Name of the document (OPTIONAL)</param>
+    /// <returns>A CSVDocument representing the data.</returns>
+    public static CSVDocument Parse(string[] csvData, string? name = null)
     {
-        var result = new CSVDocument(Path.GetFileNameWithoutExtension(path))
-        {
-            _data = File.ReadAllLines(path)
-        };
+        var result = new CSVDocument(name) { _data = csvData };
+
         // Try and determine records and fields.
         result._recordStart = result.Comments.Count;
         if (result._data.Length - result._recordStart > 1)
@@ -78,109 +94,15 @@ public class CSVDocument
             var second = result._data[result._recordStart + 1];
             var last = result._data[^1];
 
-            if (typesMatch(getTypes(first), getTypes(last)))
-            {
-                // assume no header
-
-            }
-            else
+            if (!typesMatch(getTypes(first), getTypes(last)))
             {
                 // assume header
                 ((List<String>)result.Fields).AddRange(first.Split(','));
                 result._recordStart++;
             }
-            result.Records = new List<ICSVRecord>(Enumerable.Range(result._recordStart, result._data.Length - result._recordStart).Select(x => new CSVRecord(x, result)));
         }
+        result.Records = new List<ICSVRecord>(Enumerable.Range(result._recordStart, result._data.Length - result._recordStart).Select(x => new CSVRecord(x, result)));
         return result;
-    }
-
-    private static bool typesMatch(Type[] one, Type[] two)
-    {
-        if (one.Length != two.Length) return false;
-        for (int i = 0; i < one.Length; i++)
-        {
-            if (one[i] != two[i]) return false;
-        }
-        return true;
-    }
-
-    private static Type[] getTypes(string data)
-    {
-        // possible: DateTime, decimal, else string
-        var parts = data.Split(',');
-        var types = new Type[parts.Length];
-        for (int i = 0; i < parts.Length; i++)
-        {
-            if (DateTime.TryParse(parts[i], out var date)) types[i] = typeof(DateTime);
-            else if (Decimal.TryParse(parts[i], out var d)) types[i] = typeof(Decimal);
-            else types[i] = typeof(String);
-        }
-        return types;
-    }
-
-    private class CSVRecord : ICSVRecord
-    {
-        private CSVDocument _doc;
-        private int _index;
-        private string[]? _parts;
-        public CSVRecord(int index, CSVDocument doc)
-        {
-            _index = index;
-            _doc = doc;
-        }
-
-        public string this[int index] => readParts()[index];
-
-        public string this[string fieldName] => this[_doc.Fields.IndexOf(fieldName)];
-
-        public string[] Values => readParts();
-
-        private string[] readParts() => _parts ?? createParts();
-        private string[] createParts()
-        {
-            _parts = _doc._data![_index].Split(",");
-            return _parts;
-        }
-
-        public bool TryGetValue<T>(int index, out T? value) where T:struct
-        {
-            var runtimeType = typeof(T);
-
-            if (_doc._data != null)
-            {
-                readParts();
-
-                if (runtimeType == typeof(Decimal))
-                {
-                    value = (T)Convert.ChangeType(_parts![index], runtimeType);
-                    return true;
-                }
-                if (runtimeType == typeof(DateTime))
-                {
-                    value = (T)Convert.ChangeType(_parts![index], runtimeType);
-                    return true;
-                }
-            }
-            value = default;
-            return false;
-        }
-
-        public bool TryGetValue<T>(string fieldName, out T? value) where T: struct
-        {
-            var index = _doc.Fields.IndexOf(fieldName);
-            if (index >= 0)
-            {
-                return TryGetValue(index, out value);
-            }
-            value = default;
-            return false;
-        }
-    }
-
-    private List<String> readComments()
-    {
-        if (_data != null) return new List<string>(_data.TakeWhile(x => !x.Contains(',')).Select(x => x.Trim('\"')));
-        return [];
     }
 
     /// <summary>
@@ -209,7 +131,7 @@ public class CSVDocument
         /// <param name="index">Zero based index to the field of interest.</param>
         /// <param name="value">Record data of type 'T'.</param>
         /// <returns>(True) if successful, otherwise (False).</returns>
-        public bool TryGetValue<T>(int index, out T? value) where T:struct;
+        public bool TryGetValue<T>(int index, out T? value) where T : IParsable<T>;
 
         /// <summary>
         /// Access data via field name.
@@ -218,11 +140,73 @@ public class CSVDocument
         /// <param name="fieldName">Name of the field.</param>
         /// <param name="value">Record data of type 'T'.</param>
         /// <returns>(True) if successful, otherwise (False).</returns>
-        public bool TryGetValue<T>(string fieldName, out T? value) where T : struct;
+        public bool TryGetValue<T>(string fieldName, out T? value) where T : IParsable<T>;
 
         /// <summary>
         /// Record Values.
         /// </summary>
         public string[] Values { get; }
+    }
+
+    private static bool typesMatch(Type[] one, Type[] two)
+    {
+        if (one.Length != two.Length) return false;
+        for (int i = 0; i < one.Length; i++)
+        {
+            if (one[i] != two[i]) return false;
+        }
+        return true;
+    }
+
+    private static Type[] getTypes(string data)
+    {
+        // possible: DateTime, decimal, else string
+        var parts = data.Split(',');
+        var types = new Type[parts.Length];
+        for (int i = 0; i < parts.Length; i++)
+        {
+            if (DateTime.TryParse(parts[i], out _)) types[i] = typeof(DateTime);
+            else if (Decimal.TryParse(parts[i], out _)) types[i] = typeof(Decimal);
+            else types[i] = typeof(String);
+        }
+        return types;
+    }
+    private List<String> readComments()
+    {
+        if (_data != null) return new List<string>(_data.TakeWhile(x => !x.Contains(',')).Select(x => x.Trim('\"')));
+        return [];
+    }
+
+    private class CSVRecord : ICSVRecord
+    {
+        private readonly CSVDocument _doc;
+        private readonly int _index;
+        private string[]? _parts;
+        public CSVRecord(int index, CSVDocument doc)
+        {
+            _index = index;
+            _doc = doc;
+        }
+
+        public string this[int index] => readParts()[index];
+
+        public string this[string fieldName] => this[_doc.Fields.IndexOf(fieldName)];
+
+        public string[] Values => readParts();
+
+        private string[] readParts() => _parts ?? createParts();
+        private string[] createParts()
+        {
+            // TODO: Account for quoted comma's in the data
+            // need to account for comma's in the data
+            _parts = _doc._data![_index].Split(",").Select(x => (x.Length > 1 && x.StartsWith('\"') && x.EndsWith('\"')) ? x.Trim('\"') : x).ToArray();
+            return _parts;
+        }
+
+        public bool TryGetValue<T>(int index, out T value) where T : IParsable<T>
+            => T.TryParse(readParts()[index], null, out value!);
+
+        public bool TryGetValue<T>(string fieldName, out T value) where T : IParsable<T>
+            => TryGetValue(_doc.Fields.IndexOf(fieldName), out value);
     }
 }

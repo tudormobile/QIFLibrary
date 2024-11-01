@@ -10,8 +10,8 @@ namespace Tudormobile.QIFLibrary;
 /// </summary>
 public class OFXReader
 {
-    private bool _ignoreWhiteSpace;
-    private TextReader _reader;
+    private readonly bool _ignoreWhiteSpace;
+    private readonly TextReader _reader;
     private readonly Lazy<OFXTokenReader> _tokenReader;
 
     /// <summary>
