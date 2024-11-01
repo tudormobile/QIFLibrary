@@ -7,9 +7,10 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <AssemblyName>Tudormobile.$(MSBuildProjectName)</AssemblyName>
     <RootNamespace>Tudormobile.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <MajorMinorVer>1.0</MajorMinorVer>
+    <MajorMinorVer>$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)\..\..\version.txt').Trim())</MajorMinorVer>
     <BuildVer>$([System.DateTime]::Now.ToString('yyMM'))</BuildVer>
     <RevVer>$([System.DateTime]::Now.ToString('dd'))</RevVer>
     <AssemblyVersion>$(MajorMinorVer).$(BuildVer).100$(RevVer)</AssemblyVersion>
@@ -21,15 +22,28 @@
     <Authors>WH Tudor</Authors>
     <Title>QIF Library</Title>
     <Description>Tools for accessing and manipulating QIF data</Description>
-    <Copyright>COPYRIGHT(C) TUDORMOBILE LLC</Copyright>
+    <Copyright>COPYRIGHT © TUDORMOBILE LLC</Copyright>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>QIF;QFX;OFX;Tudormobile</PackageTags>
+    <RepositoryUrl>https://github.com/tudormobile/$(MSBuildProjectName)</RepositoryUrl>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'!='Release'">
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
+
+  <Target Name="WriteVersion" BeforeTargets="Build" Condition="'$(Configuration)' == 'Release'">
+    <WriteLinesToFile Lines="$(PackageVersion)" File="$(BaseOutputPath)\$(Configuration)\ver.txt" Overwrite="true" />
+  </Target>
 
 </Project>
