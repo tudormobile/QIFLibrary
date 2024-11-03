@@ -13,7 +13,7 @@ namespace ConsoleApp1
             // create a document
             var doc = new OFXDocument().DefaultHeaders();
             var set = new OFXMessageSet(OFXMessageSetTypes.SIGNON, OFXMessageDirection.RESPONSE);
-            var status = new OFXStatus() { Code = 0, Message = "Successful signon", Severity = OFXStatus.StatusSeverity.INFO };
+            var status = new OFXStatus("Successful signon");
             var message = new OFXMessage()
             {
                 Name = "SONRS",

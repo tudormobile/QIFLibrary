@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Globalization;
+﻿using System.Globalization;
 using Tudormobile.QIFLibrary.Entities;
 
 namespace Tudormobile.QIFLibrary;
@@ -166,6 +165,45 @@ public static class OFXPropertyExtensions
     public static IList<OFXProperty> Add(this IList<OFXProperty> list, OFXLanguage language)
     {
         list.Add(new OFXProperty("LANGUAGE", language.ToString()));
+        return list;
+    }
+
+    public static IList<OFXProperty> Add(this IList<OFXProperty> list, OFXCurrencyType currency = OFXCurrencyType.USD)
+    {
+        list.Add(new OFXProperty("CURDEF", currency.ToString()));
+        return list;
+    }
+
+    public static IList<OFXProperty> Add(this IList<OFXProperty> list, Account account, OFXMessageDirection direction = OFXMessageDirection.RESPONSE)
+    {
+        /*
+         *             var acctFrom = new OFXProperty("INVACCTFROM");
+
+            // should be able to add an account but cannot for now
+            var account = new Account()
+            {
+                AccountId = "0123456789",
+                InstitutionId = "dummybroker.com",
+                AccountType = Account.AccountTypes.INVESTMENT,
+                // direction for FROM and TO on account types
+            };
+            acctFrom.Children.Add(new OFXProperty("BROKERID", "dummybroker.com"));
+            acctFrom.Children.Add(new OFXProperty("ACCTID", "0123456789"));
+
+
+        */
+        var type = account.AccountType switch
+        {
+            Account.AccountTypes.CREDITLINE => "CC",
+            Account.AccountTypes.INVESTMENT => "INV",
+            _ => "BANK"
+        };
+        var tofrom = direction == OFXMessageDirection.RESPONSE ? "FROM" : "TO";
+        var prop = new OFXProperty($"{type}ACCT{tofrom}");
+        prop.Children.Add(new OFXProperty("BROKERID", account.InstitutionId));
+        prop.Children.Add(new OFXProperty("ACCTID", account.AccountId));
+
+        list.Add(prop);
         return list;
     }
 

@@ -1,6 +1,4 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace Tudormobile.QIFLibrary;
@@ -107,12 +105,11 @@ public class OFXReader
                         // check for well-known properties
                         if (prop!.Name == "STATUS")
                         {
-                            message.Status = new OFXStatus()
-                            {
-                                Message = prop.Children.FirstOrDefault(c => c.Name == "MESSAGE")?.Value ?? String.Empty,
-                                Code = int.TryParse(prop.Children.FirstOrDefault(c => c.Name == "CODE")?.Value ?? String.Empty, out var code) ? code : 0,
-                                Severity = Enum.TryParse<OFXStatus.StatusSeverity>(prop.Children.FirstOrDefault(c => c.Name == "SEVERITY")?.Value ?? String.Empty, out var severity) ? severity : OFXStatus.StatusSeverity.UNKNOWN
-                            };
+                            message.Status = new OFXStatus(
+                                int.TryParse(prop.Children.FirstOrDefault(c => c.Name == "CODE")?.Value ?? String.Empty, out var code) ? code : 0,
+                                Enum.TryParse<OFXStatus.StatusSeverity>(prop.Children.FirstOrDefault(c => c.Name == "SEVERITY")?.Value ?? String.Empty, out var severity) ? severity : OFXStatus.StatusSeverity.UNKNOWN,
+                                prop.Children.FirstOrDefault(c => c.Name == "MESSAGE")?.Value ?? String.Empty
+                            );
                         }
                         else if (prop.Name == "TRNUID")
                         {

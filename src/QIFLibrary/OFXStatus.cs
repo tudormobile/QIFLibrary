@@ -25,6 +25,45 @@ public class OFXStatus
     public StatusSeverity Severity { get; set; } = StatusSeverity.UNKNOWN;
 
     /// <summary>
+    /// Create an initialize a new instance.
+    /// </summary>
+    /// <remarks>
+    /// Severity defaults to UNKNOWN, message to emty string and code to zero.
+    /// </remarks>
+    public OFXStatus() : this(0, StatusSeverity.UNKNOWN) { }
+
+    /// <summary>
+    /// Create an initialize a new instance.
+    /// </summary>
+    /// <param name="message">Status message.</param>
+    /// <remarks>
+    /// Severity defaults to INFO and code to zero.
+    /// </remarks>
+    public OFXStatus(string message) : this(0, StatusSeverity.INFO, message) { }
+
+    /// <summary>
+    /// Create an initialize a new instance.
+    /// </summary>
+    /// <param name="severity">Status severity.</param>
+    /// <remarks>
+    /// Message defaults to empty string and code to zero.
+    /// </remarks>
+    public OFXStatus(StatusSeverity severity) : this(0, severity) { }
+
+    /// <summary>
+    /// Create an initialize a new instance.
+    /// </summary>
+    /// <param name="code">Status code.</param>
+    /// <param name="severity">Status severity.</param>
+    /// <param name="message">Status message.</param>
+    public OFXStatus(int code, StatusSeverity severity = StatusSeverity.INFO, string message = "")
+    {
+        Code = code;
+        Message = message;
+        Severity = severity;
+    }
+
+    /// <summary>
     /// Status message severity values.
     /// </summary>
     public enum StatusSeverity

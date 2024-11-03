@@ -1,10 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tudormobile.QIFLibrary;
+﻿using Tudormobile.QIFLibrary;
 
 namespace QIFLibrary.Tests
 {
@@ -19,6 +13,16 @@ namespace QIFLibrary.Tests
             Assert.AreEqual(0, target.Code, "Default code must be zero");
             Assert.AreEqual(String.Empty, target.Message, "Default message must be empty string");
             Assert.AreEqual(OFXStatus.StatusSeverity.UNKNOWN, target.Severity, "Default severity must be UNKNOWN");
+        }
+
+        [TestMethod]
+        public void ConstructorTest2()
+        {
+            var expected = "this is a message";
+            var actual = new OFXStatus(expected);
+            Assert.AreEqual(expected, actual.Message);
+            Assert.AreEqual(OFXStatus.StatusSeverity.INFO, actual.Severity, "Must default to INFO status");
+            Assert.AreEqual(0, actual.Code, "Must default to code zero.");
         }
 
         [TestMethod]

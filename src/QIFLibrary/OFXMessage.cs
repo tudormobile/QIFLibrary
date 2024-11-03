@@ -26,7 +26,7 @@ public class OFXMessage
     /// <summary>
     /// Message status.
     /// </summary>
-    public OFXStatus Status { get; set; } = new OFXStatus();
+    public OFXStatus Status { get; set; } = new OFXStatus(OFXStatus.StatusSeverity.UNKNOWN);
 
     /// <summary>
     /// Representation of the message as a property.
