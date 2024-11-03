@@ -1,12 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tudormobile.QIFLibrary;
+﻿using Tudormobile.QIFLibrary;
 using Tudormobile.QIFLibrary.Entities;
-using static Tudormobile.QIFLibrary.Entities.Position;
 
 namespace QIFLibrary.Tests;
 
@@ -248,5 +241,74 @@ public class OFXPropertyExtensionsTests
         var actual = p.AsInteger(defaultValue: expected);
         Assert.AreEqual(expected, actual);
         Assert.AreEqual(0, p.AsInteger());
+    }
+
+    [TestMethod]
+    public void AddAccountTest1()
+    {
+        var expected = new Account()
+        {
+            AccountId = "123",
+            InstitutionId = "356",
+            AccountType = Account.AccountTypes.SAVINGS
+        };
+        var target = new List<OFXProperty>();
+        var actual = target.Add(expected, OFXMessageDirection.REQUEST);
+
+        Assert.AreSame(target, actual, "Failed to return reference to self.");
+
+        Assert.AreEqual("BANKACCTTO", actual[0].Name);
+        Assert.AreEqual("123", actual[0].Children["ACCTID"].Value);
+        Assert.AreEqual("356", actual[0].Children["BROKERID"].Value);
+    }
+
+    [TestMethod]
+    public void AddAccountTest2()
+    {
+        var expected = new Account()
+        {
+            AccountId = "123",
+            InstitutionId = "356",
+            AccountType = Account.AccountTypes.CREDITLINE
+        };
+        var target = new List<OFXProperty>();
+        var actual = target.Add(expected, OFXMessageDirection.RESPONSE);
+
+        Assert.AreSame(target, actual, "Failed to return reference to self.");
+
+        Assert.AreEqual("CCACCTFROM", actual[0].Name);
+        Assert.AreEqual("123", actual[0].Children["ACCTID"].Value);
+        Assert.AreEqual("356", actual[0].Children["BROKERID"].Value);
+    }
+
+    [TestMethod]
+    public void AddAccountTest3()
+    {
+        var expected = new Account()
+        {
+            AccountId = "123",
+            InstitutionId = "356",
+            AccountType = Account.AccountTypes.INVESTMENT
+        };
+        var target = new List<OFXProperty>();
+        var actual = target.Add(expected, OFXMessageDirection.REQUEST);
+
+        Assert.AreSame(target, actual, "Failed to return reference to self.");
+
+        Assert.AreEqual("INVACCTTO", actual[0].Name);
+        Assert.AreEqual("123", actual[0].Children["ACCTID"].Value);
+        Assert.AreEqual("356", actual[0].Children["BROKERID"].Value);
+    }
+
+
+    [TestMethod()]
+    public void AddCurrencyTest()
+    {
+        var target = new List<OFXProperty>();
+        var actual = target.Add(OFXCurrencyType.CAD);
+
+        Assert.AreSame(target, actual, "Failed to return reference to self.");
+        Assert.AreEqual("CURDEF", actual[0].Name);
+        Assert.AreEqual("CAD", actual[0].Value);
     }
 }

@@ -53,7 +53,7 @@ public class OFXWriter
                 }
                 if (!isOpen)
                 {
-                    currentIndent -= indentAmount;
+                    currentIndent = Math.Max(0, currentIndent - indentAmount);
                     indentString = $"{Environment.NewLine}{new String(' ', currentIndent)}";
                 }
                 lastOpen = isOpen && s[^1] == '>';
