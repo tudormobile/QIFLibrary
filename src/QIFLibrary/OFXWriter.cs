@@ -51,13 +51,13 @@ public class OFXWriter
                     currentIndent += indentAmount;
                     indentString = $"{Environment.NewLine}{new String(' ', currentIndent)}";
                 }
-                if (!isOpen)
+                if (!isOpen && !lastOpen)
                 {
-                    currentIndent -= indentAmount;
+                    currentIndent = Math.Max(0, currentIndent - indentAmount);
                     indentString = $"{Environment.NewLine}{new String(' ', currentIndent)}";
                 }
                 lastOpen = isOpen && s[^1] == '>';
-                if (currentIndent > 0) _writer.Write(indentString);
+                _writer.Write(indentString);
                 _writer.Write(s);
             }
         }

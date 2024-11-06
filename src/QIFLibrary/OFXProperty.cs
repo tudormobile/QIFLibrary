@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace Tudormobile.QIFLibrary;
+﻿namespace Tudormobile.QIFLibrary;
 
 /// <summary>
 /// OFX Property (name, value pair).
@@ -20,7 +18,7 @@ public class OFXProperty
     /// <summary>
     /// Child Properties.
     /// </summary>
-    public OFXPropertyCollection Children { get; } = [];
+    public virtual OFXPropertyCollection Children { get; } = [];
 
     /// <summary>
     /// Create and initialize a new instance.
@@ -38,23 +36,7 @@ public class OFXProperty
     /// </summary>
     /// <returns>String representation of the property.</returns>
     public override string ToString()
-    {
-        if (Children.Count > 0)
-        {
-            var result = new StringBuilder();
-            result.Append($"<{Name.ToUpperInvariant()}>");
-            foreach (var c in Children)
-            {
-                result.Append(c.ToString());
-            }
-            result.Append($"</{Name.ToUpperInvariant()}>");
-            return result.ToString();
-        }
-        else
-        {
-            return $"<{Name.ToUpperInvariant()}>{Value}";
-        }
-    }
+        => string.Concat(ToStrings());
 
     /// <summary>
     /// Convert this instance to strings.
@@ -67,16 +49,20 @@ public class OFXProperty
     {
         if (Children.Count > 0)
         {
-            yield return $"<{Name}>";
+            yield return $"<{Name.ToUpperInvariant()}>";
             foreach (var c in Children)
             {
-                yield return string.Concat(c.ToStrings());
+                foreach (var s in c.ToStrings()) { yield return s; }
+                //yield return string.Concat(c.ToStrings());
             }
-            yield return $"</{Name}>";
+            yield return $"</{Name.ToUpperInvariant()}>";
         }
         else
         {
-            yield return $"<{Name}>{Value}";
+            if (!string.IsNullOrWhiteSpace(Value))
+            {
+                yield return $"<{Name.ToUpperInvariant()}>{Value}";
+            }
         }
     }
 }
