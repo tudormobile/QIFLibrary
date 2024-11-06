@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,6 +60,7 @@ public class CSVWriterTests
         Assert.AreEqual(expected, actual);
     }
 
+    [ExcludeFromCodeCoverage]
     public class TestRecord : CSVDocument.ICSVRecord
     {
         public string this[int index] => throw new NotImplementedException();

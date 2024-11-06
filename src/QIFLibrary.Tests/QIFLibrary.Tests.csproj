@@ -13,6 +13,7 @@
     <None Remove="TestAssets\bank_one.qif" />
     <None Remove="TestAssets\bank_two.qif" />
     <None Remove="TestAssets\bonds.qif" />
+    <None Remove="TestAssets\chase.qfx" />
     <None Remove="TestAssets\Quicken.qfx" />
     <None Remove="TestAssets\retirement.qif" />
     <None Remove="TestAssets\sample1.csv" />
@@ -29,6 +30,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="TestAssets\bonds.qif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestAssets\chase.qfx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="TestAssets\Quicken.qfx">

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Tudormobile.QIFLibrary;
+﻿namespace Tudormobile.QIFLibrary;
 
 internal class QIFRecordBuilder(QIFDocumentType dataType) : IBuilder<QIFRecord>
 {
@@ -110,18 +103,18 @@ internal class QIFRecordBuilder(QIFDocumentType dataType) : IBuilder<QIFRecord>
     private string Address() => Value('A');
     private string Category() => Value('L');
     private bool Flagged() => Value('F', s => true, false);
-    private string SplitCategory() => Value('S');
-    private string SplitMemo() => Value('E');
+    //TODO: private string SplitCategory() => Value('S');
+    //TODO: private string SplitMemo() => Value('E');
+    //TODO: private Decimal SplitPercent() => Value('%', ParseDecimal);
     private Decimal SplitAmount() => Value('$', ParseDecimal);
-    private Decimal SplitPercent() => Value('%', ParseDecimal);
     private string InvestAction() => Value('N');
     private string SecurityName() => Value('Y');
     private Decimal Price() => Value('I', ParseDecimal);
     private Decimal Quantity() => Value('Q', ParseDecimal);
     private Decimal Commission() => Value('O', ParseDecimal);
-    private Decimal AmountTransferred() => Value('$', ParseDecimal);
     private Decimal Budgeted() => Value('B', ParseDecimal);
-    private string ExtendedData() => Value('X');
+    //TODO: private Decimal AmountTransferred() => Value('$', ParseDecimal);
+    //TODO: private string ExtendedData() => Value('X');
 
     private string Value(char key)
         => Value(key, s => s, String.Empty);

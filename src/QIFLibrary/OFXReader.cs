@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.Runtime.CompilerServices;
-
-namespace Tudormobile.QIFLibrary;
+﻿namespace Tudormobile.QIFLibrary;
 
 /// <summary>
 /// Provides mechanisms to read OFX data.
@@ -51,6 +48,48 @@ public class OFXReader
     }
 
     /// <summary>
+    /// Attempts for force-read headers from malformed OFX data.
+    /// </summary>
+    /// <param name="headers">Collection of Key/Value pair if successful.</param>
+    /// <returns>True if successful; otherwise false.</returns>
+    /// <remarks>
+    /// This method is intended for malformed OFX data. It does not
+    /// always consumes at least 1 line of content. It will attempt to
+    /// parse headers until an open xml tag is found. Internally, this
+    /// method reads OFX tokens from the parser rather than 'lines' per
+    /// the OFX specification.
+    /// </remarks>
+    public bool TryForceReadHeaders(out (string Key, string Value)[]? headers)
+    {
+        var ignore = _tokenReader.Value.IgnoreWhiteSpace;
+        _tokenReader.Value.IgnoreWhiteSpace = true;
+        var foundHeaders = new List<(string Key, string Value)>();
+
+        var line = _tokenReader.Value.Peek();
+        while (line.TokenType == OFXTokenReader.OFXTokenType.Content)
+        {
+            foreach (var item in line.Data.Split('\n'))
+            {
+                var parts = item.Split(':');
+
+                if (parts.Length == 2 && parts[0].Trim().Length > 0)
+                {
+                    foundHeaders.Add((parts[0].Trim(), parts[1].Trim()));
+                }
+            }
+            _ = _tokenReader.Value.Read();      // discard the above
+            line = _tokenReader.Value.Peek();   // and peek the next one.
+        }
+        if (foundHeaders.Count > 0)
+        {
+            headers = foundHeaders.ToArray();
+            return true;
+        }
+        headers = default;
+        return false;
+    }
+
+    /// <summary>
     /// Read the next message set.
     /// </summary>
     /// <param name="messageSet">Message set if successful.</param>
@@ -64,7 +103,7 @@ public class OFXReader
             var name = startToken!.Data;
             messageSet = setFromName(name);
 
-            while (TryReadMessage(name, out var message))
+            while (TryReadMessage(out var message))
             {
                 messageSet.Messages.Add(message!);
             }
@@ -79,10 +118,9 @@ public class OFXReader
     /// <summary>
     /// Read the next message.
     /// </summary>
-    /// <param name="name">Name of the message.</param>
     /// <param name="message">Message read or (null) if not found.</param>
     /// <returns>True if message was found; otherwise false.</returns>
-    public bool TryReadMessage(string name, out OFXMessage? message)
+    public bool TryReadMessage(out OFXMessage? message)
     {
         var result = false;
         message = default;
@@ -194,9 +232,9 @@ public class OFXReader
     private bool peekEOF()
         => _tokenReader.Value.Peek().TokenType == OFXTokenReader.OFXTokenType.EndOfFile;
 
-    private bool peekEndTag(string? name = null)
-        => (_tokenReader.Value.Peek().TokenType == OFXTokenReader.OFXTokenType.EndOfFile) ||
-           (string.IsNullOrWhiteSpace(name) || _tokenReader.Value.Peek().Data == name);
+    private bool peekEndTag(string name)
+        => _tokenReader.Value.Peek().TokenType == OFXTokenReader.OFXTokenType.EndTag &&
+           _tokenReader.Value.Peek().Data == name;
 
     private bool isMatch(OFXTokenReader.OFXToken token, OFXTokenReader.OFXTokenType tokenType, string? name = null)
         => token.TokenType == tokenType && (string.IsNullOrEmpty(name) || token.Data == name);

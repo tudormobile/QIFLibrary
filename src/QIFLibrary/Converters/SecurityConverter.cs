@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tudormobile.QIFLibrary.Entities;
+﻿using Tudormobile.QIFLibrary.Entities;
 using Tudormobile.QIFLibrary.Interfaces;
-
 namespace Tudormobile.QIFLibrary.Converters;
 
 /// <summary>
@@ -35,6 +29,26 @@ public class SecurityConverter : PropertyConverterBase<Security>, IPropertyConve
             }
         }
         return null;
+    }
+
+    /// <summary>
+    /// Converts a security to OFX Property.
+    /// </summary>
+    /// <param name="security">Security to convert.</param>
+    /// <returns>OFX property representing the security.</returns>
+    public static OFXProperty ToProperty(Security security)
+    {
+        var result = new OFXProperty("SECINFO");
+        var id = new OFXProperty("SECID");
+        id.Children.Add(new OFXProperty("UNIQUEID", security.Ticker));
+        id.Children.Add(new OFXProperty("UNIQUEIDTYPE", "TICKER"));
+        result.Children.Add(id);
+        result.Children.Add(new OFXProperty("SECNAME", security.Name));
+        result.Children.Add(new OFXProperty("TICKER", security.Ticker));
+        if (security.UnitPrice != null) result.Children.Add(security.UnitPrice.Value, "UNITPRICE");
+        if (security.UnitPriceDate != null) result.Children.Add(security.UnitPriceDate.Value, "ASOF");
+
+        return result;
     }
 
     /// <summary>

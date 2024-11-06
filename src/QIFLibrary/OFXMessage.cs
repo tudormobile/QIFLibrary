@@ -1,7 +1,4 @@
-﻿using System.Numerics;
-using Tudormobile.QIFLibrary.Entities;
-
-namespace Tudormobile.QIFLibrary;
+﻿namespace Tudormobile.QIFLibrary;
 
 /// <summary>
 /// OFX Message.
@@ -21,7 +18,7 @@ public class OFXMessage
     /// <summary>
     /// Properties associated with the message.
     /// </summary>
-    public IList<OFXProperty> Properties { get; } = [];
+    public virtual IList<OFXProperty> Properties { get; } = [];
 
     /// <summary>
     /// Message status.
@@ -57,16 +54,16 @@ public class OFXMessage
     {
         yield return $"<{Name.ToUpperInvariant()}>";
 
-        // Severity (optional)
-        if (Status.Severity != OFXStatus.StatusSeverity.UNKNOWN)
-        {
-            foreach (var s in Status.ToStrings()) yield return s;
-        }
-
         // Identifier (optional)
         if (Id.Length > 0)
         {
             yield return $"<TRNUID>{Id}";
+        }
+
+        // Status (optional)
+        if (Status.Severity != OFXStatus.StatusSeverity.UNKNOWN)
+        {
+            foreach (var s in Status.ToStrings()) yield return s;
         }
 
         // Properties
