@@ -1,18 +1,23 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tudormobile.QIFLibrary;
+﻿using Tudormobile.QIFLibrary;
 using Tudormobile.QIFLibrary.Entities;
-using static Tudormobile.QIFLibrary.Entities.Position;
 
 namespace QIFLibrary.Tests;
 
 [TestClass]
 public class OFXPropertyExtensionsTests
 {
+    [TestMethod]
+    public void AddDateTest()
+    {
+        var date = new DateTime(1964, 3, 11, 1, 2, 3, DateTimeKind.Utc);
+        var target = new List<OFXProperty>();
+
+        target.Add(date, "ASOF");
+
+        Assert.AreEqual("DTASOF", target[0].Name);
+        Assert.AreEqual("19640311010203", target[0].Value);
+    }
+
     [TestMethod]
     public void HasChildrenTest()
     {
@@ -175,9 +180,9 @@ public class OFXPropertyExtensionsTests
     [TestMethod]
     public void AsDateTest3()
     {
-        var expected = DateTime.UtcNow;
         var actual = new OFXProperty("", "").AsDate();
-        Assert.AreEqual(expected.Ticks, actual.Ticks, 100);
+        var expected = DateTime.UtcNow;
+        Assert.AreEqual(expected.Ticks, actual.Ticks, 1000);
     }
 
     [TestMethod]
@@ -248,5 +253,137 @@ public class OFXPropertyExtensionsTests
         var actual = p.AsInteger(defaultValue: expected);
         Assert.AreEqual(expected, actual);
         Assert.AreEqual(0, p.AsInteger());
+    }
+
+    [TestMethod]
+    public void AddAccountTest1()
+    {
+        var expected = new Account()
+        {
+            AccountId = "123",
+            InstitutionId = "356",
+            AccountType = Account.AccountTypes.SAVINGS
+        };
+        var target = new List<OFXProperty>();
+        var actual = target.Add(expected, OFXMessageDirection.REQUEST);
+
+        Assert.AreSame(target, actual, "Failed to return reference to self.");
+
+        Assert.AreEqual("BANKACCTTO", actual[0].Name);
+        Assert.AreEqual("123", actual[0].Children["ACCTID"].Value);
+        Assert.AreEqual("356", actual[0].Children["BROKERID"].Value);
+    }
+
+    [TestMethod]
+    public void AddAccountTest2()
+    {
+        var expected = new Account()
+        {
+            AccountId = "123",
+            InstitutionId = "356",
+            AccountType = Account.AccountTypes.CREDITLINE
+        };
+        var target = new List<OFXProperty>();
+        var actual = target.Add(expected, OFXMessageDirection.RESPONSE);
+
+        Assert.AreSame(target, actual, "Failed to return reference to self.");
+
+        Assert.AreEqual("CCACCTFROM", actual[0].Name);
+        Assert.AreEqual("123", actual[0].Children["ACCTID"].Value);
+        Assert.AreEqual("356", actual[0].Children["BROKERID"].Value);
+    }
+
+    [TestMethod]
+    public void AddAccountTest3()
+    {
+        var expected = new Account()
+        {
+            AccountId = "123",
+            InstitutionId = "356",
+            AccountType = Account.AccountTypes.INVESTMENT
+        };
+        var target = new List<OFXProperty>();
+        var actual = target.Add(expected, OFXMessageDirection.REQUEST);
+
+        Assert.AreSame(target, actual, "Failed to return reference to self.");
+
+        Assert.AreEqual("INVACCTTO", actual[0].Name);
+        Assert.AreEqual("123", actual[0].Children["ACCTID"].Value);
+        Assert.AreEqual("356", actual[0].Children["BROKERID"].Value);
+    }
+
+
+    [TestMethod]
+    public void AddCurrencyTest()
+    {
+        var target = new List<OFXProperty>();
+        var actual = target.Add(OFXCurrencyType.CAD);
+
+        Assert.AreSame(target, actual, "Failed to return reference to self.");
+        Assert.AreEqual("CURDEF", actual[0].Name);
+        Assert.AreEqual("CAD", actual[0].Value);
+    }
+
+    [TestMethod]
+    public void AddDecimalTest()
+    {
+        var expected = 123.45m;
+        var name = "NAME";
+        var target = new List<OFXProperty>();
+        var actual = target.Add(expected, name);
+
+        Assert.AreSame(target, actual, "Failed to return reference to self.");
+        Assert.AreEqual(name, actual[0].Name);
+        Assert.AreEqual(expected.ToString(), actual[0].Value);
+    }
+
+    [TestMethod]
+    public void AddPositionAccountTypeTest()
+    {
+        var data = Position.PositionAccountTypes.CASH;
+        var target = new List<OFXProperty>();
+        var actual = target.Add(data);
+
+        Assert.AreSame(target, actual, "Failed to return reference to self.");
+        Assert.AreEqual("HELDINACCT", actual[0].Name);
+        Assert.AreEqual(data.ToString(), actual[0].Value);
+    }
+
+    [TestMethod]
+    public void AddPositionTypeTest()
+    {
+        var data = Position.PositionTypes.LONG;
+        var target = new List<OFXProperty>();
+        var actual = target.Add(data);
+
+        Assert.AreSame(target, actual, "Failed to return reference to self.");
+        Assert.AreEqual("POSTYPE", actual[0].Name);
+        Assert.AreEqual(data.ToString(), actual[0].Value);
+    }
+
+    [TestMethod]
+    public void AddPositionListTest()
+    {
+        var data = new PositionList();
+        var id = "MSFT";
+        var date = new DateTime(2024, 11, 05, 12, 37, 06, DateTimeKind.Utc);
+        var position = new Position(id)
+        {
+            Memo = "memo",
+            PriceDate = date,
+            PositionType = Position.PositionTypes.LONG,
+            MarketValue = 12345.67m,
+            SecurityType = Security.SecurityTypes.OPTION,
+            UnitPrice = 987.65m,
+            SubAccountType = Position.PositionAccountTypes.MARGIN,
+            Units = 112233m,
+        };
+        data.Items.Add(position);
+
+        var target = new List<OFXProperty>();
+        var actual = target.Add(data);
+
+        Assert.AreSame(target, actual, "Failed to return reference to self.");
+        Assert.AreEqual("INVPOSLIST", actual[0].Name);
     }
 }

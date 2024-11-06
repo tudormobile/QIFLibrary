@@ -1,10 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
-using System.Threading.Tasks;
 using Tudormobile.QIFLibrary;
 
 namespace QIFLibrary.Tests;
@@ -12,6 +7,65 @@ namespace QIFLibrary.Tests;
 [TestClass]
 public class QIFReaderTests
 {
+    [TestMethod, ExcludeFromCodeCoverage]
+    public async Task UnsupportedInvestmentActions()
+    {
+        //TODO: Remove this when these become supported
+        var currentlyNotSupported = new string[] {
+            "UNKNOWN","BuyX","SellX","ShtSell","CvrShrt","CGLong","CGLongX","CGMid","CGMidX","CGShort","CGShortX","DivX",
+            "IntIncX","ReinvDiv","ReinvInt","ReinvLg","ReinvMd","ReinvSh","Reprice","XIn","XOut","MiscExp","MiscExpX",
+            "MiscInc","MiscIncX","MargInt","MargIntX","RtrnCap","RtrnCapX","StkSplit"
+        };
+        foreach (var x in currentlyNotSupported)
+        {
+            var data = @$"!Type:Invst
+D12/30'2023
+T11,259.61
+N{x}
+YiShares Core Total Mkt ETF
+I105.23
+Q107
+^";
+            using var ms = new MemoryStream(Encoding.UTF8.GetBytes(data));
+
+            try
+            {
+                var target = await QIFReader.FromStream(ms).ReadRecordAsync();
+                Assert.Fail($"Investment Action: '{x}'; Expected NOTSUPPORTEDEXCEPTION.");
+            }
+            catch (NotSupportedException) { }
+        }
+    }
+
+    [TestMethod]
+    public async Task ReadBadRecordActionAsyncTest()
+    {
+        var expected = new DateTime(2023, 12, 30);
+        var data = @"!Type:Invst
+D12/30'2023
+T11,259.61
+NBadExtion
+YiShares Core Total Mkt ETF
+I105.23
+Q107
+^
+D12/30'2023
+T11,259.61
+NShrsOut
+YiShares Core Total Mkt ETF
+I105.23
+Q107
+^
+";
+        using var ms = new MemoryStream(Encoding.UTF8.GetBytes(data));
+
+        var target = QIFReader.FromStream(ms);
+        var actual = await target.ReadRecordAsync();
+        target.Close();
+        Assert.IsInstanceOfType<QIFInvestment>(actual);
+        Assert.AreEqual(QIFInvestmentType.UNKNOWN, ((QIFInvestment)actual).InvestmentAction);
+    }
+
     [TestMethod]
     public async Task ReadRecordAsyncTest()
     {
@@ -24,13 +78,24 @@ YiShares Core Total Mkt ETF
 I105.23
 Q107
 ^
+D12/30'2023
+T11,259.61
+NShrsOut
+YiShares Core Total Mkt ETF
+I105.23
+Q107
+^
 ";
-        var ms = new MemoryStream(Encoding.UTF8.GetBytes(data));
+        using var ms = new MemoryStream(Encoding.UTF8.GetBytes(data));
 
         var target = QIFReader.FromStream(ms);
         var actual = await target.ReadRecordAsync();
         Assert.IsInstanceOfType<QIFInvestment>(actual);
         Assert.AreEqual(expected, actual.Date);
+
+        actual = await target.ReadRecordAsync();
+        Assert.AreEqual(QIFInvestmentType.ShrsOut, ((QIFInvestment)actual).InvestmentAction);
+
         target.Close();
     }
 
@@ -52,6 +117,7 @@ Q107
         target.Close();
         Assert.AreEqual(expected, actual.Count);
     }
+
     [TestMethod]
     public void BankTransactionsTest()
     {

@@ -1,11 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Tudormobile.QIFLibrary;
 using Tudormobile.QIFLibrary.Converters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tudormobile.QIFLibrary;
 using Tudormobile.QIFLibrary.Entities;
 using Tudormobile.QIFLibrary.Interfaces;
 
@@ -127,6 +121,30 @@ public class PositionConverterTests
 
         Assert.IsNull(actual);
         Assert.IsNull(target.GetPositionList(root));
+    }
+
+    [TestMethod]
+    public void ToPropertyTest()
+    {
+        var expected = "<POSOPT><INVPOS><SECID><UNIQUEID>MSFT<UNIQUEIDTYPE>TICKER</SECID><HELDINACCT>MARGIN<POSTYPE>LONG<UNITS>112233<UNITPRICE>987.65<MKTVAL>12345.67<DTPRICEASOF>20241105123706<MEMO>memo</INVPOS></POSOPT>";
+        var id = "MSFT";
+        var date = new DateTime(2024, 11, 05, 12, 37, 06, DateTimeKind.Utc);
+        var position = new Position(id)
+        {
+            Memo = "memo",
+            PriceDate = date,
+            PositionType = Position.PositionTypes.LONG,
+            MarketValue = 12345.67m,
+            SecurityType = Security.SecurityTypes.OPTION,
+            UnitPrice = 987.65m,
+            SubAccountType = Position.PositionAccountTypes.MARGIN,
+            Units = 112233m,
+        };
+        var target = new PositionConverter();
+        var actual = target.ToProperty(position);
+
+        Assert.AreEqual(expected, actual.ToString());
+
     }
 
 }

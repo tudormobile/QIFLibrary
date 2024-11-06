@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tudormobile.QIFLibrary.Entities;
+﻿using Tudormobile.QIFLibrary.Entities;
 using Tudormobile.QIFLibrary.Interfaces;
 
 namespace Tudormobile.QIFLibrary.Converters;
@@ -13,15 +8,7 @@ namespace Tudormobile.QIFLibrary.Converters;
 /// </summary>
 public class PositionConverter : PropertyConverterBase<Position>, IPropertyConverter<PositionList>
 {
-    /// <summary>
-    /// Convert to a position.
-    /// </summary>
-    /// <param name="root">Property to convert.</param>
-    /// <returns>A new transaction if successful; otherwise (null).</returns>
-    public override Position? Convert(OFXProperty root)
-    {
-        //var wrapper = "POSMF|POSSTOCK|POSDEBT|POSOPT|POSOTHER";
-        var wrapper = new Dictionary<string, Security.SecurityTypes>()
+    private readonly Dictionary<string, Security.SecurityTypes> _wrapper = new()
         {
             {"POSMF", Security.SecurityTypes.MUTUALFUND },
             {"POSSTOCK", Security.SecurityTypes.STOCK },
@@ -30,7 +17,16 @@ public class PositionConverter : PropertyConverterBase<Position>, IPropertyConve
             {"POSOTHER", Security.SecurityTypes.OTHER },
         };
 
-        foreach (var item in wrapper)
+    /// <summary>
+    /// Convert to a position.
+    /// </summary>
+    /// <param name="root">Property to convert.</param>
+    /// <returns>A new transaction if successful; otherwise (null).</returns>
+    public override Position? Convert(OFXProperty root)
+    {
+        //var wrapper = "POSMF|POSSTOCK|POSDEBT|POSOPT|POSOTHER";
+
+        foreach (var item in _wrapper)
         {
             var p = digForProperty(root, item.Key);
             var securityType = p == null ? Security.SecurityTypes.UNKNOWN : item.Value;
@@ -68,6 +64,34 @@ public class PositionConverter : PropertyConverterBase<Position>, IPropertyConve
             }
         }
         return null;
+    }
+
+    /// <summary>
+    /// Converty position to an OFX property.
+    /// </summary>
+    /// <param name="position">Position to convert.</param>
+    /// <returns>OFX Property representing the position.</returns>
+    public OFXProperty ToProperty(Position position)
+    {
+        var name = _wrapper.FirstOrDefault(kvp => kvp.Value == position.SecurityType).Key;
+        var result = new OFXProperty(name);
+        var pos = new OFXProperty("INVPOS");
+        var id = new OFXProperty("SECID");
+        id.Children.Add(new OFXProperty("UNIQUEID", position.SecurityId));
+        id.Children.Add(new OFXProperty("UNIQUEIDTYPE", "TICKER"));
+        pos.Children.Add(id);
+
+        pos.Children
+            .Add(position.SubAccountType)
+            .Add(position.PositionType)
+            .Add(position.Units, "UNITS")
+            .Add(position.UnitPrice, "UNITPRICE")
+            .Add(position.MarketValue, "MKTVAL", MidpointRounding.ToEven)
+            .Add(position.PriceDate, "PRICEASOF")
+            .Add(new OFXProperty("MEMO", position.Memo));
+
+        result.Children.Add(pos);
+        return result;
     }
 
     /// <summary>

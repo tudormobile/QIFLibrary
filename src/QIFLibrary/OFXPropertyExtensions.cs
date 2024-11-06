@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Globalization;
+﻿using System.Globalization;
 using Tudormobile.QIFLibrary.Entities;
 
 namespace Tudormobile.QIFLibrary;
@@ -9,7 +8,7 @@ namespace Tudormobile.QIFLibrary;
 /// </summary>
 public static class OFXPropertyExtensions
 {
-    private static char[] splitChars = ['[', ']', ':'];
+    private static readonly char[] splitChars = ['[', ']', ':'];
 
     /// <summary>
     /// Determine if a property is empty.
@@ -170,6 +169,84 @@ public static class OFXPropertyExtensions
     }
 
     /// <summary>
+    /// Add currency to the property list.
+    /// </summary>
+    /// <param name="list">List to extend.</param>
+    /// <param name="currency">Currency to add.</param>
+    /// <returns>Fluent reference to the list.</returns>
+    public static IList<OFXProperty> Add(this IList<OFXProperty> list, OFXCurrencyType currency = OFXCurrencyType.USD)
+    {
+        list.Add(new OFXProperty("CURDEF", currency.ToString()));
+        return list;
+    }
+
+    /// <summary>
+    /// Add a decimal value to the property list.
+    /// </summary>
+    /// <param name="list">List to extend.</param>
+    /// <param name="value">Value to add.</param>
+    /// <param name="valueName">Name of the value property.</param>
+    /// <param name="rounding">(OPTIONAL) Round to 2-placed using this strategy.</param>
+    /// <returns>Fluent reference to the list.</returns>
+    /// <remarks>
+    /// No rounding is performed unless a rounding strategy is provided. Note that "rounding to even" is typically used by bankers.
+    /// </remarks>
+    public static IList<OFXProperty> Add(this IList<OFXProperty> list, decimal value, string valueName, MidpointRounding? rounding = null)
+    {
+        var val = rounding == null ? value : Math.Round(value, 2, rounding.Value);
+        list.Add(new OFXProperty(valueName, val.ToString()));
+        return list;
+    }
+
+    /// <summary>
+    /// Add a position account type to the property list.
+    /// </summary>
+    /// <param name="list">List to extend.</param>
+    /// <param name="accountType">Position account type to add.</param>
+    /// <returns>Fluent reference to the list.</returns>
+    public static IList<OFXProperty> Add(this IList<OFXProperty> list, Position.PositionAccountTypes accountType)
+    {
+        list.Add(new OFXProperty("HELDINACCT", accountType.ToString()));
+        return list;
+    }
+
+    /// <summary>
+    /// Add a position type to the property list.
+    /// </summary>
+    /// <param name="list">List to extend.</param>
+    /// <param name="positionType">Position type to add.</param>
+    /// <returns>Fluent reference to the list.</returns>
+    public static IList<OFXProperty> Add(this IList<OFXProperty> list, Position.PositionTypes positionType)
+    {
+        list.Add(new OFXProperty("POSTYPE", positionType.ToString()));
+        return list;
+    }
+
+    /// <summary>
+    /// Add account to property list.
+    /// </summary>
+    /// <param name="list">List to extend.</param>
+    /// <param name="account">Account to add.</param>
+    /// <param name="direction"></param>
+    /// <returns>Fluent reference to the list.</returns>
+    public static IList<OFXProperty> Add(this IList<OFXProperty> list, Account account, OFXMessageDirection direction = OFXMessageDirection.RESPONSE)
+    {
+        var type = account.AccountType switch
+        {
+            Account.AccountTypes.CREDITLINE => "CC",
+            Account.AccountTypes.INVESTMENT => "INV",
+            _ => "BANK"
+        };
+        var tofrom = direction == OFXMessageDirection.RESPONSE ? "FROM" : "TO";
+        var prop = new OFXProperty($"{type}ACCT{tofrom}");
+        prop.Children.Add(new OFXProperty("BROKERID", account.InstitutionId));
+        prop.Children.Add(new OFXProperty("ACCTID", account.AccountId));
+
+        list.Add(prop);
+        return list;
+    }
+
+    /// <summary>
     /// Add financial institution to a property list.
     /// </summary>
     /// <param name="list">List to extend.</param>
@@ -193,7 +270,19 @@ public static class OFXPropertyExtensions
     /// <returns>Fluent reference to the list.</returns>
     public static IList<OFXProperty> Add(this IList<OFXProperty> list, DateTime date, string dateType)
     {
-        list.Add(new OFXProperty($"DT{dateType}", date.ToUniversalTime().ToString("YYYYMMddhhmmss")));
+        list.Add(new OFXProperty($"DT{dateType}", date.ToUniversalTime().ToString("yyyyMMddHHmmss")));
+        return list;
+    }
+
+    /// <summary>
+    /// Add investment position list to a property list.
+    /// </summary>
+    /// <param name="list">List to extend.</param>
+    /// <param name="positions">Investment position list to add.</param>
+    /// <returns>Fluent reference to the list.</returns>
+    public static IList<OFXProperty> Add(this IList<OFXProperty> list, PositionList positions)
+    {
+        list.Add(new OFXInvestmentPositionList(positions));
         return list;
     }
 
