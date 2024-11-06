@@ -1,10 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tudormobile.QIFLibrary;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Tudormobile.QIFLibrary;
 
 namespace QIFLibrary.Tests;
 
@@ -42,7 +36,7 @@ public class OFXMessageSetTests
     }
 
     [TestMethod]
-    public void ToStringTest()
+    public void ToStringTest1()
     {
         var direction = OFXMessageDirection.RESPONSE;
         var type = OFXMessageSetTypes.UNKNOWN;
@@ -52,9 +46,27 @@ public class OFXMessageSetTests
 
         var actual = target.ToString();
 
-        Assert.IsTrue(actual.Contains("UNKNOWNMSGSETV1"));
+        Assert.IsTrue(actual.Contains("UNKNOWNMSGSRSV1"));
         Assert.IsTrue(actual.Contains("CHILD"));
 
         Assert.AreEqual(4, target.ToStrings().Count());
     }
+
+    [TestMethod]
+    public void ToStringTest2()
+    {
+        var direction = OFXMessageDirection.REQUEST;
+        var type = OFXMessageSetTypes.UNKNOWN;
+
+        var target = new OFXMessageSet(type, direction);
+        target.Messages.Add(new OFXMessage() { Name = "child" });
+
+        var actual = target.ToString();
+
+        Assert.IsTrue(actual.Contains("UNKNOWNMSGSRQV1"));
+        Assert.IsTrue(actual.Contains("CHILD"));
+
+        Assert.AreEqual(4, target.ToStrings().Count());
+    }
+
 }

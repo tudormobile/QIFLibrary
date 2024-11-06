@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-
-namespace Tudormobile.QIFLibrary;
+﻿namespace Tudormobile.QIFLibrary;
 
 /// <summary>
 /// OFX Message Set.
@@ -61,7 +54,9 @@ public class OFXMessageSet
     /// </remarks>
     public IEnumerable<String> ToStrings()
     {
-        yield return $"<{MessageSetType}MSGSETV{Version}>";
+        var dir = Direction == OFXMessageDirection.REQUEST ? "Q" : "S";
+        var name = $"{MessageSetType}MSGSR{dir}V{Version}";
+        yield return $"<{name}>";
 
         // Messages
         foreach (var m in Messages)
@@ -69,7 +64,7 @@ public class OFXMessageSet
             foreach (var s in m.ToStrings()) yield return s;
         }
 
-        yield return $"</{MessageSetType}MSGSETV{Version}>";
+        yield return $"</{name}>";
     }
 }
 

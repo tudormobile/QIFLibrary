@@ -164,4 +164,14 @@ one,two,three";
         Assert.AreEqual(2, target.Fields.Count);
     }
 
+    [TestMethod]
+    public void ChaseCCDocumemtTest()
+    {
+        var filename = Path.Combine("TestAssets", "chase.qfx");
+        var target = OFXDocument.ParseFile(filename);
+
+        Assert.IsTrue(target.Headers.AsEnumerable().Any(), "Failed to read headers from malformed CHASE document.");
+        Assert.IsTrue(target.MessageSets.AsEnumerable().Any(), "Failed to read transactions from malformed CHASE document.");
+    }
+
 }

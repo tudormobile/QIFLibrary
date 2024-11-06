@@ -109,6 +109,20 @@ public class OFXDocument
                 result.Headers[header.Key] = header.Value;
             }
 
+            // Peek all data to see if we missed any headers from malformed OFX files such
+            // as those produced by Chase Bank. (Headers begins with a blank line and does 
+            // NOT contain the required end line).
+            if (result.Headers["OFXHEADER"] == string.Empty || result.Headers.Count == 0)
+            {
+                if (ofxReader.TryForceReadHeaders(out var headers))
+                {
+                    foreach (var header in headers!)
+                    {
+                        result.Headers.Add(header.Key, header.Value);
+                    }
+                }
+            }
+
             // Move to the start of the OFX data
             if (ofxReader.TryMoveToStart(out OFXTokenReader.OFXToken? token, "OFX"))
             {
