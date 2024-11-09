@@ -1,6 +1,7 @@
 ﻿using Tudormobile.QIFLibrary;
+using Tudormobile.QIFLibrary.IO;
 
-namespace QIFLibrary.Tests;
+namespace QIFLibrary.Tests.IO;
 
 [TestClass]
 public class OFXReaderTests
@@ -8,7 +9,7 @@ public class OFXReaderTests
     [TestMethod]
     public void ConstructorTests()
     {
-        var target = new OFXReader(new StringReader(String.Empty));
+        var target = new OFXReader(new StringReader(string.Empty));
         // how to validate?
     }
 

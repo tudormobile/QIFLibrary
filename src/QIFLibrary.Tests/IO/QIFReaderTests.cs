@@ -1,8 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Tudormobile.QIFLibrary;
+using Tudormobile.QIFLibrary.IO;
 
-namespace QIFLibrary.Tests;
+namespace QIFLibrary.Tests.IO;
 
 [TestClass]
 public class QIFReaderTests

@@ -1,13 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
-using System.Threading.Tasks;
 using Tudormobile.QIFLibrary;
+using Tudormobile.QIFLibrary.IO;
 
-namespace QIFLibrary.Tests;
+namespace QIFLibrary.Tests.IO;
 
 [TestClass]
 public class CSVWriterTests
@@ -24,8 +20,8 @@ public class CSVWriterTests
         target.Write(doc);
         writer.Flush();
 
-        var actual = Encoding.UTF8.GetString(ms.ToArray()).Replace("\n", String.Empty).Replace("\r", string.Empty);
-        var expected = File.ReadAllText(filename).Replace("\"", String.Empty).Replace("\n", String.Empty).Replace("\r", string.Empty);
+        var actual = Encoding.UTF8.GetString(ms.ToArray()).Replace("\n", string.Empty).Replace("\r", string.Empty);
+        var expected = File.ReadAllText(filename).Replace("\"", string.Empty).Replace("\n", string.Empty).Replace("\r", string.Empty);
         Assert.AreEqual(expected, actual);
     }
 
@@ -67,7 +63,7 @@ public class CSVWriterTests
 
         public string this[string fieldName] => throw new NotImplementedException();
 
-        public string[] Values => ["12,34","this\"is\" a test", "5"];
+        public string[] Values => ["12,34", "this\"is\" a test", "5"];
 
         public bool TryGetValue<T>(int index, out T? value) where T : IParsable<T>
         {
