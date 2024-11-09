@@ -5,9 +5,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tudormobile.QIFLibrary;
+using Tudormobile.QIFLibrary.IO;
 
-namespace QIFLibrary.Tests;
+namespace QIFLibrary.Tests.IO;
 
 [TestClass]
 public class CSVReaderTests

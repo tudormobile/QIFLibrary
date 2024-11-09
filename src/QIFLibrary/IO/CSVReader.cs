@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Tudormobile.QIFLibrary;
+namespace Tudormobile.QIFLibrary.IO;
 
 /// <summary>
 /// Provides mechanisms for reading CSV data.
@@ -45,7 +45,7 @@ public class CSVReader
     /// Read comments from the data stream.
     /// </summary>
     /// <returns>Comments</returns>
-    public IEnumerable<String> ReadComments()
+    public IEnumerable<string> ReadComments()
     {
         _lastLine = _reader.ReadLine();
         while (_lastLine != null && !_lastLine.Contains(','))
