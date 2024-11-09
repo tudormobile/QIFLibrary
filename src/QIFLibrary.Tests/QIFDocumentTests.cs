@@ -1,9 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using Tudormobile.QIFLibrary;
 
 namespace QIFLibrary.Tests;
@@ -116,6 +111,20 @@ Q107
         Assert.AreEqual(11259.61m, actual.Records[0].Amount);
         Assert.AreEqual("R", actual.Records[0].Status);
 
+    }
+
+    [TestMethod]
+    public void ParseFidelityDocumentTest()
+    {
+        var expected = QIFDocumentType.Investment;
+        var expectedRecords = 12;
+        var filename = Path.Combine("TestAssets", "history.qif");
+        var actual = QIFDocument.ParseFile(filename);
+        Assert.AreEqual(expected, actual.DataType);
+        Assert.AreEqual(expectedRecords, actual.Records.Count, "Did NOT contain the expected record count.");
+
+        Assert.AreEqual("Fees", actual.Records.First().Memo);
+        Assert.AreEqual("Contribution", actual.Records[1].Memo);
     }
 
 }

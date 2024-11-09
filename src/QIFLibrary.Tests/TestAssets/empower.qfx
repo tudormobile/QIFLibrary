@@ -1,0 +1,153 @@
+OFXHEADER:100
+DATA:OFXSGML
+VERSION:102
+SECURITY:NONE
+ENCODING:USASCII
+CHARSET:1252
+COMPRESSION:NONE
+OLDFILEUID:NONE
+NEWFILEUID:NONE
+
+<OFX>
+  <SIGNONMSGSRSV1>
+    <SONRS>
+      <STATUS>
+        <CODE>0</CODE>
+        <SEVERITY>INFO</SEVERITY>
+        <MESSAGE>SUCCESS</MESSAGE>
+      </STATUS>
+      <DTSERVER>20241109050709.178</DTSERVER>
+      <LANGUAGE>ENG</LANGUAGE>
+      <FI>
+        <ORG>GWRS</ORG>
+        <FID>3862</FID>
+      </FI>
+      <INTU.BID>3862</INTU.BID>
+    </SONRS>
+  </SIGNONMSGSRSV1>
+  <INVSTMTMSGSRSV1>
+    <INVSTMTTRNRS>
+      <TRNUID>0</TRNUID>
+      <STATUS>
+        <CODE>0</CODE>
+        <SEVERITY>INFO</SEVERITY>
+        <MESSAGE>SUCCESS</MESSAGE>
+      </STATUS>
+      <INVSTMTRS>
+        <DTASOF>20240930000000.000</DTASOF>
+        <CURDEF>USD</CURDEF>
+        <INVACCTFROM>
+          <BROKERID>gwrs.com</BROKERID>
+          <ACCTID>20943567.150563-01</ACCTID>
+        </INVACCTFROM>
+        <INVTRANLIST>
+          <DTSTART>20240701000000.000</DTSTART>
+          <DTEND>20240930000000.000</DTEND>
+          <SELLMF>
+            <INVSELL>
+              <INVTRAN>
+                <FITID>86823817E2055931877</FITID>
+                <DTTRADE>20240729000000.000</DTTRADE>
+              </INVTRAN>
+              <SECID>
+                <UNIQUEID>LMCSP5$01</UNIQUEID>
+                <UNIQUEIDTYPE>CUSIP</UNIQUEIDTYPE>
+              </SECID>
+              <UNITS>-18.893453</UNITS>
+              <UNITPRICE>598.365476</UNITPRICE>
+              <TOTAL>11305.19</TOTAL>
+              <SUBACCTSEC>OTHER</SUBACCTSEC>
+              <SUBACCTFUND>OTHER</SUBACCTFUND>
+            </INVSELL>
+            <SELLTYPE>SELL</SELLTYPE>
+          </SELLMF>
+          <SELLMF>
+            <INVSELL>
+              <INVTRAN>
+                <FITID>86823817E2075058013</FITID>
+                <DTTRADE>20240828000000.000</DTTRADE>
+              </INVTRAN>
+              <SECID>
+                <UNIQUEID>LMCSP5$01</UNIQUEID>
+                <UNIQUEIDTYPE>CUSIP</UNIQUEIDTYPE>
+              </SECID>
+              <UNITS>-18.893448</UNITS>
+              <UNITPRICE>613.253865</UNITPRICE>
+              <TOTAL>11586.48</TOTAL>
+              <SUBACCTSEC>OTHER</SUBACCTSEC>
+              <SUBACCTFUND>OTHER</SUBACCTFUND>
+            </INVSELL>
+            <SELLTYPE>SELL</SELLTYPE>
+          </SELLMF>
+          <SELLMF>
+            <INVSELL>
+              <INVTRAN>
+                <FITID>86823817E2096644510</FITID>
+                <DTTRADE>20240930000000.000</DTTRADE>
+              </INVTRAN>
+              <SECID>
+                <UNIQUEID>LMCSP5$01</UNIQUEID>
+                <UNIQUEIDTYPE>CUSIP</UNIQUEIDTYPE>
+              </SECID>
+              <UNITS>-18.893434</UNITS>
+              <UNITPRICE>632.752098</UNITPRICE>
+              <TOTAL>11954.86</TOTAL>
+              <SUBACCTSEC>OTHER</SUBACCTSEC>
+              <SUBACCTFUND>OTHER</SUBACCTFUND>
+            </INVSELL>
+            <SELLTYPE>SELL</SELLTYPE>
+          </SELLMF>
+          <TRANSFER>
+            <INVTRAN>
+              <FITID>86823817E2095337967</FITID>
+              <DTTRADE>20240927000000.000</DTTRADE>
+            </INVTRAN>
+            <SECID>
+              <UNIQUEID>LMCSP5$01</UNIQUEID>
+              <UNIQUEIDTYPE>CUSIP</UNIQUEIDTYPE>
+            </SECID>
+            <SUBACCTSEC>OTHER</SUBACCTSEC>
+            <UNITS>-0.00165</UNITS>
+            <TFERACTION>OUT</TFERACTION>
+            <POSTYPE>LONG</POSTYPE>
+            <UNITPRICE>630.30303</UNITPRICE>
+          </TRANSFER>
+        </INVTRANLIST>
+        <INVPOSLIST>
+          <POSMF>
+            <INVPOS>
+              <SECID>
+                <UNIQUEID>LMCSP5$01</UNIQUEID>
+                <UNIQUEIDTYPE>CUSIP</UNIQUEIDTYPE>
+              </SECID>
+              <HELDINACCT>CASH</HELDINACCT>
+              <POSTYPE>LONG</POSTYPE>
+              <UNITS>2059.384806</UNITS>
+              <UNITPRICE>632.75209</UNITPRICE>
+              <MKTVAL>1303080.04</MKTVAL>
+              <DTPRICEASOF>20240930000000.000</DTPRICEASOF>
+            </INVPOS>
+          </POSMF>
+        </INVPOSLIST>
+        <INV401KBAL>
+          <TOTAL>1303080.04</TOTAL>
+        </INV401KBAL>
+      </INVSTMTRS>
+    </INVSTMTTRNRS>
+  </INVSTMTMSGSRSV1>
+  <SECLISTMSGSRSV1>
+    <SECLIST>
+      <MFINFO>
+        <SECINFO>
+          <SECID>
+            <UNIQUEID>LMCSP5$01</UNIQUEID>
+            <UNIQUEIDTYPE>CUSIP</UNIQUEIDTYPE>
+          </SECID>
+          <SECNAME>US Large-Cap Equity Index Fund</SECNAME>
+          <TICKER>LMCSP5$01</TICKER>
+        </SECINFO>
+      </MFINFO>
+    </SECLIST>
+  </SECLISTMSGSRSV1>
+</OFX>
+
