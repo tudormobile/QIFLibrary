@@ -130,7 +130,12 @@ public class OFXReader
         if (peek.TokenType == OFXTokenReader.OFXTokenType.StartTag)
         {
             var startTag = _tokenReader.Value.Read();
-            message = new OFXMessage() { Name = startTag.Data };
+            message = startTag.Data switch
+            {
+                "INVSTMTTRNRS" => new OFXInvestmentStatementResponse() { Name = startTag.Data },
+                _ => new OFXMessage() { Name = startTag.Data }
+            };
+
             // Read the message until the matching end tag (or EOF)
             while (!peekEOF() && !peekEndTag(startTag.Data))
             {
