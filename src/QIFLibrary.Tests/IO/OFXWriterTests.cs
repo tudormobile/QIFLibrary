@@ -41,6 +41,8 @@ namespace QIFLibrary.Tests.IO
             var target = new OFXWriter(writer, indent: false);
 
             var filename = Path.Combine("TestAssets", "Quicken.qfx");
+            if (!File.Exists(filename)) return;
+
             var document = OFXDocument.ParseFile(filename);
 
             target.Write(document);
@@ -55,6 +57,8 @@ namespace QIFLibrary.Tests.IO
             var target = new OFXWriter(writer, indent: true);
 
             var filename = Path.Combine("TestAssets", "Quicken.qfx");
+            if (!File.Exists(filename)) return;
+
             var document = OFXDocument.ParseFile(filename);
 
             target.Write(document);

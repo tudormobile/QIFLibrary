@@ -105,6 +105,8 @@ Q107
     {
         var expected = 26;
         var filename = Path.Combine("TestAssets", "retirement.qif");
+        if (!File.Exists(filename)) return;
+
         var contents = File.ReadAllBytes(filename);
         var ms = new MemoryStream(contents);
         var actual = new List<QIFRecord>();

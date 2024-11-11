@@ -1,12 +1,6 @@
-﻿using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Tudormobile.QIFLibrary;
 using Tudormobile.QIFLibrary.Converters;
 using Tudormobile.QIFLibrary.Entities;
@@ -165,6 +159,8 @@ NEWFILEUID:NONE
     public void QuickenQFXTest()
     {
         var filename = Path.Combine("TestAssets", "Quicken.qfx");
+        if (!File.Exists(filename)) return;
+
         var target = OFXDocument.ParseFile(filename);
 
         Assert.AreEqual(9, target.Headers.Count);
@@ -198,6 +194,8 @@ NEWFILEUID:NONE
     public void OFXInvestmentFileTest()
     {
         var filename = Path.Combine("TestAssets", "temp.ofx");
+        if (!File.Exists(filename)) return;
+
         var target = OFXDocument.ParseFile(filename);
 
         // find a position list

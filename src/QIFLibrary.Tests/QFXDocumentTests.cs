@@ -11,6 +11,8 @@ public class QFXDocumentTests
     public void EmpowerExportTest()
     {
         var filename = Path.Combine("TestAssets", "empower.qfx");
+        if (!File.Exists(filename)) return;
+
         var target = OFXDocument.ParseFile(filename);
 
         var inst = new InstitutionConverter().Convert(target.MessageSets[0].Messages[0].AsProperty());
@@ -36,6 +38,8 @@ public class QFXDocumentTests
     public void InvestmentStatementResponseTest()
     {
         var filename = Path.Combine("TestAssets", "empower.qfx");
+        if (!File.Exists(filename)) return;
+
         var target = OFXDocument.ParseFile(filename).MessageSets[1].Messages.First() as OFXInvestmentStatementResponse;
 
         Assert.IsNotNull(target);

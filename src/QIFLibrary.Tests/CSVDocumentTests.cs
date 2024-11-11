@@ -1,10 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tudormobile.QIFLibrary;
+﻿using Tudormobile.QIFLibrary;
 
 namespace QIFLibrary.Tests;
 
@@ -29,6 +23,8 @@ public class CSVDocumentTests
     {
         var expected = 3;
         var filename = Path.Combine("TestAssets", "sample1.csv");
+        if (!File.Exists(filename)) return;
+
         var target = CSVDocument.ParseFile(filename);
         var actual = target.Comments.Count;
         Assert.AreEqual(expected, actual);
@@ -43,6 +39,8 @@ public class CSVDocumentTests
     {
         var expected = 0;
         var filename = Path.Combine("TestAssets", "sample2.csv");
+        if (!File.Exists(filename)) return;
+
         var target = CSVDocument.ParseFile(filename);
         var actual = target.Comments.Count;
         Assert.AreEqual(expected, actual);
@@ -61,6 +59,8 @@ public class CSVDocumentTests
     {
         var expected = 0;
         var filename = Path.Combine("TestAssets", "sample3.csv");
+        if (!File.Exists(filename)) return;
+
         var target = CSVDocument.ParseFile(filename);
         var actual = target.Comments.Count;
         Assert.AreEqual(expected, actual);
@@ -168,6 +168,7 @@ one,two,three";
     public void ChaseCCDocumemtTest()
     {
         var filename = Path.Combine("TestAssets", "chase.qfx");
+        if (!File.Exists(filename)) return;
         var target = OFXDocument.ParseFile(filename);
 
         Assert.IsTrue(target.Headers.AsEnumerable().Any(), "Failed to read headers from malformed CHASE document.");

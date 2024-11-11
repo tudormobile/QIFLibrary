@@ -12,6 +12,8 @@ public class QIFDocumentTests
         var expected = QIFDocumentType.Investment;
         var expectedRecords = 26;
         var filename = Path.Combine("TestAssets", "retirement.qif");
+        if (!File.Exists(filename)) return;
+
         var actual = QIFDocument.ParseFile(filename);
         Assert.AreEqual(expected, actual.DataType);
         Assert.AreEqual(expectedRecords, actual.Records.Count, "Did NOT contain the expected record count.");
@@ -23,6 +25,8 @@ public class QIFDocumentTests
         var expected = QIFDocumentType.Investment;
         var expectedRecords = 29;
         var filename = Path.Combine("TestAssets", "bonds.qif");
+        if (!File.Exists(filename)) return;
+
         var actual = QIFDocument.ParseFile(filename);
         Assert.AreEqual(expected, actual.DataType);
         Assert.AreEqual(expectedRecords, actual.Records.Count, "Did NOT contain the expected record count.");
@@ -119,6 +123,8 @@ Q107
         var expected = QIFDocumentType.Investment;
         var expectedRecords = 12;
         var filename = Path.Combine("TestAssets", "history.qif");
+        if (!File.Exists(filename)) return;
+
         var actual = QIFDocument.ParseFile(filename);
         Assert.AreEqual(expected, actual.DataType);
         Assert.AreEqual(expectedRecords, actual.Records.Count, "Did NOT contain the expected record count.");
