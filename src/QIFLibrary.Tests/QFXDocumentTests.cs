@@ -40,7 +40,7 @@ public class QFXDocumentTests
 
         Assert.IsNotNull(target);
         Assert.AreEqual(String.Empty, target.Cookie);
-        Assert.AreEqual(new DateTime(2024, 09, 29, 20, 00, 00, DateTimeKind.Utc), target.Date); //20240930000000.000
+        Assert.AreEqual(new DateTime(2024, 09, 30, 00, 00, 00), target.Date.ToUniversalTime()); //20240930000000.000
 
         Assert.IsNotNull(target.Account);
         Assert.AreEqual("20943567.150563-01", target.Account.AccountId);
