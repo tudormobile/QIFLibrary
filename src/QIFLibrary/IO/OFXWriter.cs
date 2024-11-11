@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Reflection.PortableExecutable;
-using Tudormobile.QIFLibrary;
 
-namespace Tudormobile.QIFLibrary;
+namespace Tudormobile.QIFLibrary.IO;
 
 /// <summary>
 /// Provides mechanisms to write OFX data.
@@ -49,12 +48,12 @@ public class OFXWriter
                 if (lastOpen && isOpen)
                 {
                     currentIndent += indentAmount;
-                    indentString = $"{Environment.NewLine}{new String(' ', currentIndent)}";
+                    indentString = $"{Environment.NewLine}{new string(' ', currentIndent)}";
                 }
                 if (!isOpen && !lastOpen)
                 {
                     currentIndent = Math.Max(0, currentIndent - indentAmount);
-                    indentString = $"{Environment.NewLine}{new String(' ', currentIndent)}";
+                    indentString = $"{Environment.NewLine}{new string(' ', currentIndent)}";
                 }
                 lastOpen = isOpen && s[^1] == '>';
                 _writer.Write(indentString);

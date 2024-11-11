@@ -1,4 +1,4 @@
-﻿namespace Tudormobile.QIFLibrary;
+﻿namespace Tudormobile.QIFLibrary.IO;
 
 /// <summary>
 /// Reads data in Quicken Interchange Format (QIF).

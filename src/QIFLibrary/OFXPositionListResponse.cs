@@ -52,7 +52,7 @@ public class OFXPositionListResponse : OFXMessage
         Status = status ?? new OFXStatus() { Code = 0, Severity = OFXStatus.StatusSeverity.INFO };
         Cookie = cookie;
 
-        _properties = new Lazy<List<OFXProperty>>(generateProperties);
+        _properties = new Lazy<List<OFXProperty>>(() => generateProperties());
         Name = "INVSTMTTRNRS";
     }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tudormobile.QIFLibrary;
+namespace Tudormobile.QIFLibrary.IO;
 
 /// <summary>
 /// Provides mechanisms to write CSV data.

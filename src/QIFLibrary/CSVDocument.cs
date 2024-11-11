@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Tudormobile.QIFLibrary;
+﻿namespace Tudormobile.QIFLibrary;
 
 /// <summary>
 /// Comma Separated Values (CSV) document.
@@ -55,7 +47,7 @@ public class CSVDocument
     public CSVDocument(string? name = null, IEnumerable<string>? comments = null)
     {
         Name = name ?? string.Empty;
-        _comments = comments == null ? new Lazy<IList<string>>(readComments) : new Lazy<IList<string>>(new List<String>(comments));
+        _comments = comments == null ? new Lazy<IList<string>>(() => readComments()) : new Lazy<IList<string>>(new List<String>(comments));
     }
 
     /// <summary>

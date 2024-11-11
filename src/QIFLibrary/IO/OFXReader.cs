@@ -1,4 +1,4 @@
-﻿namespace Tudormobile.QIFLibrary;
+﻿namespace Tudormobile.QIFLibrary.IO;
 
 /// <summary>
 /// Provides mechanisms to read OFX data.
@@ -32,7 +32,7 @@ public class OFXReader
     public bool TryReadHeader(out (string Key, string Value) header)
     {
         var line = _reader.ReadLine();
-        if (!String.IsNullOrWhiteSpace(line))
+        if (!string.IsNullOrWhiteSpace(line))
         {
             var parts = line.Split(':');
 
@@ -130,7 +130,12 @@ public class OFXReader
         if (peek.TokenType == OFXTokenReader.OFXTokenType.StartTag)
         {
             var startTag = _tokenReader.Value.Read();
-            message = new OFXMessage() { Name = startTag.Data };
+            message = startTag.Data switch
+            {
+                "INVSTMTTRNRS" => new OFXInvestmentStatementResponse() { Name = startTag.Data },
+                _ => new OFXMessage() { Name = startTag.Data }
+            };
+
             // Read the message until the matching end tag (or EOF)
             while (!peekEOF() && !peekEndTag(startTag.Data))
             {
@@ -144,9 +149,9 @@ public class OFXReader
                         if (prop!.Name == "STATUS")
                         {
                             message.Status = new OFXStatus(
-                                int.TryParse(prop.Children.FirstOrDefault(c => c.Name == "CODE")?.Value ?? String.Empty, out var code) ? code : 0,
-                                Enum.TryParse<OFXStatus.StatusSeverity>(prop.Children.FirstOrDefault(c => c.Name == "SEVERITY")?.Value ?? String.Empty, out var severity) ? severity : OFXStatus.StatusSeverity.UNKNOWN,
-                                prop.Children.FirstOrDefault(c => c.Name == "MESSAGE")?.Value ?? String.Empty
+                                int.TryParse(prop.Children.FirstOrDefault(c => c.Name == "CODE")?.Value ?? string.Empty, out var code) ? code : 0,
+                                Enum.TryParse<OFXStatus.StatusSeverity>(prop.Children.FirstOrDefault(c => c.Name == "SEVERITY")?.Value ?? string.Empty, out var severity) ? severity : OFXStatus.StatusSeverity.UNKNOWN,
+                                prop.Children.FirstOrDefault(c => c.Name == "MESSAGE")?.Value ?? string.Empty
                             );
                         }
                         else if (prop.Name == "TRNUID")

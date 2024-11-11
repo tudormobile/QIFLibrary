@@ -1,12 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tudormobile.QIFLibrary;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Tudormobile.QIFLibrary;
+using Tudormobile.QIFLibrary.IO;
 
-namespace QIFLibrary.Tests
+namespace QIFLibrary.Tests.IO
 {
     [TestClass]
     public class OFXWriterTests
@@ -71,7 +66,7 @@ namespace QIFLibrary.Tests
         public void WriteTest3()
         {
             var doc = new OFXDocument().DefaultHeaders();
-            double quantity = 0.01 + (double)DateTime.Now.Day / 1000.0;
+            double quantity = 0.01 + DateTime.Now.Day / 1000.0;
 
             var signon = new OFXMessageSet(OFXMessageSetTypes.SIGNON, OFXMessageDirection.RESPONSE);
             var invstm = new OFXMessageSet(OFXMessageSetTypes.INVSTMT, OFXMessageDirection.RESPONSE);
@@ -94,7 +89,7 @@ namespace QIFLibrary.Tests
             writer.Write(doc);
             var result = sw.ToString();
 
-            Assert.AreEqual(24, result.Split(new char[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries).Length);
+            Assert.AreEqual(24, result.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Length);
 
         }
 
