@@ -17,8 +17,8 @@ public class QFXDocumentTests
 
         var inst = new InstitutionConverter().Convert(target.MessageSets[0].Messages[0].AsProperty());
         Assert.IsNotNull(inst);
-        Assert.AreEqual("GWRS", inst.Name);
-        Assert.AreEqual("3862", inst.Id);
+        Assert.AreEqual("empower.org", inst.Name);
+        Assert.AreEqual("12345", inst.Id);
 
         var transactions = new OFXPropertyConverter().GetInvestmentTransactionList(target.MessageSets[1].Messages[0].AsProperty());
         var positions = new OFXPropertyConverter().GetPositionList(target.MessageSets[1].Messages[0].AsProperty());
@@ -32,6 +32,11 @@ public class QFXDocumentTests
 
         Assert.IsNotNull(transactions);
         Assert.AreEqual(3, transactions.Items.Count);
+
+        Assert.AreEqual(11305.19m, transactions.Items[0].Total);
+        Assert.AreEqual(598.365476m, transactions.Items[0].UnitPrice);
+        Assert.AreEqual(-18.893453m, transactions.Items[0].Units);
+        Assert.AreEqual(0m, transactions.Items[0].CommissionAndFees);
     }
 
     [TestMethod]
