@@ -41,13 +41,15 @@ namespace QIFLibrary.Tests.IO
             var target = new OFXWriter(writer, indent: false);
 
             var filename = Path.Combine("TestAssets", "Quicken.qfx");
-            if (!File.Exists(filename)) return;
+            if (File.Exists(filename))
+            {
 
-            var document = OFXDocument.ParseFile(filename);
+                var document = OFXDocument.ParseFile(filename);
 
-            target.Write(document);
+                target.Write(document);
 
-            Assert.IsTrue(writer.ToString().EndsWith("</OFX>"));
+                Assert.IsTrue(writer.ToString().EndsWith("</OFX>"));
+            }
         }
 
         [TestMethod]
@@ -57,13 +59,15 @@ namespace QIFLibrary.Tests.IO
             var target = new OFXWriter(writer, indent: true);
 
             var filename = Path.Combine("TestAssets", "Quicken.qfx");
-            if (!File.Exists(filename)) return;
+            if (File.Exists(filename))
+            {
 
-            var document = OFXDocument.ParseFile(filename);
+                var document = OFXDocument.ParseFile(filename);
 
-            target.Write(document);
+                target.Write(document);
 
-            Assert.IsTrue(writer.ToString().EndsWith("</OFX>"));
+                Assert.IsTrue(writer.ToString().EndsWith("</OFX>"));
+            }
         }
 
         [TestMethod]

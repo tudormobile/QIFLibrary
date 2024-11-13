@@ -1,10 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
-using System.Threading.Tasks;
 using Tudormobile.QIFLibrary.IO;
 
 namespace QIFLibrary.Tests.IO;
@@ -126,5 +121,38 @@ mike,2";
         }
         catch (IndexOutOfRangeException) { }
     }
+
+    [TestMethod]
+    public void QuoteTest()
+    {
+        var data = new (string test, string expected)[]
+        {
+            ("test", "\"test\""),       // adds quotes
+            ("\"test\"", "\"test\""),   // does not add quotes
+            ("test\"", "\"test\"\""),   // adds quotes
+            ("\"test", "\"\"test\""),   // adds wuotes
+        };
+        foreach (var item in data)
+        {
+            Assert.AreEqual(item.expected, item.test.Quote());
+        }
+    }
+
+    [TestMethod]
+    public void UnQuoteTest()
+    {
+        var data = new (string test, string expected)[]
+        {
+            ("test", "test"),           // nothing to remove
+            ("\"test\"", "test"),       // removes quotes
+            ("test\"", "test\""),       // does not remove
+            ("\"test", "\"test"),       // does not remove
+        };
+        foreach (var item in data)
+        {
+            Assert.AreEqual(item.expected, item.test.UnQuote());
+        }
+    }
+
 
 }

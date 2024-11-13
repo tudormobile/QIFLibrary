@@ -22,3 +22,6 @@ csharp_style_prefer_primary_constructors = true:suggestion
 csharp_style_expression_bodied_methods = false:silent
 csharp_style_expression_bodied_constructors = false:silent
 csharp_style_expression_bodied_operators = false:silent
+
+## Private methods must be camelCase
+dotnet_naming_style.private_method_style.capitalization = camel_case

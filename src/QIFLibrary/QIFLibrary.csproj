@@ -29,7 +29,12 @@
     <PackageTags>QIF;QFX;OFX;Tudormobile</PackageTags>
     <RepositoryUrl>https://github.com/tudormobile/$(MSBuildProjectName)</RepositoryUrl>
   </PropertyGroup>
-  
+
+  <!-- For unit testing (change later ?? ) -->
+  <ItemGroup>
+    <InternalsVisibleTo Include="QIFLibrary.Tests" />
+  </ItemGroup>
+
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>

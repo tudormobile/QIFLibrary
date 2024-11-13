@@ -105,20 +105,22 @@ Q107
     {
         var expected = 26;
         var filename = Path.Combine("TestAssets", "retirement.qif");
-        if (!File.Exists(filename)) return;
-
-        var contents = File.ReadAllBytes(filename);
-        var ms = new MemoryStream(contents);
-        var actual = new List<QIFRecord>();
-        var target = QIFReader.FromStream(ms);
-
-        await foreach (var record in target.ReadRecordsAsync())
+        if (File.Exists(filename))
         {
-            actual.Add(record);
-        }
 
-        target.Close();
-        Assert.AreEqual(expected, actual.Count);
+            var contents = File.ReadAllBytes(filename);
+            var ms = new MemoryStream(contents);
+            var actual = new List<QIFRecord>();
+            var target = QIFReader.FromStream(ms);
+
+            await foreach (var record in target.ReadRecordsAsync())
+            {
+                actual.Add(record);
+            }
+
+            target.Close();
+            Assert.AreEqual(expected, actual.Count);
+        }
     }
 
     [TestMethod]
