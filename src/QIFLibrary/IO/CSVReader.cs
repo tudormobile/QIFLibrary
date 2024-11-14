@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace Tudormobile.QIFLibrary.IO;
 
@@ -63,7 +57,7 @@ public class CSVReader
     {
         var header = _lastLine ?? _reader.ReadLine();
         _lastLine = null;
-        _fields = header?.Split(',');
+        _fields = header?.CsvSplit();
         return _fields ?? Enumerable.Empty<string>();
     }
 
@@ -188,5 +182,52 @@ public class CSVReader
         }
 
     }
+}
 
+internal static class CSVExtentions
+{
+    private static Char[] _trimChars = [' ', '\r', '\n'];
+    public static string[] CsvSplit(this string s)
+    {
+        return csvSplitString(s).Select(x => x.Trim(_trimChars)).ToArray();
+    }
+
+    public static string Quote(this string s)
+    {
+        if (s.Length < 2 || s[0] != '\"' || s[s.Length - 1] != '\"') return $"\"{s}\"";
+        return s;
+    }
+
+    public static string UnQuote(this string s)
+    {
+        if (s.Length >= 2 && s[0] == '\"' && s[s.Length - 1] == '\"') return s.Substring(1, s.Length - 2);
+        return s;
+    }
+
+    private static IEnumerable<string> csvSplitString(string s)
+    {
+        var start = 0;
+        var inQuote = false;
+        for (int i = 0; i < s.Length; i++)
+        {
+            var c = s[i];
+            if (!inQuote)
+            {
+                if (c == '"')
+                {
+                    inQuote = true;
+                }
+                else if (c == ',')
+                {
+                    yield return s.Substring(start, i - start).UnQuote();
+                    start = i + 1;
+                }
+            }
+            else
+            {
+                if (c == '"') inQuote = false;
+            }
+        }
+        yield return s.Substring(start, s.Length - start).UnQuote();
+    }
 }

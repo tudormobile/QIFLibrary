@@ -1,10 +1,12 @@
-﻿namespace Tudormobile.QIFLibrary;
+﻿using Tudormobile.QIFLibrary.IO;
+namespace Tudormobile.QIFLibrary;
 
 /// <summary>
 /// Comma Separated Values (CSV) document.
 /// </summary>
 public class CSVDocument
 {
+    private static char[] _lineEndings = ['\r', '\n'];
     private int _recordStart = 0;
     private string[]? _data = null;
     private readonly Lazy<IList<String>> _comments;
@@ -65,7 +67,7 @@ public class CSVDocument
     /// <param name="name">Name of the document.</param>
     /// <returns>A CSVDocument representing the data.</returns>
     public static CSVDocument Parse(string data, string? name = null)
-        => Parse(data.Split("\n"), name);
+        => Parse(data.Split(_lineEndings, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries), name);
 
     /// <summary>
     /// Parse CSV data.
@@ -89,7 +91,7 @@ public class CSVDocument
             if (!typesMatch(getTypes(first), getTypes(last)))
             {
                 // assume header
-                ((List<String>)result.Fields).AddRange(first.Split(','));
+                ((List<String>)result.Fields).AddRange(first.CsvSplit());
                 result._recordStart++;
             }
         }
@@ -153,7 +155,7 @@ public class CSVDocument
     private static Type[] getTypes(string data)
     {
         // possible: DateTime, decimal, else string
-        var parts = data.Split(',');
+        var parts = data.CsvSplit();
         var types = new Type[parts.Length];
         for (int i = 0; i < parts.Length; i++)
         {
@@ -189,9 +191,7 @@ public class CSVDocument
         private string[] readParts() => _parts ?? createParts();
         private string[] createParts()
         {
-            // TODO: Account for quoted comma's in the data
-            // need to account for comma's in the data
-            _parts = _doc._data![_index].Split(",").Select(x => (x.Length > 1 && x.StartsWith('\"') && x.EndsWith('\"')) ? x.Trim('\"') : x).ToArray();
+            _parts = _doc._data![_index].CsvSplit().Select(x => x.UnQuote()).ToArray();
             return _parts;
         }
 

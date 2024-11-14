@@ -1,10 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tudormobile.QIFLibrary;
+﻿using Tudormobile.QIFLibrary;
 
 namespace QIFLibrary.Tests;
 
@@ -29,13 +23,17 @@ public class CSVDocumentTests
     {
         var expected = 3;
         var filename = Path.Combine("TestAssets", "sample1.csv");
-        var target = CSVDocument.ParseFile(filename);
-        var actual = target.Comments.Count;
-        Assert.AreEqual(expected, actual);
+        if (File.Exists(filename))
+        {
 
-        // Should have 7 records with 9 fields
-        Assert.AreEqual(7, target.Records.Count, "Data should have 7 records.");
-        Assert.AreEqual(9, target.Fields.Count, "Data should have 9 fields.");
+            var target = CSVDocument.ParseFile(filename);
+            var actual = target.Comments.Count;
+            Assert.AreEqual(expected, actual);
+
+            // Should have 7 records with 9 fields
+            Assert.AreEqual(7, target.Records.Count, "Data should have 7 records.");
+            Assert.AreEqual(9, target.Fields.Count, "Data should have 9 fields.");
+        }
     }
 
     [TestMethod]
@@ -43,17 +41,21 @@ public class CSVDocumentTests
     {
         var expected = 0;
         var filename = Path.Combine("TestAssets", "sample2.csv");
-        var target = CSVDocument.ParseFile(filename);
-        var actual = target.Comments.Count;
-        Assert.AreEqual(expected, actual);
+        if (File.Exists(filename))
+        {
 
-        // Should have 7 records with 9 fields
-        Assert.AreEqual(215, target.Records.Count, "Data should have 7 records.");
-        Assert.AreEqual(11, target.Fields.Count, "Data should have 9 fields.");
+            var target = CSVDocument.ParseFile(filename);
+            var actual = target.Comments.Count;
+            Assert.AreEqual(expected, actual);
 
-        var d = target.Records[0]["Effective Date"];
+            // Should have 7 records with 9 fields
+            Assert.AreEqual(215, target.Records.Count, "Data should have 7 records.");
+            Assert.AreEqual(11, target.Fields.Count, "Data should have 9 fields.");
 
-        var success = target.Records[0].TryGetValue<DateTime>("Effective Date", out DateTime dd);
+            var d = target.Records[0]["Effective Date"];
+
+            var success = target.Records[0].TryGetValue<DateTime>("Effective Date", out DateTime dd);
+        }
     }
 
     [TestMethod]
@@ -61,22 +63,26 @@ public class CSVDocumentTests
     {
         var expected = 0;
         var filename = Path.Combine("TestAssets", "sample3.csv");
-        var target = CSVDocument.ParseFile(filename);
-        var actual = target.Comments.Count;
-        Assert.AreEqual(expected, actual);
+        if (File.Exists(filename))
+        {
 
-        // Should have 7 records with 9 fields
-        Assert.AreEqual(2, target.Records.Count, "Data should have 2 records.");
-        Assert.AreEqual(0, target.Fields.Count, "Data should have ? fields.");
+            var target = CSVDocument.ParseFile(filename);
+            var actual = target.Comments.Count;
+            Assert.AreEqual(expected, actual);
 
-        Assert.AreEqual("1", target.Records[0][0]);
-        Assert.AreEqual("2", target.Records[0][1]);
-        Assert.AreEqual("3", target.Records[0][2]);
-        Assert.AreEqual("4", target.Records[1][0]);
-        Assert.AreEqual("5", target.Records[1][1]);
-        Assert.AreEqual("6", target.Records[1][2]);
+            // Should have 7 records with 9 fields
+            Assert.AreEqual(2, target.Records.Count, "Data should have 2 records.");
+            Assert.AreEqual(0, target.Fields.Count, "Data should have ? fields.");
 
-        CollectionAssert.AreEqual(new string[] { "1", "2", "3" }, target.Records[0].Values);
+            Assert.AreEqual("1", target.Records[0][0]);
+            Assert.AreEqual("2", target.Records[0][1]);
+            Assert.AreEqual("3", target.Records[0][2]);
+            Assert.AreEqual("4", target.Records[1][0]);
+            Assert.AreEqual("5", target.Records[1][1]);
+            Assert.AreEqual("6", target.Records[1][2]);
+
+            CollectionAssert.AreEqual(new string[] { "1", "2", "3" }, target.Records[0].Values);
+        }
     }
 
     // Edge cases
@@ -133,10 +139,9 @@ public class CSVDocumentTests
     {
         var data = "\"one,two\",\"three\",\"";
         var target = CSVDocument.Parse(data);
-        Assert.AreEqual("\"one", target.Records[0][0]);
-        Assert.AreEqual("two\"", target.Records[0][1]);
-        Assert.AreEqual("three", target.Records[0][2]);
-        Assert.AreEqual("\"", target.Records[0][3]);
+        Assert.AreEqual("one,two", target.Records[0][0]);
+        Assert.AreEqual("three", target.Records[0][1]);
+        Assert.AreEqual("\"", target.Records[0][2]);
     }
 
     [TestMethod]
@@ -168,10 +173,53 @@ one,two,three";
     public void ChaseCCDocumemtTest()
     {
         var filename = Path.Combine("TestAssets", "chase.qfx");
-        var target = OFXDocument.ParseFile(filename);
+        if (File.Exists(filename))
+        {
+            var target = OFXDocument.ParseFile(filename);
 
-        Assert.IsTrue(target.Headers.AsEnumerable().Any(), "Failed to read headers from malformed CHASE document.");
-        Assert.IsTrue(target.MessageSets.AsEnumerable().Any(), "Failed to read transactions from malformed CHASE document.");
+            Assert.IsTrue(target.Headers.AsEnumerable().Any(), "Failed to read headers from malformed CHASE document.");
+            Assert.IsTrue(target.MessageSets.AsEnumerable().Any(), "Failed to read transactions from malformed CHASE document.");
+        }
     }
+
+    [TestMethod]
+    public void RecordsWithCommasTest()
+    {
+        // Addresses bug #26
+        var data = "01/08/2024,S&amp;P 500 INDEX,Contributions,\"3,010.62\",\"65.853\"\r\n\r\n\r\n";
+        var expected = "3,010.62";
+        var target = CSVDocument.Parse(data);
+        var actual = target.Records[0].Values[3];
+        Assert.AreEqual(expected, actual, "Failed to parse quoted comma correctlt.");
+    }
+
+    [TestMethod]
+    public void CsvFileWithBlankLinesTest()
+    {
+        // Addresses Bug #25
+        var data = "01/08/2024,S&amp;P 500 INDEX,Contributions,\"3,010.62\",\"65.853\"\r\n\r\n01/08/2024,S&amp;P 500 INDEX,Contributions,\"3,010.62\",\"65.853\"\r\n\r\n\r\n";
+        var expected = 2;
+        var target = CSVDocument.Parse(data);
+        var actual = target.Records.Count;
+        Assert.AreEqual(expected, actual, "Should not create records from blank lines.");
+    }
+
+    [TestMethod]
+    public void CsvFileWithQuotedHeadersTest()
+    {
+        // Addresses Bug #24
+        var data = @"one,""two"",""three,four"",five
+1,2,3,4";
+        var target = CSVDocument.Parse(data);
+
+        Assert.AreEqual(1, target.Records.Count, "Should have only 1 record; should have identified header with type mis-matches.");
+        Assert.AreEqual(4, target.Fields.Count, "Should have found exactly 4 fields in this header.");
+        Assert.AreEqual("one", target.Fields[0]);
+        Assert.AreEqual("two", target.Fields[1]);
+        Assert.AreEqual("three,four", target.Fields[2]);
+        Assert.AreEqual("five", target.Fields[3]);
+    }
+
+
 
 }

@@ -1,6 +1,7 @@
 # QIFLibrary
 Library to read and write QIF data.  
 [![dotnet](https://github.com/tudormobile/QIFLibrary/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/tudormobile/QIFLibrary/actions/workflows/dotnet.yml)
+[![Publish Docs](https://github.com/tudormobile/QIFLibrary/actions/workflows/docs.yml/badge.svg)](https://github.com/tudormobile/QIFLibrary/actions/workflows/docs.yml)
 
 ## Quick Start
 

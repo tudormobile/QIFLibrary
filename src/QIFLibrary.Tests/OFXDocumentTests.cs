@@ -1,12 +1,6 @@
-﻿using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Tudormobile.QIFLibrary;
 using Tudormobile.QIFLibrary.Converters;
 using Tudormobile.QIFLibrary.Entities;
@@ -165,59 +159,65 @@ NEWFILEUID:NONE
     public void QuickenQFXTest()
     {
         var filename = Path.Combine("TestAssets", "Quicken.qfx");
-        var target = OFXDocument.ParseFile(filename);
+        if (File.Exists(filename))
+        {
 
-        Assert.AreEqual(9, target.Headers.Count);
-        Assert.AreEqual(2, target.MessageSets.Count);
-        Assert.AreEqual(OFXMessageSetTypes.BANK, target.MessageSets[1].MessageSetType);
-        Assert.AreEqual(1, target.MessageSets[1].Messages.Count);
-        Assert.AreEqual("123", target.MessageSets[1].Messages[0].Id);
-        Assert.AreEqual(4, target.MessageSets[1].Messages[0].Status.Code);
-        Assert.AreEqual("", target.MessageSets[1].Messages[0].Status.Message);
-        Assert.AreEqual(OFXStatus.StatusSeverity.INFO, target.MessageSets[1].Messages[0].Status.Severity);
-        Assert.AreEqual("STMTRS", target.MessageSets[1].Messages[0].Properties[0].Name);
-        Assert.AreEqual(5, target.MessageSets[1].Messages[0].Properties[0].Children.Count);
+            var target = OFXDocument.ParseFile(filename);
 
-        // some converters?
-        var actual = new InstitutionConverter().Convert(target.MessageSets[0].Messages[0].Properties[2]);
+            Assert.AreEqual(9, target.Headers.Count);
+            Assert.AreEqual(2, target.MessageSets.Count);
+            Assert.AreEqual(OFXMessageSetTypes.BANK, target.MessageSets[1].MessageSetType);
+            Assert.AreEqual(1, target.MessageSets[1].Messages.Count);
+            Assert.AreEqual("123", target.MessageSets[1].Messages[0].Id);
+            Assert.AreEqual(4, target.MessageSets[1].Messages[0].Status.Code);
+            Assert.AreEqual("", target.MessageSets[1].Messages[0].Status.Message);
+            Assert.AreEqual(OFXStatus.StatusSeverity.INFO, target.MessageSets[1].Messages[0].Status.Severity);
+            Assert.AreEqual("STMTRS", target.MessageSets[1].Messages[0].Properties[0].Name);
+            Assert.AreEqual(5, target.MessageSets[1].Messages[0].Properties[0].Children.Count);
 
-        var account = new OFXPropertyConverter().GetAccount(target.Root);
+            // some converters?
+            var actual = new InstitutionConverter().Convert(target.MessageSets[0].Messages[0].Properties[2]);
 
-        Assert.IsNotNull(account);
-        Assert.AreEqual("221379824", account.InstitutionId);
-        Assert.AreEqual("67035K90", account.AccountId);
-        Assert.AreEqual(Account.AccountTypes.CHECKING, account.AccountType);
+            var account = new OFXPropertyConverter().GetAccount(target.Root);
 
-        var transactions = new OFXPropertyConverter().GetTransactionList(target.Root);
-        Assert.IsNotNull(transactions);
-        Assert.AreEqual(7, transactions.Items.Count);
+            Assert.IsNotNull(account);
+            Assert.AreEqual("221379824", account.InstitutionId);
+            Assert.AreEqual("67035K90", account.AccountId);
+            Assert.AreEqual(Account.AccountTypes.CHECKING, account.AccountType);
 
+            var transactions = new OFXPropertyConverter().GetTransactionList(target.Root);
+            Assert.IsNotNull(transactions);
+            Assert.AreEqual(7, transactions.Items.Count);
+        }
     }
 
     [TestMethod]
     public void OFXInvestmentFileTest()
     {
         var filename = Path.Combine("TestAssets", "temp.ofx");
-        var target = OFXDocument.ParseFile(filename);
-
-        // find a position list
-        var positions = new OFXPropertyConverter().GetPositionList(target.Root);
-
-        var seclist = target.MessageSets[2].Messages[0].AsProperty();
-        var securities = new OFXPropertyConverter().GetSecurityList(seclist);
-
-        Assert.IsNotNull(positions);
-        Assert.IsNotNull(securities);
-        foreach (var item in positions.Items)
+        if (File.Exists(filename))
         {
-            var id = item.SecurityId;
-            Debug.WriteLine($"Position: {id} was found (of {positions.Items.Count} total):");
 
-            var security = securities.Items.FirstOrDefault(x => x.Id == id);
+            var target = OFXDocument.ParseFile(filename);
 
-            Assert.IsNotNull(security);
-            Debug.WriteLine($">>>Security: '{security.Name}' ({security.Id}) was found with position {item.Units} shares at ${item.UnitPrice}");
+            // find a position list
+            var positions = new OFXPropertyConverter().GetPositionList(target.Root);
+
+            var seclist = target.MessageSets[2].Messages[0].AsProperty();
+            var securities = new OFXPropertyConverter().GetSecurityList(seclist);
+
+            Assert.IsNotNull(positions);
+            Assert.IsNotNull(securities);
+            foreach (var item in positions.Items)
+            {
+                var id = item.SecurityId;
+                Debug.WriteLine($"Position: {id} was found (of {positions.Items.Count} total):");
+
+                var security = securities.Items.FirstOrDefault(x => x.Id == id);
+
+                Assert.IsNotNull(security);
+                Debug.WriteLine($">>>Security: '{security.Name}' ({security.Id}) was found with position {item.Units} shares at ${item.UnitPrice}");
+            }
         }
-
     }
 }

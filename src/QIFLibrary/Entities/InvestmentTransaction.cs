@@ -66,7 +66,7 @@ public class InvestmentTransaction
     /// <summary>
     /// Commission and fees.
     /// </summary>
-    public decimal CommissionAndFees => Math.Abs(Total) - (Math.Abs(Units) * UnitPrice);
+    public decimal CommissionAndFees => Math.Round(Math.Abs(Total) - (Math.Abs(Units * UnitPrice)), 2, MidpointRounding.ToEven);
 
     /// <summary>
     /// Create and intialize a new instance.

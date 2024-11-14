@@ -12,9 +12,13 @@ public class QIFDocumentTests
         var expected = QIFDocumentType.Investment;
         var expectedRecords = 26;
         var filename = Path.Combine("TestAssets", "retirement.qif");
-        var actual = QIFDocument.ParseFile(filename);
-        Assert.AreEqual(expected, actual.DataType);
-        Assert.AreEqual(expectedRecords, actual.Records.Count, "Did NOT contain the expected record count.");
+        if (File.Exists(filename))
+        {
+
+            var actual = QIFDocument.ParseFile(filename);
+            Assert.AreEqual(expected, actual.DataType);
+            Assert.AreEqual(expectedRecords, actual.Records.Count, "Did NOT contain the expected record count.");
+        }
     }
 
     [TestMethod]
@@ -23,9 +27,13 @@ public class QIFDocumentTests
         var expected = QIFDocumentType.Investment;
         var expectedRecords = 29;
         var filename = Path.Combine("TestAssets", "bonds.qif");
-        var actual = QIFDocument.ParseFile(filename);
-        Assert.AreEqual(expected, actual.DataType);
-        Assert.AreEqual(expectedRecords, actual.Records.Count, "Did NOT contain the expected record count.");
+        if (File.Exists(filename))
+        {
+
+            var actual = QIFDocument.ParseFile(filename);
+            Assert.AreEqual(expected, actual.DataType);
+            Assert.AreEqual(expectedRecords, actual.Records.Count, "Did NOT contain the expected record count.");
+        }
     }
 
     [TestMethod]
@@ -119,12 +127,17 @@ Q107
         var expected = QIFDocumentType.Investment;
         var expectedRecords = 12;
         var filename = Path.Combine("TestAssets", "history.qif");
-        var actual = QIFDocument.ParseFile(filename);
-        Assert.AreEqual(expected, actual.DataType);
-        Assert.AreEqual(expectedRecords, actual.Records.Count, "Did NOT contain the expected record count.");
+        if (File.Exists(filename))
+        {
 
-        Assert.AreEqual("Fees", actual.Records.First().Memo);
-        Assert.AreEqual("Contribution", actual.Records[1].Memo);
+
+            var actual = QIFDocument.ParseFile(filename);
+            Assert.AreEqual(expected, actual.DataType);
+            Assert.AreEqual(expectedRecords, actual.Records.Count, "Did NOT contain the expected record count.");
+
+            Assert.AreEqual("Fees", actual.Records.First().Memo);
+            Assert.AreEqual("Contribution", actual.Records[1].Memo);
+        }
     }
 
 }

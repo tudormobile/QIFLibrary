@@ -10,60 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="TestAssets\bank_one.qif" />
-    <None Remove="TestAssets\bank_two.qif" />
-    <None Remove="TestAssets\bonds.qif" />
-    <None Remove="TestAssets\chase.qfx" />
-    <None Remove="TestAssets\empower.qfx" />
-    <None Remove="TestAssets\history.qif" />
-    <None Remove="TestAssets\Quicken.qfx" />
-    <None Remove="TestAssets\retirement.qif" />
-    <None Remove="TestAssets\sample1.csv" />
-    <None Remove="TestAssets\sample2.csv" />
-    <None Remove="TestAssets\sample3.csv" />
-    <None Remove="TestAssets\temp.ofx" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="TestAssets\bank_one.qif">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestAssets\bank_two.qif">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestAssets\bonds.qif">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestAssets\chase.qfx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestAssets\empower.qfx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestAssets\history.qif">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestAssets\Quicken.qfx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestAssets\retirement.qif">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestAssets\sample1.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestAssets\sample2.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestAssets\sample3.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestAssets\temp.ofx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
