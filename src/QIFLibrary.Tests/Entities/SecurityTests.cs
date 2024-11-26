@@ -1,10 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tudormobile.QIFLibrary.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Tudormobile.QIFLibrary.Entities;
 
 namespace QIFLibrary.Tests.Entities;
 
@@ -27,6 +21,7 @@ public class SecurityTests
         Assert.AreEqual(price, target.UnitPrice);
         Assert.AreEqual(date, target.UnitPriceDate);
         Assert.AreEqual(Security.SecurityTypes.UNKNOWN, target.SecurityType);
+        Assert.AreEqual(Security.SecurityIdTypes.OTHER, target.SecurityIdType);
     }
 
     [TestMethod]
@@ -38,6 +33,7 @@ public class SecurityTests
         var id = "id";
         var price = 123.45m;
         var sectype = Security.SecurityTypes.MUTUALFUND;
+        var secIdType = Security.SecurityIdTypes.CUSIP;
         var target = new Security("", "", "")
         {
             Name = name,
@@ -45,7 +41,8 @@ public class SecurityTests
             UnitPriceDate = date,
             Ticker = tick,
             Id = id,
-            SecurityType = sectype
+            SecurityType = sectype,
+            SecurityIdType = secIdType
         };
 
         Assert.AreEqual(sectype, target.SecurityType);
@@ -54,7 +51,7 @@ public class SecurityTests
         Assert.AreEqual(name, target.Name);
         Assert.AreEqual(price, target.UnitPrice);
         Assert.AreEqual(date, target.UnitPriceDate);
-
+        Assert.AreEqual(secIdType, target.SecurityIdType);
     }
 
     [TestMethod]

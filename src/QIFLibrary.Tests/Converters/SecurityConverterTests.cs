@@ -1,11 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Tudormobile.QIFLibrary;
 using Tudormobile.QIFLibrary.Converters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tudormobile.QIFLibrary;
 using Tudormobile.QIFLibrary.Entities;
 using Tudormobile.QIFLibrary.Interfaces;
 
@@ -49,6 +43,7 @@ public class SecurityConverterTests
 
         var securityId = new OFXProperty("SECID");
         securityId.Children.Add(new OFXProperty("UNIQUEID", "ABC"));
+        securityId.Children.Add(new OFXProperty("UNIQUEIDTYPE", "TICKER"));
 
         security.Children.Add(securityId);
         security.Children.Add(new OFXProperty("SECNAME", "ABC Company"));
@@ -66,6 +61,7 @@ public class SecurityConverterTests
         Assert.IsNotNull(actual);
         Assert.AreEqual("ABC", actual.Ticker);
         Assert.AreEqual("ABC Company", actual.Name);
+        Assert.AreEqual(Security.SecurityIdTypes.TICKER, actual.SecurityIdType);
         Assert.AreEqual(new DateTime(2024, 10, 21, 10, 43, 15, DateTimeKind.Utc), actual.UnitPriceDate!.Value.ToUniversalTime());
         Assert.AreEqual(1.23m, actual.UnitPrice);
         Assert.AreEqual("ABC", actual.Id);
@@ -88,12 +84,39 @@ public class SecurityConverterTests
     {
         var root = new OFXProperty("Bad Root");
 
-        var target = new OFXPropertyConverter(
-            );
+        var target = new OFXPropertyConverter();
         var actual = target.GetSecurity(root);
 
         Assert.IsNull(actual);
         Assert.IsNull(target.GetSecurityList(root));
     }
 
+    [TestMethod]
+    public void ToPropertyTest()
+    {
+        var date = DateTime.Now;
+        var name = "name";
+        var tick = "ABC";
+        var id = "id";
+        var price = 123.45m;
+        var sectype = Security.SecurityTypes.MUTUALFUND;
+        var secIdType = Security.SecurityIdTypes.CUSIP;
+
+        var data = new Security(id, tick, name, price, date)
+        {
+            SecurityType = sectype,
+            SecurityIdType = secIdType
+        };
+
+        var actual = SecurityConverter.ToProperty(data);
+
+        Assert.AreEqual("SECINFO", actual.Name);
+        Assert.AreEqual("CUSIP", actual.Children["SECID"].Children["UNIQUEIDTYPE"].Value);
+        Assert.AreEqual(tick, actual.Children["SECID"].Children["UNIQUEID"].Value);
+
+        Assert.AreEqual(name, actual.Children["SECNAME"].Value);
+        Assert.AreEqual(tick, actual.Children["TICKER"].Value);
+        Assert.AreEqual(price, actual.Children["UNITPRICE"].AsDecimal());
+        Assert.AreEqual(date.ToString(), actual.Children["DTASOF"].AsDate().ToString());
+    }
 }

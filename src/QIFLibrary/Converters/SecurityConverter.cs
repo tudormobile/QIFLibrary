@@ -18,6 +18,8 @@ public class SecurityConverter : PropertyConverterBase<Security>, IPropertyConve
         if (p != null)
         {
             var propId = digForProperty(p, "UNIQUEID");
+            var propIdType = digForProperty(p, "UNIQUEIDTYPE");
+            Enum.TryParse<Security.SecurityIdTypes>(propIdType?.Value, out var idType);
             if (propId != null)
             {
                 return new Security(
@@ -25,7 +27,8 @@ public class SecurityConverter : PropertyConverterBase<Security>, IPropertyConve
                     p.Children["TICKER"].Value,
                     p.Children["SECNAME"].Value,
                     p.Children["UNITPRICE"].AsDecimal(),
-                    p.Children["DTASOF"].AsDate());
+                    p.Children["DTASOF"].AsDate())
+                { SecurityIdType = idType };
             }
         }
         return null;
@@ -41,7 +44,7 @@ public class SecurityConverter : PropertyConverterBase<Security>, IPropertyConve
         var result = new OFXProperty("SECINFO");
         var id = new OFXProperty("SECID");
         id.Children.Add(new OFXProperty("UNIQUEID", security.Ticker));
-        id.Children.Add(new OFXProperty("UNIQUEIDTYPE", "TICKER"));
+        id.Children.Add(new OFXProperty("UNIQUEIDTYPE", security.SecurityIdType.ToString()));
         result.Children.Add(id);
         result.Children.Add(new OFXProperty("SECNAME", security.Name));
         result.Children.Add(new OFXProperty("TICKER", security.Ticker));

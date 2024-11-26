@@ -78,7 +78,7 @@ public class PositionConverter : PropertyConverterBase<Position>, IPropertyConve
         var pos = new OFXProperty("INVPOS");
         var id = new OFXProperty("SECID");
         id.Children.Add(new OFXProperty("UNIQUEID", position.SecurityId));
-        id.Children.Add(new OFXProperty("UNIQUEIDTYPE", "TICKER"));
+        id.Children.Add(new OFXProperty("UNIQUEIDTYPE", Security.SecurityIdTypes.TICKER.ToString()));
         pos.Children.Add(id);
 
         pos.Children
