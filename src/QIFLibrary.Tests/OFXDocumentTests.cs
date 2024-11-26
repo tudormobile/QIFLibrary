@@ -21,6 +21,19 @@ public class OFXDocumentTests
         Assert.AreEqual("102", target.Version, "Default value for 'Version' property must be 102");
     }
 
+    [TestMethod]
+    public void SaveSmallerTest()
+    {
+        // Test for Bug #29
+        var filename = Path.Combine(Path.GetTempPath(), Path.GetTempFileName());
+        var largeText = new string('X', 1024);
+        File.WriteAllText(filename, largeText);
+        var target = new OFXDocument();
+        target.Save(filename);
+        var actual = File.ReadAllText(filename);
+        Assert.IsTrue(actual.EndsWith("</OFX>"), "Failed to truncate old data from the file.");
+    }
+
     [TestMethod, ExcludeFromCodeCoverage]
     public void SaveTest()
     {

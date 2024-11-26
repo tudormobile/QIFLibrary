@@ -87,7 +87,7 @@ public class OFXDocument
     /// <param name="path">Pathname to the file.</param>
     public void Save(string path)
     {
-        using var s = new StreamWriter(File.OpenWrite(path));
+        using var s = new StreamWriter(path);
         new OFXWriter(s).Write(this, indent: true);
     }
 

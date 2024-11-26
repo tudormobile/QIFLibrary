@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Tudormobile.QIFLibrary.Entities.Transaction;
-
-namespace Tudormobile.QIFLibrary.Entities
+﻿namespace Tudormobile.QIFLibrary.Entities
 {
     /// <summary>
     /// Represents a financial security, such as a stock or a mutual fund.
@@ -55,11 +48,40 @@ namespace Tudormobile.QIFLibrary.Entities
         /// </summary>
         public SecurityTypes SecurityType { get; set; } = SecurityTypes.UNKNOWN;
 
+        /// <summary>
+        /// Allow security identifier types.
+        /// </summary>
+        public enum SecurityIdTypes
+        {
+            /// <summary>
+            /// Unique, application-defined type.
+            /// </summary>
+            OTHER = 0,
+
+            /// <summary>
+            /// Security Id is a ticker symbol.
+            /// </summary>
+            TICKER = 1,
+
+            /// <summary>
+            /// Security identifier is a CUSIP (Committee on Uniform Securities Identification Procedures). 
+            /// </summary>
+            CUSIP = 2,
+        }
 
         /// <summary>
         /// Unique identifier.
         /// </summary>
         public string Id { get; set; }
+
+        /// <summary>
+        /// Type of this security identifier.
+        /// </summary>
+        /// <remarks>
+        /// The default value is 'other' unless otherwise known.
+        /// </remarks>
+        public SecurityIdTypes SecurityIdType { get; set; } = SecurityIdTypes.OTHER;
+
 
         /// <summary>
         /// Ticker symbol.
