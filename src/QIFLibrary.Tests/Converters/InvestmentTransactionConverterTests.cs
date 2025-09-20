@@ -43,7 +43,7 @@ public class InvestmentTransactionConverterTests
         Assert.AreEqual(1.234m, actual.UnitPrice);
         Assert.AreEqual(123m, actual.Units);
         Assert.AreEqual(543.21m, actual.Total);
-        Assert.AreEqual(new DateTime(2024, 11, 12, 0, 0, 0, DateTimeKind.Utc).ToLocalTime(), actual.DatePosted);
+        Assert.AreEqual(new DateTime(2024, 11, 12, 0, 0, 0, DateTimeKind.Local), actual.DatePosted);
         Assert.AreEqual(InvestmentTransactionType.SELLMF, actual.TransactionType);
 
         var list = (target as IPropertyConverter<InvestmentTransactionList>).Convert(root);

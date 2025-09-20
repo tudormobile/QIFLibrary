@@ -36,11 +36,12 @@ public static class OFXPropertyExtensions
     /// </summary>
     /// <param name="property">Property to convert.</param>
     /// <param name="defaultValue">Default value.(Optional)</param>
+    /// <param name="ignoreTime">True if time componenet should be ignored (default is false)</param>
     /// <returns>Converted value if successful; otherwse the default value is returned.</returns>
     /// <remarks>
     /// If no default value is provided and conversion to date is not successful, the current UTC time is returned.
     /// </remarks>
-    public static DateTime AsDate(this OFXProperty property, DateTime? defaultValue = null)
+    public static DateTime AsDate(this OFXProperty property, DateTime? defaultValue = null, bool ignoreTime = false)
     {
         var formats = new string[]
         {
@@ -57,6 +58,11 @@ public static class OFXPropertyExtensions
         {
             if (DateTime.TryParseExact(value[0].Trim(), format, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var result))
             {
+                var local = result.ToUniversalTime();
+                if (ignoreTime || (local.Hour == 0 && local.Minute == 0 && local.Second == 0))
+                {
+                    return local.Date;
+                }
                 if (value.Length > 1 && value[1].Trim().Length > 1 && int.TryParse(value[1], out int offset))
                 {
                     return result.AddHours(offset);
