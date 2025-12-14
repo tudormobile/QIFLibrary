@@ -11,7 +11,7 @@ public class CSVDocumentTests
         var target = new CSVDocument();
         Assert.AreEqual(String.Empty, target.Name, "Must be initialize to <Empty> string.");
         Assert.IsEmpty(target.Comments, "Must initialize with zero comments.");
-        Assert.IsEmpty(target.Fields, "Must be intiialized with zero fields.");
+        Assert.IsEmpty(target.Fields, "Must be initialized with zero fields.");
         Assert.IsEmpty(target.Records, "Must be initialized with zero records.");
 
         Assert.AreEqual("text/csv", CSVDocument.CONTENT_TYPE);
