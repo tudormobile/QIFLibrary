@@ -41,7 +41,9 @@ jobs:
         updateProjectFiles: true
 
     - name: Display Version Info
-      run: gitversion
+      run: |
+        echo "Full SemVer: ${{ steps.version_step.outputs.fullSemVer }}"
+        echo "NuGet Version: ${{ steps.version_step.outputs.nuGetVersionV2 }}"
 
     - name: Run unit tests
       run: dotnet test --logger "trx;LogFilePrefix=output" --collect "Code Coverage" 
