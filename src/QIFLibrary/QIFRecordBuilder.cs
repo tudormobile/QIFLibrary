@@ -95,7 +95,7 @@ internal class QIFRecordBuilder(QIFDocumentType dataType) : IBuilder<QIFRecord>
     }
 
     private DateTime Date() => Value('D', ParseQIFDate, DateTime.MinValue);
-    private Decimal Amount() => Value('T', s => Decimal.Parse(s), Value('U', s => Decimal.Parse(s), default));
+    private Decimal Amount() => Value('T', s => ParseDecimal(s), Value('U', s => ParseDecimal(s), default));
     private string Memo() => Value('M').TrimEnd();
     private string Status() => Value('C');
     private string Check() => Value('N');

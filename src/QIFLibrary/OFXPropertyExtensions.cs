@@ -36,7 +36,7 @@ public static class OFXPropertyExtensions
     /// </summary>
     /// <param name="property">Property to convert.</param>
     /// <param name="defaultValue">Default value.(Optional)</param>
-    /// <param name="ignoreTime">True if time componenet should be ignored (default is false)</param>
+    /// <param name="ignoreTime">True if time component should be ignored (default is false)</param>
     /// <returns>Converted value if successful; otherwse the default value is returned.</returns>
     /// <remarks>
     /// If no default value is provided and conversion to date is not successful, the current UTC time is returned.
