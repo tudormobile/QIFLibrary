@@ -86,9 +86,8 @@ jobs:
     - name: Create Zip for Release
       shell: pwsh
       run: |
-        pwd
-        ls -lR
-        compress-archive -Path src/QIFLibrary/bin/Release/*.nupkg -Destination package.zip -Force
+        cd src/QIFLibrary/bin/Release
+        Compress-Archive -Path *.nupkg -Destination $env:GITHUB_WORKSPACE/package.zip -Force
 
     - name: Test Version Output
       run: echo ${{ steps.version_step.outputs.fullSemVer }}     
