@@ -63,12 +63,12 @@ namespace QIFLibrary.Tests
             };
             var actual = target.ToString();
 
-            Assert.IsTrue(actual.Contains("123"));
-            Assert.IsTrue(actual.Contains("UNKNOWN"));
-            Assert.IsFalse(actual.Contains("MESSAGE"));
+            Assert.Contains("123", actual);
+            Assert.Contains("UNKNOWN", actual);
+            Assert.DoesNotContain("MESSAGE", actual);
 
             target.Message = "m";
-            Assert.IsTrue(target.ToString().Contains("MESSAGE"));
+            Assert.Contains("MESSAGE", target.ToString());
         }
 
         [TestMethod]

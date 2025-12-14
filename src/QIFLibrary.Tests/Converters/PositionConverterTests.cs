@@ -65,12 +65,12 @@ public class PositionConverterTests
             Assert.AreEqual(1.23m, actual.UnitPrice);
             Assert.AreEqual(112233.44m, actual.MarketValue);
             Assert.AreEqual("Some Memo", actual.Memo);
-            Assert.AreEqual(new DateTime(2024, 10, 4, 0, 0, 0, DateTimeKind.Utc).ToLocalTime(), actual.PriceDate);
+            Assert.AreEqual(new DateTime(2024, 10, 4, 0, 0, 0, DateTimeKind.Local), actual.PriceDate);
             Assert.AreEqual(Position.PositionTypes.LONG, actual.PositionType);
 
             var list = (target as IPropertyConverter<PositionList>).Convert(root);
             Assert.IsNotNull(list);
-            Assert.AreEqual(1, list.Items.Count);
+            Assert.HasCount(1, list.Items);
         }
     }
 

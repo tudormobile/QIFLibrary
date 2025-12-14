@@ -17,7 +17,7 @@ public class OFXDocumentTests
         Assert.IsNotNull(target.Headers);
         Assert.AreEqual("application/x-ofx", OFXDocument.CONTENT_TYPE);
         Assert.AreEqual("ofx", OFXDocument.FILE_EXTENSION);
-        Assert.AreEqual(0, target.MessageSets.Count, "Must contain initialized message list of zero message sets.");
+        Assert.IsEmpty(target.MessageSets, "Must contain initialized message list of zero message sets.");
         Assert.AreEqual("102", target.Version, "Default value for 'Version' property must be 102");
     }
 
@@ -31,7 +31,7 @@ public class OFXDocumentTests
         var target = new OFXDocument();
         target.Save(filename);
         var actual = File.ReadAllText(filename);
-        Assert.IsTrue(actual.EndsWith("</OFX>"), "Failed to truncate old data from the file.");
+        Assert.EndsWith("</OFX>", actual, "Failed to truncate old data from the file.");
     }
 
     [TestMethod, ExcludeFromCodeCoverage]
@@ -44,8 +44,8 @@ public class OFXDocumentTests
         {
             var actual = File.ReadAllText(path);
             File.Delete(path);
-            Assert.IsTrue(actual.Contains("<OFX>"));
-            Assert.IsTrue(actual.Contains("</OFX>"));
+            Assert.Contains("<OFX>", actual);
+            Assert.Contains("</OFX>", actual);
             return;
         }
         Assert.Fail("Failed to create file");
@@ -90,7 +90,7 @@ NEWFILEUID:NONE
 </OFX>
 ";
         var target = OFXDocument.Parse(data);
-        Assert.AreEqual(0, target.MessageSets.Count, "There are no message sets.");
+        Assert.IsEmpty(target.MessageSets, "There are no message sets.");
 
         Assert.AreEqual(9, target.Headers.Count, "Should have found 9 headers.");
         Assert.AreEqual("100", target.Headers["OFXHEADER"]);
@@ -141,19 +141,19 @@ NEWFILEUID:NONE
 
         Assert.AreEqual("102", target.Version);
 
-        Assert.AreEqual(1, target.MessageSets.Count, "There should be exactly 1 message set.");
+        Assert.HasCount(1, target.MessageSets, "There should be exactly 1 message set.");
         Assert.AreEqual(1, target.MessageSets[0].Version);
         Assert.AreEqual(OFXMessageSetTypes.SIGNON, target.MessageSets[0].MessageSetType);
         Assert.AreEqual(OFXMessageDirection.RESPONSE, target.MessageSets[0].Direction);
 
-        Assert.AreEqual(1, target.MessageSets[0].Messages.Count, "Should have found (1) message.");
+        Assert.HasCount(1, target.MessageSets[0].Messages, "Should have found (1) message.");
         Assert.AreEqual("SONRS", target.MessageSets[0].Messages[0].Name);
         Assert.AreEqual("", target.MessageSets[0].Messages[0].Id, "No transaction Id in the data.");
         Assert.AreEqual("Successful Sign On", target.MessageSets[0].Messages[0].Status.Message);
         Assert.AreEqual(OFXStatus.StatusSeverity.INFO, target.MessageSets[0].Messages[0].Status.Severity);
         Assert.AreEqual(0, target.MessageSets[0].Messages[0].Status.Code);
 
-        Assert.AreEqual(4, target.MessageSets[0].Messages[0].Properties.Count);
+        Assert.HasCount(4, target.MessageSets[0].Messages[0].Properties);
 
         Assert.AreEqual(9, target.Headers.Count, "Should have found 9 headers.");
         Assert.AreEqual("100", target.Headers.Version);
@@ -178,15 +178,15 @@ NEWFILEUID:NONE
             var target = OFXDocument.ParseFile(filename);
 
             Assert.AreEqual(9, target.Headers.Count);
-            Assert.AreEqual(2, target.MessageSets.Count);
+            Assert.HasCount(2, target.MessageSets);
             Assert.AreEqual(OFXMessageSetTypes.BANK, target.MessageSets[1].MessageSetType);
-            Assert.AreEqual(1, target.MessageSets[1].Messages.Count);
+            Assert.HasCount(1, target.MessageSets[1].Messages);
             Assert.AreEqual("123", target.MessageSets[1].Messages[0].Id);
             Assert.AreEqual(4, target.MessageSets[1].Messages[0].Status.Code);
             Assert.AreEqual("", target.MessageSets[1].Messages[0].Status.Message);
             Assert.AreEqual(OFXStatus.StatusSeverity.INFO, target.MessageSets[1].Messages[0].Status.Severity);
             Assert.AreEqual("STMTRS", target.MessageSets[1].Messages[0].Properties[0].Name);
-            Assert.AreEqual(5, target.MessageSets[1].Messages[0].Properties[0].Children.Count);
+            Assert.HasCount(5, target.MessageSets[1].Messages[0].Properties[0].Children);
 
             // some converters?
             var actual = new InstitutionConverter().Convert(target.MessageSets[0].Messages[0].Properties[2]);
@@ -200,7 +200,7 @@ NEWFILEUID:NONE
 
             var transactions = new OFXPropertyConverter().GetTransactionList(target.Root);
             Assert.IsNotNull(transactions);
-            Assert.AreEqual(7, transactions.Items.Count);
+            Assert.HasCount(7, transactions.Items);
         }
     }
 

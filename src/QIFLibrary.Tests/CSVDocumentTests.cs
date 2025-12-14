@@ -10,9 +10,9 @@ public class CSVDocumentTests
     {
         var target = new CSVDocument();
         Assert.AreEqual(String.Empty, target.Name, "Must be initialize to <Empty> string.");
-        Assert.AreEqual(0, target.Comments.Count, "Must initialize with zero comments.");
-        Assert.AreEqual(0, target.Fields.Count, "Must be intiialized with zero fields.");
-        Assert.AreEqual(0, target.Records.Count, "Must be initialized with zero records.");
+        Assert.IsEmpty(target.Comments, "Must initialize with zero comments.");
+        Assert.IsEmpty(target.Fields, "Must be initialized with zero fields.");
+        Assert.IsEmpty(target.Records, "Must be initialized with zero records.");
 
         Assert.AreEqual("text/csv", CSVDocument.CONTENT_TYPE);
         Assert.AreEqual("csv", CSVDocument.FILE_EXTENSION);
@@ -31,8 +31,8 @@ public class CSVDocumentTests
             Assert.AreEqual(expected, actual);
 
             // Should have 7 records with 9 fields
-            Assert.AreEqual(7, target.Records.Count, "Data should have 7 records.");
-            Assert.AreEqual(9, target.Fields.Count, "Data should have 9 fields.");
+            Assert.HasCount(7, target.Records, "Data should have 7 records.");
+            Assert.HasCount(9, target.Fields, "Data should have 9 fields.");
         }
     }
 
@@ -49,8 +49,8 @@ public class CSVDocumentTests
             Assert.AreEqual(expected, actual);
 
             // Should have 7 records with 9 fields
-            Assert.AreEqual(215, target.Records.Count, "Data should have 7 records.");
-            Assert.AreEqual(11, target.Fields.Count, "Data should have 9 fields.");
+            Assert.HasCount(215, target.Records, "Data should have 7 records.");
+            Assert.HasCount(11, target.Fields, "Data should have 9 fields.");
 
             var d = target.Records[0]["Effective Date"];
 
@@ -71,8 +71,8 @@ public class CSVDocumentTests
             Assert.AreEqual(expected, actual);
 
             // Should have 7 records with 9 fields
-            Assert.AreEqual(2, target.Records.Count, "Data should have 2 records.");
-            Assert.AreEqual(0, target.Fields.Count, "Data should have ? fields.");
+            Assert.HasCount(2, target.Records, "Data should have 2 records.");
+            Assert.IsEmpty(target.Fields, "Data should have ? fields.");
 
             Assert.AreEqual("1", target.Records[0][0]);
             Assert.AreEqual("2", target.Records[0][1]);
@@ -91,9 +91,9 @@ public class CSVDocumentTests
     {
         var data = new string[0];
         var target = CSVDocument.Parse(data);
-        Assert.AreEqual(0, target.Records.Count);
-        Assert.AreEqual(0, target.Comments.Count);
-        Assert.AreEqual(0, target.Fields.Count);
+        Assert.IsEmpty(target.Records);
+        Assert.IsEmpty(target.Comments);
+        Assert.IsEmpty(target.Fields);
         Assert.AreEqual(String.Empty, target.Name);
     }
 
@@ -104,9 +104,9 @@ public class CSVDocumentTests
         var name = "name";
         var data = "1,2,3/11/1964";
         var target = CSVDocument.Parse(data, name);
-        Assert.AreEqual(1, target.Records.Count);
-        Assert.AreEqual(0, target.Comments.Count);
-        Assert.AreEqual(0, target.Fields.Count);
+        Assert.HasCount(1, target.Records);
+        Assert.IsEmpty(target.Comments);
+        Assert.IsEmpty(target.Fields);
         Assert.AreEqual(name, target.Name);
 
         Assert.IsTrue(target.Records[0].TryGetValue(2, out DateTime actual));
@@ -122,9 +122,9 @@ public class CSVDocumentTests
         var name = "name";
         var data = "\"1\",\"2\",\"3/11/1964\"";
         var target = CSVDocument.Parse(data, name);
-        Assert.AreEqual(1, target.Records.Count);
-        Assert.AreEqual(0, target.Comments.Count);
-        Assert.AreEqual(0, target.Fields.Count);
+        Assert.HasCount(1, target.Records);
+        Assert.IsEmpty(target.Comments);
+        Assert.IsEmpty(target.Fields);
         Assert.AreEqual(name, target.Name);
 
         Assert.IsTrue(target.Records[0].TryGetValue(2, out DateTime actual));
@@ -151,13 +151,13 @@ public class CSVDocumentTests
         string[] comments = { "one", "two" };
         var target = new CSVDocument(name, comments);
 
-        Assert.AreEqual(2, target.Comments.Count);
+        Assert.HasCount(2, target.Comments);
         Assert.AreEqual("one", target.Comments[0]);
         Assert.AreEqual("two", target.Comments[1]);
         Assert.AreEqual(name, target.Name);
 
-        Assert.AreEqual(0, target.Records.Count);
-        Assert.AreEqual(0, target.Fields.Count);
+        Assert.IsEmpty(target.Records);
+        Assert.IsEmpty(target.Fields);
     }
 
     [TestMethod]
@@ -166,7 +166,7 @@ public class CSVDocumentTests
         var data = @"one,two
 one,two,three";
         var target = CSVDocument.Parse(data);
-        Assert.AreEqual(2, target.Fields.Count);
+        Assert.HasCount(2, target.Fields);
     }
 
     [TestMethod]
@@ -212,8 +212,8 @@ one,two,three";
 1,2,3,4";
         var target = CSVDocument.Parse(data);
 
-        Assert.AreEqual(1, target.Records.Count, "Should have only 1 record; should have identified header with type mis-matches.");
-        Assert.AreEqual(4, target.Fields.Count, "Should have found exactly 4 fields in this header.");
+        Assert.HasCount(1, target.Records, "Should have only 1 record; should have identified header with type mis-matches.");
+        Assert.HasCount(4, target.Fields, "Should have found exactly 4 fields in this header.");
         Assert.AreEqual("one", target.Fields[0]);
         Assert.AreEqual("two", target.Fields[1]);
         Assert.AreEqual("three,four", target.Fields[2]);

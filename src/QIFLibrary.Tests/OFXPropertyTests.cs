@@ -21,7 +21,7 @@ public class OFXPropertyTests
 
         Assert.AreEqual(name, target.Name);
         Assert.AreEqual(value, target.Value);
-        Assert.AreEqual(0, target.Children.Count, "Must initialize children to an empty list.");
+        Assert.IsEmpty(target.Children, "Must initialize children to an empty list.");
 
     }
 
@@ -60,8 +60,8 @@ public class OFXPropertyTests
         var target = new OFXProperty(name, value);
         var actual = target.ToString();
 
-        Assert.IsTrue(actual.Contains(name.ToUpperInvariant()));
-        Assert.IsTrue(actual.Contains(value));
+        Assert.Contains(name.ToUpperInvariant(), actual);
+        Assert.Contains(value, actual);
     }
 
     [TestMethod]
@@ -74,10 +74,10 @@ public class OFXPropertyTests
         target.Children.Add(new OFXProperty("child", "data"));
         var actual = target.ToString();
 
-        Assert.IsTrue(actual.Contains(name.ToUpperInvariant()));
-        Assert.IsTrue(actual.Contains("CHILD"));
-        Assert.IsTrue(actual.Contains("data"));
-        Assert.IsFalse(actual.Contains(value));
+        Assert.Contains(name.ToUpperInvariant(), actual);
+        Assert.Contains("CHILD", actual);
+        Assert.Contains("data", actual);
+        Assert.DoesNotContain(value, actual);
 
         Assert.AreEqual(3, target.ToStrings().Count());
     }

@@ -68,7 +68,7 @@ public class SecurityConverterTests
 
         var list = ((IPropertyConverter<SecurityList>)target).Convert(root);
         Assert.IsNotNull(list);
-        Assert.AreEqual(2, list.Items.Count);
+        Assert.HasCount(2, list.Items);
     }
 
     [TestMethod]

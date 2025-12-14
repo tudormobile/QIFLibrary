@@ -49,8 +49,8 @@ public class OFXPropertyExtensionsTests
         var target = new List<OFXProperty>().Add(DateTime.Now, expected);
         var actual = target.First().Name;
 
-        Assert.IsTrue(actual.StartsWith("DT"));
-        Assert.IsTrue(actual.EndsWith(expected));
+        Assert.StartsWith("DT", actual);
+        Assert.EndsWith(expected, actual);
     }
 
     [TestMethod]
@@ -183,6 +183,24 @@ public class OFXPropertyExtensionsTests
         var actual = new OFXProperty("", "").AsDate();
         var expected = DateTime.UtcNow;
         Assert.AreEqual(expected.Ticks, actual.Ticks, 1000);
+    }
+
+    [TestMethod]
+    public void AsDateTest4()
+    {
+        var data = "20250917000000[-5:EST]";
+        var expected = new DateTime(2025, 9, 17, 0, 0, 0, DateTimeKind.Unspecified);
+        var actual = new OFXProperty("DT", data).AsDate();
+        Assert.AreEqual(expected, actual, "Missing time data should ignore time.");
+    }
+
+    [TestMethod]
+    public void AsDateTest5()
+    {
+        var data = "20250131000000[-5:EST]";
+        var expected = new DateTime(2025, 1, 31, 0, 0, 0, DateTimeKind.Unspecified);
+        var actual = new OFXProperty("DT", data).AsDate();
+        Assert.AreEqual(expected, actual, "Missing time data should ignore time.");
     }
 
     [TestMethod]

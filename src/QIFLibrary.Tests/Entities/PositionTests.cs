@@ -71,7 +71,7 @@ public class PositionTests
     public void CollectionTest()
     {
         var target = new PositionList();
-        Assert.AreEqual(0, target.Items.Count, "Collection must be intialize with zero entries.");
+        Assert.IsEmpty(target.Items, "Collection must be initialized with zero entries.");
     }
 
 }

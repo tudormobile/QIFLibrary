@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -10,29 +10,26 @@
     <AssemblyName>Tudormobile.$(MSBuildProjectName)</AssemblyName>
     <RootNamespace>Tudormobile.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <MajorMinorVer>$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)\..\..\version.txt').Trim())</MajorMinorVer>
-    <BuildVer>$([System.DateTime]::Now.ToString('yyMM'))</BuildVer>
-    <RevVer>$([System.DateTime]::Now.ToString('dd'))</RevVer>
-    <AssemblyVersion>$(MajorMinorVer).$(BuildVer).100$(RevVer)</AssemblyVersion>
-    <FileVersion>$(MajorMinorVer).$(BuildVer).100$(RevVer)</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <PackageVersion>$(MajorMinorVer).$(BuildVer)</PackageVersion>
     <Authors>WH Tudor</Authors>
     <Title>QIF Library</Title>
-    <Description>Tools for accessing and manipulating QIF data</Description>
-    <Copyright>COPYRIGHT © TUDORMOBILE LLC</Copyright>
+    <Description>Tools for accessing and manipulating QIF/QFX/OFX and CSV data</Description>
+    <Copyright>COPYRIGHT © BILL TUDOR</Copyright>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>QIF;QFX;OFX;Tudormobile</PackageTags>
+    <PackageTags>QIF;QFX;OFX;CSV;Tudormobile</PackageTags>
+    <PackageProjectUrl>https://tudormobile.github.io/$(MSBuildProjectName)/</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/tudormobile/$(MSBuildProjectName)/releases</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/tudormobile/$(MSBuildProjectName)</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <!-- For unit testing (change later ?? ) -->
   <ItemGroup>
-    <InternalsVisibleTo Include="QIFLibrary.Tests" />
+    <InternalsVisibleTo Include="$(MSBuildProjectName).Tests" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -46,9 +43,5 @@
   <ItemGroup>
     <None Include="..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
-
-  <Target Name="WriteVersion" BeforeTargets="Build" Condition="'$(Configuration)' == 'Release'">
-    <WriteLinesToFile Lines="$(PackageVersion)" File="$(BaseOutputPath)\$(Configuration)\ver.txt" Overwrite="true" />
-  </Target>
 
 </Project>

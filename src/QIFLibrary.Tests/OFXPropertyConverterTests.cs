@@ -1,28 +1,20 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Diagnostics.CodeAnalysis;
 using Tudormobile.QIFLibrary;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Http.Headers;
-using System.Diagnostics.CodeAnalysis;
-using System.Security.Cryptography.X509Certificates;
-using Tudormobile.QIFLibrary.Interfaces;
-using Tudormobile.QIFLibrary.Entities;
 using Tudormobile.QIFLibrary.Converters;
+using Tudormobile.QIFLibrary.Entities;
+using Tudormobile.QIFLibrary.Interfaces;
 
 namespace QIFLibrary.Tests;
 
 [TestClass]
 public class OFXPropertyConverterTests
 {
-    [TestMethod, ExcludeFromCodeCoverage, ExpectedException(typeof(NotSupportedException))]
+    [TestMethod, ExcludeFromCodeCoverage]
     public void ConvertTest1()
     {
         var target = new OFXPropertyConverter();
         var prop = new OFXProperty("some name");
-        target.Convert<String>(prop);   // <-- throws
+        Assert.ThrowsExactly<NotSupportedException>(() => target.Convert<String>(prop));   // <-- throws
     }
 
     [TestMethod]

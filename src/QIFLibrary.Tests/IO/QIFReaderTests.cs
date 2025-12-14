@@ -119,7 +119,7 @@ Q107
             }
 
             target.Close();
-            Assert.AreEqual(expected, actual.Count);
+            Assert.HasCount(expected, actual);
         }
     }
 
@@ -131,7 +131,7 @@ Q107
         var target = QIFReader.FromStream(ms);
         var actual = target.ReadRecordsAsync().ToBlockingEnumerable().Cast<QIFBankRecord>().ToList();
         target.Close();
-        Assert.AreEqual(expected, actual.Count, "Failed to parse the correct number of records.");
+        Assert.HasCount(expected, actual, "Failed to parse the correct number of records.");
 
         // Validate first record
         Assert.AreEqual(new DateTime(2024, 1, 2), actual[0].Date);
@@ -153,7 +153,7 @@ Q107
         var target = QIFReader.FromStream(ms);
         var actual = target.ReadRecordsAsync().ToBlockingEnumerable().Cast<QIFBankRecord>().ToList();
         target.Close();
-        Assert.AreEqual(expected, actual.Count, "Failed to parse the correct number of records.");
+        Assert.HasCount(expected, actual, "Failed to parse the correct number of records.");
 
         Assert.AreEqual(new DateTime(2024, 1, 2), actual[0].Date);
         Assert.AreEqual(new DateTime(2024, 1, 2), actual[1].Date);
@@ -172,7 +172,7 @@ Q107
         var target = QIFReader.FromStream(ms);
         var actual = target.ReadRecordsAsync().ToBlockingEnumerable().Cast<QIFCategoryRecord>().ToList();
         target.Close();
-        Assert.AreEqual(expected, actual.Count, "Failed to parse the correct number of records.");
+        Assert.HasCount(expected, actual, "Failed to parse the correct number of records.");
 
         Assert.AreEqual("Test Category", actual[0].Memo);
         Assert.AreEqual(1000m, actual[0].Budgeted);
@@ -187,7 +187,7 @@ Q107
         var target = QIFReader.FromStream(ms);
         var actual = target.ReadRecordsAsync().ToBlockingEnumerable().ToList();
         target.Close();
-        Assert.AreEqual(expected, actual.Count, "Failed to parse the correct number of records.");
+        Assert.HasCount(expected, actual, "Failed to parse the correct number of records.");
 
         var actual1 = (actual[0] as QIFAccountRecord)!;
         var actual2 = (actual[1] as QIFAccountRecord)!;

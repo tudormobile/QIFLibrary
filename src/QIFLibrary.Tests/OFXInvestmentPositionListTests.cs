@@ -33,7 +33,7 @@ namespace QIFLibrary.Tests
 
             var target = new OFXInvestmentPositionList(data);
 
-            Assert.AreEqual(1, target.Children.Count);
+            Assert.HasCount(1, target.Children);
 
             Assert.AreEqual("INVPOSLIST", target.Name);
         }

@@ -1,11 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Tudormobile.QIFLibrary;
 using Tudormobile.QIFLibrary.Converters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tudormobile.QIFLibrary;
 using Tudormobile.QIFLibrary.Entities;
 using Tudormobile.QIFLibrary.Interfaces;
 
@@ -39,12 +33,12 @@ public class TransactionConverterTests
         Assert.AreEqual(-384.87m, actual.Amount);
         Assert.AreEqual("VIKING RIVER CRU - 8182271234", actual.Memo);
         Assert.AreEqual("ACH Withdrawal", actual.Name);
-        Assert.AreEqual(new DateTime(2024, 10, 4, 0, 0, 0, DateTimeKind.Utc).ToLocalTime(), actual.DatePosted);
+        Assert.AreEqual(new DateTime(2024, 10, 4, 0, 0, 0, DateTimeKind.Local), actual.DatePosted);
         Assert.AreEqual(Transaction.TransactionTypes.CASH, actual.TransactionType);
 
         var list = (target as IPropertyConverter<TransactionList>).Convert(root);
         Assert.IsNotNull(list);
-        Assert.AreEqual(1, list.Items.Count);
+        Assert.HasCount(1, list.Items);
         Assert.AreEqual(new DateTime(2024, 10, 21, 10, 43, 15, DateTimeKind.Utc).ToLocalTime(), list.Start);
         Assert.AreEqual(new DateTime(2024, 10, 21, 10, 43, 16, DateTimeKind.Utc).ToLocalTime(), list.End);
     }
@@ -69,7 +63,7 @@ public class TransactionConverterTests
         var actual = target.Convert(root);
 
         Assert.IsNotNull(actual);
-        Assert.IsTrue(actual.Id.Length > 0);
+        Assert.IsGreaterThan(0, actual.Id.Length);
         Assert.AreEqual(-384.87m, actual.Amount);
         Assert.AreEqual("VIKING RIVER CRU - 8182271234", actual.Memo);
         Assert.AreEqual("ACH Withdrawal", actual.Name);

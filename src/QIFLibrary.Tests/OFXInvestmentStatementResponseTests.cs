@@ -10,8 +10,8 @@ namespace QIFLibrary.Tests
         {
             var target = new OFXInvestmentStatementResponse();
 
-            Assert.AreEqual(0, target.PositionList.Items.Count);
-            Assert.AreEqual(0, target.TransactionList.Items.Count);
+            Assert.IsEmpty(target.PositionList.Items);
+            Assert.IsEmpty(target.TransactionList.Items);
             Assert.AreEqual(OFXCurrencyType.USD, target.Currency, "Default value required");
             Assert.IsNull(target.Investment401kBalance);
 
