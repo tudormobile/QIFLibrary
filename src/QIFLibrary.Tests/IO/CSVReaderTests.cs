@@ -15,7 +15,7 @@ public class CSVReaderTests
 4,5,6";
         using var ms = new MemoryStream(Encoding.UTF8.GetBytes(data));
         var target = CSVReader.FromStream(ms, hasHeader: true);
-        Assert.AreEqual(target.ReadComments().Count(), 0);
+        Assert.AreEqual(0, target.ReadComments().Count());
         Assert.AreEqual(3, target.ReadHeader().Count());
         Assert.AreEqual(2, target.ReadRecords().Count());
 
@@ -29,7 +29,7 @@ public class CSVReaderTests
 4,5,6";
         using var ms = new MemoryStream(Encoding.UTF8.GetBytes(data));
         var target = CSVReader.FromStream(ms, hasHeader: true);
-        Assert.AreEqual(target.ReadComments().Count(), 0);
+        Assert.AreEqual(0, target.ReadComments().Count());
         Assert.AreEqual(2, target.ReadRecords().Count());
     }
 
@@ -43,7 +43,7 @@ public class CSVReaderTests
         var result = target.ReadRecord();
 
         Assert.IsNotNull(result);
-        Assert.AreEqual(6, result.Values.Length);
+        Assert.HasCount(6, result.Values);
         Assert.AreEqual("\"A,B,C,D,E,F,G \"\"is\"\" the alphabet start\"", result.Values[0]);
         Assert.AreEqual("1", result.Values[1]);
         Assert.AreEqual("", result.Values[2]);
@@ -59,7 +59,7 @@ public class CSVReaderTests
         var reader = new StringReader(data);
         var target = new CSVReader(reader);
 
-        Assert.AreEqual(target.ReadComments().Count(), 0);
+        Assert.AreEqual(0, target.ReadComments().Count());
         Assert.AreEqual(0, target.ReadHeader().Count());
         Assert.AreEqual(0, target.ReadRecords().Count());
     }
@@ -107,7 +107,7 @@ mike,2";
         var target = new CSVReader(reader, hasHeader: true);
 
         var actual = target.ReadRecordsAsync().ToBlockingEnumerable().ToList();
-        Assert.AreEqual(2, actual.Count);
+        Assert.HasCount(2, actual);
         Assert.AreEqual("joe", actual[0]["name"]);
         Assert.AreEqual("1", actual[0]["number"]);
 

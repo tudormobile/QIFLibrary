@@ -12,7 +12,7 @@ namespace QIFLibrary.Tests.IO
             var writer = new StringWriter();
             var target = new OFXWriter(writer);
             target.Write(new OFXDocument());
-            Assert.IsTrue(writer.ToString().Contains($"<OFX>{Environment.NewLine}"));
+            Assert.Contains($"<OFX>{Environment.NewLine}", writer.ToString());
         }
 
         [TestMethod]
@@ -21,7 +21,7 @@ namespace QIFLibrary.Tests.IO
             var writer = new StringWriter();
             var target = new OFXWriter(writer, indent: false);
             target.Write(new OFXDocument());
-            Assert.IsFalse(writer.ToString().Contains($"<OFX>{Environment.NewLine}"));
+            Assert.DoesNotContain($"<OFX>{Environment.NewLine}", writer.ToString());
         }
 
         [TestMethod]
@@ -30,7 +30,7 @@ namespace QIFLibrary.Tests.IO
             var writer = new StringWriter();
             var target = new OFXWriter(writer, indent: false);
             target.Write(new OFXDocument(), indent: true);
-            Assert.IsTrue(writer.ToString().Contains($"<OFX>{Environment.NewLine}"));
+            Assert.Contains($"<OFX>{Environment.NewLine}", writer.ToString());
         }
 
 
@@ -48,7 +48,7 @@ namespace QIFLibrary.Tests.IO
 
                 target.Write(document);
 
-                Assert.IsTrue(writer.ToString().EndsWith("</OFX>"));
+                Assert.EndsWith("</OFX>", writer.ToString());
             }
         }
 
@@ -66,7 +66,7 @@ namespace QIFLibrary.Tests.IO
 
                 target.Write(document);
 
-                Assert.IsTrue(writer.ToString().EndsWith("</OFX>"));
+                Assert.EndsWith("</OFX>", writer.ToString());
             }
         }
 
@@ -97,7 +97,7 @@ namespace QIFLibrary.Tests.IO
             writer.Write(doc);
             var result = sw.ToString();
 
-            Assert.AreEqual(24, result.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Length);
+            Assert.HasCount(24, result.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
 
         }
 

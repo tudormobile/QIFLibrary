@@ -18,7 +18,7 @@ public class OFXMessageSetTests
         Assert.AreEqual(direction, target.Direction);
         Assert.AreEqual(type, target.MessageSetType);
 
-        Assert.AreEqual(0, target.Messages.Count, "Messages must be initialized to empty collection.");
+        Assert.IsEmpty(target.Messages, "Messages must be initialized to empty collection.");
     }
 
     [TestMethod]
@@ -46,8 +46,8 @@ public class OFXMessageSetTests
 
         var actual = target.ToString();
 
-        Assert.IsTrue(actual.Contains("UNKNOWNMSGSRSV1"));
-        Assert.IsTrue(actual.Contains("CHILD"));
+        Assert.Contains("UNKNOWNMSGSRSV1", actual);
+        Assert.Contains("CHILD", actual);
 
         Assert.AreEqual(4, target.ToStrings().Count());
     }
@@ -63,8 +63,8 @@ public class OFXMessageSetTests
 
         var actual = target.ToString();
 
-        Assert.IsTrue(actual.Contains("UNKNOWNMSGSRQV1"));
-        Assert.IsTrue(actual.Contains("CHILD"));
+        Assert.Contains("UNKNOWNMSGSRQV1", actual);
+        Assert.Contains("CHILD", actual);
 
         Assert.AreEqual(4, target.ToStrings().Count());
     }

@@ -48,7 +48,7 @@ public class InvestmentTransactionConverterTests
 
         var list = (target as IPropertyConverter<InvestmentTransactionList>).Convert(root);
         Assert.IsNotNull(list);
-        Assert.AreEqual(1, list.Items.Count);
+        Assert.HasCount(1, list.Items);
         Assert.AreEqual(new DateTime(2024, 10, 21, 10, 43, 15, DateTimeKind.Utc).ToLocalTime(), list.Start);
         Assert.AreEqual(new DateTime(2024, 10, 21, 10, 43, 16, DateTimeKind.Utc).ToLocalTime(), list.End);
     }

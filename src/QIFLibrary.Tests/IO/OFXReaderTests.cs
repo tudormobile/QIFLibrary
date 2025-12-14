@@ -40,7 +40,7 @@ NEWFILEUID:NONE
         Assert.IsFalse(result); // Should have failed to read header when begings with blank line.
         var actual = target.TryForceReadHeaders(out var headers);
         Assert.IsTrue(actual, "Should have found malformed headers.");
-        Assert.AreEqual(9, headers!.Length, "Should have found 9 headers.");
+        Assert.HasCount(9, headers!, "Should have found 9 headers.");
         Assert.IsTrue(target.TryMoveToStart(out var start, "OFX"), "Should have progressed to the OFX open tag.");
     }
 

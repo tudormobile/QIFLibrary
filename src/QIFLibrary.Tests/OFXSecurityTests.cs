@@ -17,8 +17,8 @@ public class OFXSecurityTests
         var target = new OFXSecurity(new Security(ticker, ticker, name, price, priceDate) { SecurityType = Security.SecurityTypes.STOCK });
 
         Assert.AreEqual("STOCKINFO", target.Name);
-        Assert.AreEqual(1, target.Children.Count);
+        Assert.HasCount(1, target.Children);
         Assert.AreEqual("SECINFO", target.Children[0].Name);
-        Assert.AreEqual(5, target.Children[0].Children.Count);
+        Assert.HasCount(5, target.Children[0].Children);
     }
 }

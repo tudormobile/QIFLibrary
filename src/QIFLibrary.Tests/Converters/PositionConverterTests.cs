@@ -70,7 +70,7 @@ public class PositionConverterTests
 
             var list = (target as IPropertyConverter<PositionList>).Convert(root);
             Assert.IsNotNull(list);
-            Assert.AreEqual(1, list.Items.Count);
+            Assert.HasCount(1, list.Items);
         }
     }
 

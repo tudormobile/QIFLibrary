@@ -49,8 +49,8 @@ public class OFXPropertyExtensionsTests
         var target = new List<OFXProperty>().Add(DateTime.Now, expected);
         var actual = target.First().Name;
 
-        Assert.IsTrue(actual.StartsWith("DT"));
-        Assert.IsTrue(actual.EndsWith(expected));
+        Assert.StartsWith("DT", actual);
+        Assert.EndsWith(expected, actual);
     }
 
     [TestMethod]

@@ -81,7 +81,7 @@ public class OFXHeadersTests
             .Add("three", "3");
 
         var actual = target.AsEnumerable().ToList();
-        Assert.AreEqual(3, actual.Count);
+        Assert.HasCount(3, actual);
     }
 
     [TestMethod]
@@ -92,7 +92,7 @@ public class OFXHeadersTests
             .Add("two", "2")
             .Add("three", "3");
         var actual = target.ToString().Split(Environment.NewLine);
-        Assert.AreEqual(5, actual.Length);
+        Assert.HasCount(5, actual);
         Assert.AreEqual(String.Empty, actual[^1]);
         Assert.AreEqual(String.Empty, actual[^2]);
     }

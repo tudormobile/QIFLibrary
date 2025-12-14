@@ -52,7 +52,6 @@ public class OFXPositionListResponseTests
         var units = 0.040m;
 
         var positionList = new PositionList();
-
         positionList.Items.Add(new Position(ticker)
         {
             SecurityType = Security.SecurityTypes.STOCK,
@@ -63,13 +62,22 @@ public class OFXPositionListResponseTests
             UnitPrice = price,
             Units = units,
         });
-        var account = new Account() { AccountId = "123", AccountType = Account.AccountTypes.MONEYMRKT, InstitutionId = "456" };
-        var date = DateTime.Now;
-        var status = new OFXStatus() { Code = 1, Message = "message", Severity = OFXStatus.StatusSeverity.WARN };
+
+        var account = new Account()
+        {
+            AccountId = "123",
+            AccountType = Account.AccountTypes.MONEYMRKT,
+            InstitutionId = "456"
+        };
+
+        var beforeTime = DateTime.Now;  // ← Capture BEFORE construction
         var target = new OFXPositionListResponse(positionList, account);
+        var afterTime = DateTime.Now;   // ← Capture AFTER construction
 
+        // Assert that the DateAsOf is within the time window
+        Assert.IsTrue(target.DateAsOf >= beforeTime);
+        Assert.IsTrue(target.DateAsOf <= afterTime);
 
-        Assert.AreEqual(DateTime.Now.Ticks, target.DateAsOf.Ticks, 10000);
         Assert.AreEqual(String.Empty, target.Id);
         Assert.AreEqual(String.Empty, target.Cookie);
         Assert.AreEqual(OFXCurrencyType.USD, target.Currency);
@@ -78,7 +86,7 @@ public class OFXPositionListResponseTests
         Assert.AreEqual(OFXStatus.StatusSeverity.INFO, target.Status.Severity);
         Assert.AreEqual("INVSTMTTRNRS", target.Name);
 
-        Assert.IsFalse(target.ToString()!.Contains("CLTCOOKIE"), "Must NOT have a cookie in this case.");
+        Assert.DoesNotContain("CLTCOOKIE", target.ToString(), "Must NOT have a cookie in this case.");
     }
 
     [TestMethod]
@@ -112,14 +120,14 @@ public class OFXPositionListResponseTests
         var actual = target.ToString();
 
         Assert.IsNotNull(actual);
-        Assert.IsTrue(actual.Contains("CLTCOOKIE"));
-        Assert.IsTrue(actual.Contains("TRNUID"));
-        Assert.IsTrue(actual.Contains(id));
-        Assert.IsTrue(actual.Contains(cookie));
+        Assert.Contains("CLTCOOKIE", actual);
+        Assert.Contains("TRNUID", actual);
+        Assert.Contains(id, actual);
+        Assert.Contains(cookie, actual);
 
-        Assert.IsTrue(actual.Contains("INVACCTFROM"));
-        Assert.IsTrue(actual.Contains("123"));
-        Assert.IsTrue(actual.Contains("456"));
+        Assert.Contains("INVACCTFROM", actual);
+        Assert.Contains("123", actual);
+        Assert.Contains("456", actual);
 
     }
 

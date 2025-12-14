@@ -23,7 +23,7 @@ public class OFXSecurityListResponseTests
         Assert.AreEqual(1, target.Version, "Must default to version 1.");
         Assert.AreEqual(OFXMessageSetTypes.SECLIST, target.MessageSetType);
         Assert.AreEqual(OFXMessageDirection.RESPONSE, target.Direction);
-        Assert.AreEqual(1, target.Messages.Count);
+        Assert.HasCount(1, target.Messages);
     }
 
     [TestMethod]
@@ -45,11 +45,11 @@ public class OFXSecurityListResponseTests
         Assert.AreEqual(1, target.Version, "Must default to version 1.");
         Assert.AreEqual(OFXMessageSetTypes.SECLIST, target.MessageSetType);
         Assert.AreEqual(OFXMessageDirection.RESPONSE, target.Direction);
-        Assert.AreEqual(2, target.Messages.Count);
+        Assert.HasCount(2, target.Messages);
 
         Assert.AreEqual(cookie, target.Messages[0].Properties.First(p => p.Name == "CLTCOOKIE").Value);
         Assert.AreEqual(OFXStatus.StatusSeverity.UNKNOWN, target.Messages[0].Status.Severity, "Must use unknown status if not specified.");
-        Assert.AreEqual(1, target.Messages[0].Properties.Count, "Should ONLY have the cookie property.");
+        Assert.HasCount(1, target.Messages[0].Properties, "Should ONLY have the cookie property.");
     }
 
     [TestMethod]
@@ -71,11 +71,11 @@ public class OFXSecurityListResponseTests
         Assert.AreEqual(1, target.Version, "Must default to version 1.");
         Assert.AreEqual(OFXMessageSetTypes.SECLIST, target.MessageSetType);
         Assert.AreEqual(OFXMessageDirection.RESPONSE, target.Direction);
-        Assert.AreEqual(2, target.Messages.Count);
+        Assert.HasCount(2, target.Messages);
 
         Assert.AreEqual(userId, target.Messages[0].Id);
         Assert.AreEqual(OFXStatus.StatusSeverity.UNKNOWN, target.Messages[0].Status.Severity, "Must use unknown status if not specified.");
-        Assert.AreEqual(0, target.Messages[0].Properties.Count, "Should not have any properties set.");
+        Assert.IsEmpty(target.Messages[0].Properties, "Should not have any properties set.");
     }
 
     [TestMethod]
@@ -102,12 +102,12 @@ public class OFXSecurityListResponseTests
         Assert.AreEqual(1, target.Version, "Must default to version 1.");
         Assert.AreEqual(OFXMessageSetTypes.SECLIST, target.MessageSetType);
         Assert.AreEqual(OFXMessageDirection.RESPONSE, target.Direction);
-        Assert.AreEqual(2, target.Messages.Count);
+        Assert.HasCount(2, target.Messages);
 
         Assert.AreEqual(status.Severity, target.Messages[0].Status.Severity);
         Assert.AreEqual(status.Message, target.Messages[0].Status.Message);
         Assert.AreEqual(status.Code, target.Messages[0].Status.Code);
-        Assert.AreEqual(0, target.Messages[0].Properties.Count, "Should not have any properties set.");
+        Assert.IsEmpty(target.Messages[0].Properties, "Should not have any properties set.");
     }
 
 }

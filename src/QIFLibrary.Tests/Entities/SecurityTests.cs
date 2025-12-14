@@ -58,6 +58,6 @@ public class SecurityTests
     public void SecurityCollectionTest()
     {
         var target = new SecurityList();
-        Assert.AreEqual(0, target.Items.Count);
+        Assert.IsEmpty(target.Items);
     }
 }

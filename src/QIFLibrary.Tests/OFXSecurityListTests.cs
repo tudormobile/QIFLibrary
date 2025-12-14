@@ -21,6 +21,6 @@ public class OFXSecurityListTests
         var target = new OFXSecurityList(securityList);
 
         Assert.AreEqual("SECLIST", target.Name);
-        Assert.AreEqual(1, target.Properties.Count);
+        Assert.HasCount(1, target.Properties);
     }
 }

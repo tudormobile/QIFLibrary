@@ -26,13 +26,13 @@ public class QFXDocumentTests
             var securities = new OFXPropertyConverter().GetSecurityList(target.MessageSets[2].Messages[0].AsProperty());
 
             Assert.IsNotNull(positions);
-            Assert.AreEqual(1, positions.Items.Count);
+            Assert.HasCount(1, positions.Items);
 
             Assert.IsNotNull(securities);
-            Assert.AreEqual(1, securities.Items.Count);
+            Assert.HasCount(1, securities.Items);
 
             Assert.IsNotNull(transactions);
-            Assert.AreEqual(3, transactions.Items.Count);
+            Assert.HasCount(3, transactions.Items);
 
             Assert.AreEqual(11305.19m, transactions.Items[0].Total);
             Assert.AreEqual(598.365476m, transactions.Items[0].UnitPrice);
@@ -59,8 +59,8 @@ public class QFXDocumentTests
             Assert.AreEqual(Account.AccountTypes.INVESTMENT, target.Account.AccountType);
             Assert.AreEqual("broker.com", target.Account.InstitutionId);
 
-            Assert.AreEqual(1, target.PositionList.Items.Count);
-            Assert.AreEqual(3, target.TransactionList.Items.Count);
+            Assert.HasCount(1, target.PositionList.Items);
+            Assert.HasCount(3, target.TransactionList.Items);
         }
     }
 

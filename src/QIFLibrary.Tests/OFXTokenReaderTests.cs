@@ -19,7 +19,7 @@ public class OFXTokenReaderTests
         var target = new OFXTokenReader(new StringReader(data));
         var actual = target.ReadTokensAsync().ToBlockingEnumerable().ToArray();
 
-        Assert.AreEqual(10, actual.Length);
+        Assert.HasCount(10, actual);
 
         Assert.AreEqual(OFXTokenReader.OFXTokenType.StartTag, actual[0].TokenType);
         Assert.AreEqual(OFXTokenReader.OFXTokenType.StartTag, actual[1].TokenType);

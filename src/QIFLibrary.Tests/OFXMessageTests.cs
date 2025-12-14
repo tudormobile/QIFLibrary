@@ -59,14 +59,14 @@ public class OFXMessageTests
         var target = new OFXMessage() { Name = "NAME", Status = status };
         target.Properties.Add(new OFXProperty("Child", "Property"));
         var actual = target.ToString();
-        Assert.IsFalse(actual.Contains(expected), "Should NOT contain status when code is unknown.");
-        Assert.IsFalse(actual.Contains(id), "Must NOT contain Id when it is not set.");
+        Assert.DoesNotContain(expected, actual, "Should NOT contain status when code is unknown.");
+        Assert.DoesNotContain(id, actual, "Must NOT contain Id when it is not set.");
 
         target.Id = id;
         status.Severity = OFXStatus.StatusSeverity.WARN;
         actual = target.ToString();
-        Assert.IsTrue(actual.Contains(expected), "MUST contain status when code is known.");
-        Assert.IsTrue(actual.Contains(id), "MUST contain Id.");
+        Assert.Contains(expected, actual, "MUST contain status when code is known.");
+        Assert.Contains(id, actual, "MUST contain Id.");
 
         var strings = target.ToStrings();
         Assert.AreEqual(8, strings.Count(), "Failed to produce correct number of strings.");

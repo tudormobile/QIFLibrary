@@ -63,7 +63,7 @@ public class TransactionTests
             End = end
         };
 
-        Assert.AreEqual(0, target.Items.Count);
+        Assert.IsEmpty(target.Items);
         Assert.AreEqual(start, target.Start);
         Assert.AreEqual(end, target.End);
     }
