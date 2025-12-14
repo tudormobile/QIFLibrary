@@ -1,5 +1,5 @@
 # QIF Library
-Provides mechanism for reading and writing data in Quicken Interchange Format (QIF).  
+Provides mechanism for reading and writing data in Quicken Interchange Format (QIF/QFX). Also includes support for OFX and CSV data files.  
 
 [Source Code](https://github.com/tudormobile/QIFLibrary) | [Documentation](https://tudormobile.github.io/QIFLibrary/)
 
@@ -15,9 +15,10 @@ dotnet add package Tudormobile.QIFLibrary
 - None
 
 ### Key Features
-- Parse QIF files into document model
-- Parse QIF data streams (and strings) into QIF documents and records
+- Parse QIF/QFX/OFX files into a document model
+- Parse QIF/QFX/OFX data streams (and strings) into QIF/QFX/OFX documents and records
 - Asynchronous parsing for large data sets.
+- Additional support for CSV data files.
 
 ### Feedback
 **Tudormobile.QIFLibrary** is free and open source software released under the MIT license. Bug reports and contributions are welcome at [the GitHub repository](https://github.com/tudormobile/QIFLibrary).

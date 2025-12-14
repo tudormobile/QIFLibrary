@@ -17,17 +17,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 9.0.x
       env:
         NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+    - name: Setup GitVersion
+      uses: gittools/actions/gitversion/setup@v4
+      with:
+        versionSpec: '6.4.x'
+
+    - name: Determine Version
+      id: version_step # step id used as a reference for output values
+      uses: gittools/actions/gitversion/execute@v4
+      with:
+        updateProjectFiles: true
+
+    - name: Display Version Info
+      run: gitversion
+
     - name: Run unit tests
       run: dotnet test --logger "trx;LogFilePrefix=output" --collect "Code Coverage" 
+
     - name: Build Release
       run: dotnet build -c Release
+
     - name: Build documentation
       run: |
         dotnet tool update -g docfx
@@ -66,14 +87,9 @@ jobs:
         pwd
         ls -lR
         compress-archive -Path src/QIFLibrary/bin/Release/*.nupkg -Destination package.zip -Force
-    - name: Get version
-      id: vars
-      shell: pwsh
-      run: |
-        $env:ver = Get-Content src/QIFLibrary/bin/Release/ver.txt
-        echo version=$env:ver >> $env:GITHUB_OUTPUT
-    - name: Test output
-      run: echo ${{ steps.vars.outputs.version }}      
+
+    - name: Test Version Output
+      run: echo ${{ steps.version_step.outputs.fullSemVer }}     
 
     - name: Create release
       if: ${{ github.event_name == 'push' }}
@@ -81,8 +97,8 @@ jobs:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         echo "Creating release"
-        echo gh release create --generate-notes v${{ steps.vars.outputs.version }} package.zip
-        gh release create -t ${{ steps.vars.outputs.version }} --generate-notes v${{ steps.vars.outputs.version }} package.zip#package
+        echo gh release create --generate-notes v${{ steps.version_step.outputs.fullSemVer }} package.zip
+        gh release create -t ${{ steps.version_step.outputs.fullSemVer }} --generate-notes v${{ steps.version_step.outputs.fullSemVer }} package.zip#package
 
     - name: Publish package
       if: ${{ github.event_name == 'push' }}
@@ -91,5 +107,7 @@ jobs:
       run: |
         echo "Adding local repo as nuget source"
         dotnet nuget add source --username tudormobile --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/tudormobile/index.json"
-        echo "Pushing package"
+        echo "Pushing package to GitHub Packages"
         dotnet nuget push "src/QIFLibrary/bin/Release/*.nupkg" --source "github" --skip-duplicate
+        echo "Pushing package to NuGet.org"
+        dotnet nuget push "src/QIFLibrary/bin/Release/*.nupkg" --source https://api.nuget.org/v3/index.json --skip-duplicate --api-key ${{ secrets.NUGET_TOKEN }}
