@@ -11,7 +11,7 @@ dotnet add package Tudormobile.QIFLibrary
 
 ## Key Features
 - Parse QIF/QFX/OFX files into document model
-- Parse QIF?QFX/OFX data streams (and strings) into QIF documents and records
+- Parse QIF/QFX/OFX data streams (and strings) into QIF documents and records
 - Asynchronous parsing for large data sets.
 
 ### Feedback
