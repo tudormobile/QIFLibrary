@@ -128,7 +128,7 @@ public static partial class OFXPropertyConverterExtensions
     /// </summary>
     /// <param name="converter">Converter to extend.</param>
     /// <param name="root">Root property.</param>
-    /// <returns>Securoty list.</returns>
+    /// <returns>Security list.</returns>
     public static SecurityList? GetSecurityList(this OFXPropertyConverter converter, OFXProperty root)
         => ((IPropertyConverter<SecurityList>)new SecurityConverter()).Convert(root);
 
