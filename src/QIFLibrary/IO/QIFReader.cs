@@ -11,6 +11,11 @@ public class QIFReader : IDisposable
     internal QIFReader(TextReader reader) { _reader = reader; }
 
     /// <summary>
+    /// Finalizes an instance of the <see cref="QIFReader"/> class.
+    /// </summary>
+    ~QIFReader() { Dispose(false); }
+
+    /// <summary>
     /// Create and initialize a new QIFReader.
     /// </summary>
     /// <param name="stream">Stream to read.</param>
@@ -71,7 +76,7 @@ public class QIFReader : IDisposable
     public void Dispose()
     {
         Dispose(true);
-        GC.SuppressFinalize(this);
+        GC.SuppressFinalize(this);  // ❌ No finalizer defined
     }
 
     /// <summary>

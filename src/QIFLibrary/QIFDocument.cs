@@ -28,9 +28,14 @@ public sealed class QIFDocument
     /// Parses data into a QIF Document.
     /// </summary>
     /// <param name="utf8Stream">QIF text to parse.</param>
-    /// <param name="leaveOpen">Leave the provided stream open [OPTONAL; Default = true].</param>
+    /// <param name="leaveOpen">Leave the provided stream open [OPTIONAL; Default = true].</param>
     /// <returns>A QIFDocument representation of the data.</returns>
-    public static QIFDocument Parse(Stream utf8Stream, bool leaveOpen = true) => Parse(new StreamReader(utf8Stream, Encoding.UTF8), leaveOpen);
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="utf8Stream"/> is null.</exception>
+    public static QIFDocument Parse(Stream utf8Stream, bool leaveOpen = true)
+    {
+        ArgumentNullException.ThrowIfNull(utf8Stream);
+        return Parse(new StreamReader(utf8Stream, Encoding.UTF8), leaveOpen);
+    }
 
     /// <summary>
     /// Parses data into a QIF Document.
@@ -44,7 +49,12 @@ public sealed class QIFDocument
     /// </summary>
     /// <param name="path">The path to the file to be parsed.</param>
     /// <returns>A QIFDocument representation of the data.</returns>
-    public static QIFDocument ParseFile(string path) => Parse(File.OpenText(path));
+    public static QIFDocument ParseFile(string path)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(path);
+        using var reader = File.OpenText(path);
+        return Parse(reader, leaveOpen: false);
+    }
 
     private static QIFDocument Parse(TextReader reader, bool leaveOpen = false)
     {

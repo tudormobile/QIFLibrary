@@ -5,6 +5,7 @@ internal class QIFRecordBuilder(QIFDocumentType dataType) : IBuilder<QIFRecord>
     private const string INVESTMENT_ACTION_BUY = "Buy";
     private const string INVESTMENT_ACTION_SELL = "Sell";
     private const string INVESTMENT_ACTION_DIV = "Div";
+    private const string ExceptionMessage = "Currently Not Implemented";
     private readonly Dictionary<Char, String> _details = [];
 
     /// <summary>
@@ -28,7 +29,10 @@ internal class QIFRecordBuilder(QIFDocumentType dataType) : IBuilder<QIFRecord>
 
     internal QIFRecordBuilder Add(string line)
     {
-        _details[line[0]] = line[1..];  // allows duplicates; last one wins.
+        if (!string.IsNullOrEmpty(line))
+        {
+            _details[line[0]] = line.Length > 1 ? line[1..] : "";
+        }
         return this;
     }
     internal QIFRecordBuilder Clear()
@@ -56,37 +60,37 @@ internal class QIFRecordBuilder(QIFDocumentType dataType) : IBuilder<QIFRecord>
             {
                 INVESTMENT_ACTION_BUY => new QIFInvestment(Date(), Amount(), Memo(), Status(), Check(), Payee(), Address(), Category(), investmentType, SecurityName(), Price(), Quantity(), Commission(), SplitAmount()),
                 INVESTMENT_ACTION_SELL => new QIFInvestment(Date(), Amount(), Memo(), Status(), Check(), Payee(), Address(), Category(), investmentType, SecurityName(), Price(), Quantity(), Commission(), SplitAmount()),
-                "BuyX" => throw new NotSupportedException(),
-                "SellX" => throw new NotSupportedException(),
-                "ShtSell" => throw new NotSupportedException(),
-                "CvrShrt" => throw new NotSupportedException(),
-                "CGLong" => throw new NotSupportedException(),
-                "CGLongX" => throw new NotSupportedException(),
-                "CGMid" => throw new NotSupportedException(),
-                "CGMidX" => throw new NotSupportedException(),
-                "CGShort" => throw new NotSupportedException(),
-                "CGShortX" => throw new NotSupportedException(),
+                "BuyX" => throw new NotSupportedException(ExceptionMessage),
+                "SellX" => throw new NotSupportedException(ExceptionMessage),
+                "ShtSell" => throw new NotSupportedException(ExceptionMessage),
+                "CvrShrt" => throw new NotSupportedException(ExceptionMessage),
+                "CGLong" => throw new NotSupportedException(ExceptionMessage),
+                "CGLongX" => throw new NotSupportedException(ExceptionMessage),
+                "CGMid" => throw new NotSupportedException(ExceptionMessage),
+                "CGMidX" => throw new NotSupportedException(ExceptionMessage),
+                "CGShort" => throw new NotSupportedException(ExceptionMessage),
+                "CGShortX" => throw new NotSupportedException(ExceptionMessage),
                 INVESTMENT_ACTION_DIV => new QIFInvestment(Date(), Amount(), Memo(), Status(), Check(), Payee(), Address(), Category(), investmentType, SecurityName(), Price(), Quantity(), Commission(), SplitAmount()),
-                "DivX" => throw new NotSupportedException(),
+                "DivX" => throw new NotSupportedException(ExceptionMessage),
                 "IntInc" => new QIFInvestment(Date(), Amount(), Memo(), Status(), Check(), Payee(), Address(), Category(), investmentType, SecurityName(), Price(), Quantity(), Commission(), SplitAmount()),
-                "IntIncX" => throw new NotSupportedException(),
-                "ReinvDiv" => throw new NotSupportedException(),
-                "ReinvInt" => throw new NotSupportedException(),
-                "ReinvLg" => throw new NotSupportedException(),
-                "ReinvMd" => throw new NotSupportedException(),
-                "ReinvSh" => throw new NotSupportedException(),
-                "Reprice" => throw new NotSupportedException(),
-                "XIn" => throw new NotSupportedException(),
-                "XOut" => throw new NotSupportedException(),
-                "MiscExp" => throw new NotSupportedException(),
-                "MiscExpX" => throw new NotSupportedException(),
-                "MiscInc" => throw new NotSupportedException(),
-                "MiscIncX" => throw new NotSupportedException(),
-                "MargInt" => throw new NotSupportedException(),
-                "MargIntX" => throw new NotSupportedException(),
-                "RtrnCap" => throw new NotSupportedException(),
-                "RtrnCapX" => throw new NotSupportedException(),
-                "StkSplit" => throw new NotSupportedException(),
+                "IntIncX" => throw new NotSupportedException(ExceptionMessage),
+                "ReinvDiv" => throw new NotSupportedException(ExceptionMessage),
+                "ReinvInt" => throw new NotSupportedException(ExceptionMessage),
+                "ReinvLg" => throw new NotSupportedException(ExceptionMessage),
+                "ReinvMd" => throw new NotSupportedException(ExceptionMessage),
+                "ReinvSh" => throw new NotSupportedException(ExceptionMessage),
+                "Reprice" => throw new NotSupportedException(ExceptionMessage),
+                "XIn" => throw new NotSupportedException(ExceptionMessage),
+                "XOut" => throw new NotSupportedException(ExceptionMessage),
+                "MiscExp" => throw new NotSupportedException(ExceptionMessage),
+                "MiscExpX" => throw new NotSupportedException(ExceptionMessage),
+                "MiscInc" => throw new NotSupportedException(ExceptionMessage),
+                "MiscIncX" => throw new NotSupportedException(ExceptionMessage),
+                "MargInt" => throw new NotSupportedException(ExceptionMessage),
+                "MargIntX" => throw new NotSupportedException(ExceptionMessage),
+                "RtrnCap" => throw new NotSupportedException(ExceptionMessage),
+                "RtrnCapX" => throw new NotSupportedException(ExceptionMessage),
+                "StkSplit" => throw new NotSupportedException(ExceptionMessage),
                 "ShrsOut" => new QIFInvestment(Date(), Amount(), Memo(), Status(), Check(), Payee(), Address(), Category(), investmentType, SecurityName(), Price(), Quantity(), Commission(), SplitAmount()),
                 "ShrsIn" => new QIFInvestment(Date(), Amount(), Memo(), Status(), Check(), Payee(), Address(), Category(), investmentType, SecurityName(), Price(), Quantity(), Commission(), SplitAmount()),
 
