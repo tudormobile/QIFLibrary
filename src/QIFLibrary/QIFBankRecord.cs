@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Tudormobile.QIFLibrary;
+﻿namespace Tudormobile.QIFLibrary;
 
 /// <summary>
 /// Represents a QIF Bank record.
@@ -37,9 +31,9 @@ public class QIFBankRecord : QIFRecord
     public bool Flagged { get; }
 
     /// <summary>
-    /// Create and initialze a new Banking record.
+    /// Creates and initializes a new Banking record.
     /// </summary>
-    /// <param name="date">Transction date.</param>
+    /// <param name="date">Transaction date.</param>
     /// <param name="amount">Amount of the transaction.</param>
     /// <param name="memo">User supplied memo.</param>
     /// <param name="status">Cleared status of the transaction.</param>

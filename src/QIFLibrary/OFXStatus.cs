@@ -1,8 +1,4 @@
-﻿using System.Reflection.PortableExecutable;
-using System.Text;
-using System.Xml.Linq;
-
-namespace Tudormobile.QIFLibrary;
+﻿namespace Tudormobile.QIFLibrary;
 
 /// <summary>
 /// OFX Message Status.
@@ -25,10 +21,10 @@ public class OFXStatus
     public StatusSeverity Severity { get; set; } = StatusSeverity.UNKNOWN;
 
     /// <summary>
-    /// Create an initialize a new instance.
+    /// Creates and initializes a new instance.
     /// </summary>
     /// <remarks>
-    /// Severity defaults to UNKNOWN, message to emty string and code to zero.
+    /// Severity defaults to UNKNOWN, message to empty string and code to zero.
     /// </remarks>
     public OFXStatus() : this(0, StatusSeverity.UNKNOWN) { }
 

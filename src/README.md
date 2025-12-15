@@ -33,7 +33,7 @@ var doc = QIFDocument.ParseFile(filename);
 
 // ....
 
-Console.WriteLine($"Document contains ${doc.Records.Count} records.");
+Console.WriteLine($"Document contains {doc.Records.Count} records.");
 ```
 
 ### QIFDocument Class
@@ -54,7 +54,7 @@ using Tudormobile.QIFLibrary;
 var reader = QIFReader.FromStream(s);       // network stream, file stream, etc.
 var record = await reader.ReadRecord();     // reads a record from the stream asynchronously
 
-// Enumerate records asynchrounsly
+// Enumerate records asynchronously
 await foreach (var record in reader.ReadRecords()) {  ... }
 
 reader.Close();
