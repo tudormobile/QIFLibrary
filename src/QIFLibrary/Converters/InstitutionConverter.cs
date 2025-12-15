@@ -1,5 +1,4 @@
 ﻿using Tudormobile.QIFLibrary.Entities;
-using Tudormobile.QIFLibrary.Interfaces;
 
 namespace Tudormobile.QIFLibrary.Converters
 {
@@ -11,12 +10,12 @@ namespace Tudormobile.QIFLibrary.Converters
         /// <summary>
         /// Key property for this entity.
         /// </summary>
-        public static string KEY = "FI";
+        public static readonly string KEY = "FI";
 
         /// <inheritdoc/>
         public override Institution? Convert(OFXProperty root)
         {
-            var p = digForProperty(root, KEY);
+            var p = DigForProperty(root, KEY);
             return p == null ? null : new Institution()
             {
                 Name = p.Children["ORG"].Value,

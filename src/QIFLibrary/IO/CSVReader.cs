@@ -126,7 +126,7 @@ public class CSVReader
             => ((CSVDocument.ICSVRecord)this)[Array.IndexOf(_fields!, fieldName)];
 
         string[] CSVDocument.ICSVRecord.Values
-            => _values ?? (_line.Contains('\"') ? parserSplit() : simpleSplit());
+            => _values ?? (_line.Contains('\"') ? ParserSplit() : SimpleSplit());
 
         bool CSVDocument.ICSVRecord.TryGetValue<T>(int index, out T value)
             => T.TryParse(((CSVDocument.ICSVRecord)this)[index], null, out value!);
@@ -134,21 +134,21 @@ public class CSVReader
         bool CSVDocument.ICSVRecord.TryGetValue<T>(string fieldName, out T value)
             => T.TryParse(((CSVDocument.ICSVRecord)this)[fieldName], null, out value!);
 
-        private string[] simpleSplit()
+        private string[] SimpleSplit()
         {
             _values = _line.Split(',');
             return _values;
         }
 
-        private string[] parserSplit()
+        private string[] ParserSplit()
         {
-            _values = parseLine().ToArray();
+            _values = [.. ParseLine()];
             return _values;
         }
 
-        private IEnumerable<string> parseLine()
+        private IEnumerable<string> ParseLine()
         {
-            StringBuilder part = new StringBuilder();
+            StringBuilder part = new();
             bool inQuote = false;
             for (int i = 0; i < _line.Length; i++)
             {
@@ -186,25 +186,25 @@ public class CSVReader
 
 internal static class CSVExtentions
 {
-    private static Char[] _trimChars = [' ', '\r', '\n'];
+    private static readonly Char[] _trimChars = [' ', '\r', '\n'];
     public static string[] CsvSplit(this string s)
     {
-        return csvSplitString(s).Select(x => x.Trim(_trimChars)).ToArray();
+        return [.. CsvSplitString(s).Select(x => x.Trim(_trimChars))];
     }
 
     public static string Quote(this string s)
     {
-        if (s.Length < 2 || s[0] != '\"' || s[s.Length - 1] != '\"') return $"\"{s}\"";
+        if (s.Length < 2 || s[0] != '\"' || s[^1] != '\"') return $"\"{s}\"";
         return s;
     }
 
     public static string UnQuote(this string s)
     {
-        if (s.Length >= 2 && s[0] == '\"' && s[s.Length - 1] == '\"') return s.Substring(1, s.Length - 2);
+        if (s.Length >= 2 && s[0] == '\"' && s[^1] == '\"') return s[1..^1];
         return s;
     }
 
-    private static IEnumerable<string> csvSplitString(string s)
+    private static IEnumerable<string> CsvSplitString(string s)
     {
         var start = 0;
         var inQuote = false;
@@ -219,7 +219,7 @@ internal static class CSVExtentions
                 }
                 else if (c == ',')
                 {
-                    yield return s.Substring(start, i - start).UnQuote();
+                    yield return s[start..i].UnQuote();
                     start = i + 1;
                 }
             }
@@ -228,6 +228,6 @@ internal static class CSVExtentions
                 if (c == '"') inQuote = false;
             }
         }
-        yield return s.Substring(start, s.Length - start).UnQuote();
+        yield return s[start..].UnQuote();
     }
 }

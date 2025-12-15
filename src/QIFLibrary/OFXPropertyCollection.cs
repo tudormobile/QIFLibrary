@@ -15,7 +15,7 @@ public class OFXPropertyCollection : List<OFXProperty>
         get
         {
             var p = this.FirstOrDefault(x => x.Name == key);
-            return p == null? new OFXProperty(key) : p;
+            return p ?? new OFXProperty(key);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Tudormobile.QIFLibrary.Entities;
-using Tudormobile.QIFLibrary.Interfaces;
 
 namespace Tudormobile.QIFLibrary.Converters;
 
@@ -28,20 +27,20 @@ public class PositionConverter : PropertyConverterBase<Position>, IPropertyConve
 
         foreach (var item in _wrapper)
         {
-            var p = digForProperty(root, item.Key);
+            var p = DigForProperty(root, item.Key);
             var securityType = p == null ? Security.SecurityTypes.UNKNOWN : item.Value;
             if (p != null)
             {
 
                 // Now dig out the investment position
-                p = digForProperty(p, "INVPOS");
+                p = DigForProperty(p, "INVPOS");
                 if (p != null)
                 {
                     // Required to have a security Id.
                     var propSecurityId = p.Children["SECID"];
                     if (propSecurityId != null)
                     {
-                        var propId = digForProperty(p, "UNIQUEID");
+                        var propId = DigForProperty(p, "UNIQUEID");
                         if (propId != null)
                         {
                             // valid postion (even if everything else is missing)
@@ -101,7 +100,7 @@ public class PositionConverter : PropertyConverterBase<Position>, IPropertyConve
     /// <returns>A new transaction list if successful; otherwise (null).</returns>
     PositionList? IPropertyConverter<PositionList>.Convert(OFXProperty root)
     {
-        var p = digForProperty(root, "INVPOSLIST");
+        var p = DigForProperty(root, "INVPOSLIST");
         if (p != null)
         {
             var result = new PositionList();

@@ -65,21 +65,21 @@ public class OFXDocument
     /// <param name="utf8Stream">OFX text to parse.</param>
     /// <param name="leaveOpen">Leave the provided stream open [OPTONAL; Default = true].</param>
     /// <returns>An OFXDocument representation of the data.</returns>
-    public static OFXDocument Parse(Stream utf8Stream, bool leaveOpen = true) => parse(new StreamReader(utf8Stream, Encoding.UTF8), leaveOpen);
+    public static OFXDocument Parse(Stream utf8Stream, bool leaveOpen = true) => Parse(new StreamReader(utf8Stream, Encoding.UTF8), leaveOpen);
 
     /// <summary>
     /// Parses data into a OFX Document.
     /// </summary>
     /// <param name="ofxData">OFX text to parse.</param>
     /// <returns>A OFXDocument representation of the data.</returns>
-    public static OFXDocument Parse(string ofxData) => parse(new StringReader(ofxData));
+    public static OFXDocument Parse(string ofxData) => Parse(new StringReader(ofxData));
 
     /// <summary>
     /// Parses data into a OFX Document.
     /// </summary>
     /// <param name="path">The path to the file to be parsed.</param>
     /// <returns>An OFXDocument representation of the data.</returns>
-    public static OFXDocument ParseFile(string path) => parse(File.OpenText(path));
+    public static OFXDocument ParseFile(string path) => Parse(File.OpenText(path));
 
     /// <summary>
     /// Save data to a file.
@@ -91,7 +91,7 @@ public class OFXDocument
         new OFXWriter(s).Write(this, indent: true);
     }
 
-    private static OFXDocument parse(TextReader reader, bool leaveOpen = false)
+    private static OFXDocument Parse(TextReader reader, bool leaveOpen = false)
     {
         try
         {
@@ -111,9 +111,9 @@ public class OFXDocument
             {
                 if (ofxReader.TryForceReadHeaders(out var headers))
                 {
-                    foreach (var header in headers!)
+                    foreach (var (Key, Value) in headers!)
                     {
-                        result.Headers.Add(header.Key, header.Value);
+                        result.Headers.Add(Key, Value);
                     }
                 }
             }

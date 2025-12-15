@@ -6,7 +6,7 @@ namespace Tudormobile.QIFLibrary;
 /// </summary>
 public class CSVDocument
 {
-    private static char[] _lineEndings = ['\r', '\n'];
+    private static readonly char[] _lineEndings = ['\r', '\n'];
     private int _recordStart = 0;
     private string[]? _data = null;
     private readonly Lazy<IList<String>> _comments;
@@ -49,7 +49,7 @@ public class CSVDocument
     public CSVDocument(string? name = null, IEnumerable<string>? comments = null)
     {
         Name = name ?? string.Empty;
-        _comments = comments == null ? new Lazy<IList<string>>(() => readComments()) : new Lazy<IList<string>>(new List<String>(comments));
+        _comments = comments == null ? new Lazy<IList<string>>(() => ReadComments()) : new Lazy<IList<string>>([.. comments]);
     }
 
     /// <summary>
@@ -88,14 +88,14 @@ public class CSVDocument
             var second = result._data[result._recordStart + 1];
             var last = result._data[^1];
 
-            if (!typesMatch(getTypes(first), getTypes(last)))
+            if (!TypesMatch(GetTypes(first), GetTypes(last)))
             {
                 // assume header
                 ((List<String>)result.Fields).AddRange(first.CsvSplit());
                 result._recordStart++;
             }
         }
-        result.Records = new List<ICSVRecord>(Enumerable.Range(result._recordStart, result._data.Length - result._recordStart).Select(x => new CSVRecord(x, result)));
+        result.Records = [.. Enumerable.Range(result._recordStart, result._data.Length - result._recordStart).Select(x => new CSVRecord(x, result))];
         return result;
     }
 
@@ -142,7 +142,7 @@ public class CSVDocument
         public string[] Values { get; }
     }
 
-    private static bool typesMatch(Type[] one, Type[] two)
+    private static bool TypesMatch(Type[] one, Type[] two)
     {
         if (one.Length != two.Length) return false;
         for (int i = 0; i < one.Length; i++)
@@ -152,7 +152,7 @@ public class CSVDocument
         return true;
     }
 
-    private static Type[] getTypes(string data)
+    private static Type[] GetTypes(string data)
     {
         // possible: DateTime, decimal, else string
         var parts = data.CsvSplit();
@@ -165,9 +165,9 @@ public class CSVDocument
         }
         return types;
     }
-    private List<String> readComments()
+    private List<String> ReadComments()
     {
-        if (_data != null) return new List<string>(_data.TakeWhile(x => !x.Contains(',')).Select(x => x.Trim('\"')));
+        if (_data != null) return [.. _data.TakeWhile(x => !x.Contains(',')).Select(x => x.Trim('\"'))];
         return [];
     }
 
@@ -182,21 +182,21 @@ public class CSVDocument
             _doc = doc;
         }
 
-        public string this[int index] => readParts()[index];
+        public string this[int index] => ReadParts()[index];
 
         public string this[string fieldName] => this[_doc.Fields.IndexOf(fieldName)];
 
-        public string[] Values => readParts();
+        public string[] Values => ReadParts();
 
-        private string[] readParts() => _parts ?? createParts();
-        private string[] createParts()
+        private string[] ReadParts() => _parts ?? CreateParts();
+        private string[] CreateParts()
         {
-            _parts = _doc._data![_index].CsvSplit().Select(x => x.UnQuote()).ToArray();
+            _parts = [.. _doc._data![_index].CsvSplit().Select(x => x.UnQuote())];
             return _parts;
         }
 
         public bool TryGetValue<T>(int index, out T value) where T : IParsable<T>
-            => T.TryParse(readParts()[index], null, out value!);
+            => T.TryParse(ReadParts()[index], null, out value!);
 
         public bool TryGetValue<T>(string fieldName, out T value) where T : IParsable<T>
             => TryGetValue(_doc.Fields.IndexOf(fieldName), out value);

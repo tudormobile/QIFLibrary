@@ -1,5 +1,4 @@
 ﻿using Tudormobile.QIFLibrary.Entities;
-using Tudormobile.QIFLibrary.Interfaces;
 namespace Tudormobile.QIFLibrary.Converters;
 
 /// <summary>
@@ -14,12 +13,12 @@ public class SecurityConverter : PropertyConverterBase<Security>, IPropertyConve
     /// <returns>A new security if successful; otherwise (null).</returns>
     public override Security? Convert(OFXProperty root)
     {
-        var p = digForProperty(root, "SECINFO");
+        var p = DigForProperty(root, "SECINFO");
         if (p != null)
         {
-            var propId = digForProperty(p, "UNIQUEID");
-            var propIdType = digForProperty(p, "UNIQUEIDTYPE");
-            Enum.TryParse<Security.SecurityIdTypes>(propIdType?.Value, out var idType);
+            var propId = DigForProperty(p, "UNIQUEID");
+            var propIdType = DigForProperty(p, "UNIQUEIDTYPE");
+            var success = Enum.TryParse<Security.SecurityIdTypes>(propIdType?.Value, out var idType);
             if (propId != null)
             {
                 return new Security(
@@ -28,7 +27,7 @@ public class SecurityConverter : PropertyConverterBase<Security>, IPropertyConve
                     p.Children["SECNAME"].Value,
                     p.Children["UNITPRICE"].AsDecimal(),
                     p.Children["DTASOF"].AsDate())
-                { SecurityIdType = idType };
+                { SecurityIdType = success ? idType : Security.SecurityIdTypes.OTHER };
             }
         }
         return null;
@@ -61,7 +60,7 @@ public class SecurityConverter : PropertyConverterBase<Security>, IPropertyConve
     /// <returns>A new security list if successful; otherwise (null).</returns>
     SecurityList? IPropertyConverter<SecurityList>.Convert(OFXProperty root)
     {
-        var p = digForProperty(root, "SECLIST");
+        var p = DigForProperty(root, "SECLIST");
         if (p != null)
         {
             var result = new SecurityList();

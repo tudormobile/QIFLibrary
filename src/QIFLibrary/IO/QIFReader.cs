@@ -3,11 +3,17 @@
 /// <summary>
 /// Reads data in Quicken Interchange Format (QIF/QFX).
 /// </summary>
-public class QIFReader
+public class QIFReader : IDisposable
 {
     private readonly TextReader _reader;
     private QIFRecordBuilder? _builder;
+    private bool _disposed;
     internal QIFReader(TextReader reader) { _reader = reader; }
+
+    /// <summary>
+    /// Finalizes an instance of the <see cref="QIFReader"/> class.
+    /// </summary>
+    ~QIFReader() { Dispose(false); }
 
     /// <summary>
     /// Create and initialize a new QIFReader.
@@ -17,7 +23,7 @@ public class QIFReader
     /// <remarks>
     /// Call Close() when finished with the reader, which will also close the provided stream.
     /// </remarks>
-    public static QIFReader FromStream(Stream stream) => new QIFReader(new StreamReader(stream));
+    public static QIFReader FromStream(Stream stream) => new(new StreamReader(stream));
 
     /// <summary>
     /// Reads a record asynchronously.
@@ -28,7 +34,7 @@ public class QIFReader
         if (_builder == null)
         {
             var headerLine = await _reader.ReadLineAsync();
-            _builder = new QIFRecordBuilder(QIFDocument.dataTypeFromHeader(headerLine));
+            _builder = new QIFRecordBuilder(QIFDocument.DataTypeFromHeader(headerLine));
         }
         _builder.Clear();
 
@@ -62,14 +68,38 @@ public class QIFReader
     /// <summary>
     /// Closes the reader and the underlying stream.
     /// </summary>
-    public void Close() => _reader.Close();
+    public void Close() => Dispose(true);
+
+    /// <summary>
+    /// Releases all resources used by the <see cref="QIFReader"/>.
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    /// Releases all resources used by the <see cref="QIFReader"/>.
+    /// </summary>
+    /// <param name="disposing">
+    /// true to release both managed and unmanaged resources; false to release only unmanaged resources.
+    /// </param>
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                _reader.Dispose();
+            }
+            _disposed = true;
+        }
+    }
 
     internal bool ReadRecord(QIFDocumentType header, out QIFRecord? record)
     {
-        if (_builder == null)
-        {
-            _builder = new QIFRecordBuilder(header);
-        }
+        _builder ??= new QIFRecordBuilder(header);
         _builder.Clear();
         string? line = _reader.ReadLine();
         do
@@ -88,5 +118,4 @@ public class QIFReader
         record = null;
         return false;
     }
-
 }

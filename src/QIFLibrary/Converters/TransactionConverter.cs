@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tudormobile.QIFLibrary.Entities;
-using Tudormobile.QIFLibrary.Interfaces;
+﻿using Tudormobile.QIFLibrary.Entities;
 
 namespace Tudormobile.QIFLibrary.Converters;
 
@@ -20,7 +14,7 @@ public class TransactionConverter : PropertyConverterBase<Transaction>, IPropert
     /// <returns>A new transaction if successful; otherwise (null).</returns>
     public override Transaction? Convert(OFXProperty root)
     {
-        var p = digForProperty(root, "STMTTRN");
+        var p = DigForProperty(root, "STMTTRN");
         if (p != null)
         {
             var propTrans = p.Children["FITID"].Value;
@@ -44,7 +38,7 @@ public class TransactionConverter : PropertyConverterBase<Transaction>, IPropert
     /// <returns>A new transaction list if successful; otherwise (null).</returns>
     TransactionList? IPropertyConverter<TransactionList>.Convert(OFXProperty root)
     {
-        var p = digForProperty(root, "BANKTRANLIST");
+        var p = DigForProperty(root, "BANKTRANLIST");
         if (p != null)
         {
             var result = new TransactionList()

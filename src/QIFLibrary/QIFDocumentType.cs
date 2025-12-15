@@ -1,7 +1,4 @@
-﻿using System.Security.Claims;
-using System.Security.Principal;
-
-namespace Tudormobile.QIFLibrary;
+﻿namespace Tudormobile.QIFLibrary;
 
 /// <summary>
 /// Data format of the QIF records.

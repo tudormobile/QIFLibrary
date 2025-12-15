@@ -72,7 +72,7 @@
         /// <summary>
         /// Unique identifier.
         /// </summary>
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         /// <summary>
         /// Type of this security identifier.
@@ -86,12 +86,12 @@
         /// <summary>
         /// Ticker symbol.
         /// </summary>
-        public string Ticker { get; set; }
+        public string Ticker { get; set; } = string.Empty;
 
         /// <summary>
         /// Name.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// Unit price.

@@ -1,7 +1,6 @@
 ﻿using Tudormobile.QIFLibrary;
 using Tudormobile.QIFLibrary.Converters;
 using Tudormobile.QIFLibrary.Entities;
-using Tudormobile.QIFLibrary.Interfaces;
 
 namespace QIFLibrary.Tests.Converters;
 

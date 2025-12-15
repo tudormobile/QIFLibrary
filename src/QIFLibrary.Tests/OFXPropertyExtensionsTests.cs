@@ -10,9 +10,10 @@ public class OFXPropertyExtensionsTests
     public void AddDateTest()
     {
         var date = new DateTime(1964, 3, 11, 1, 2, 3, DateTimeKind.Utc);
-        var target = new List<OFXProperty>();
-
-        target.Add(date, "ASOF");
+        var target = new List<OFXProperty>
+        {
+            { date, "ASOF" }
+        };
 
         Assert.AreEqual("DTASOF", target[0].Name);
         Assert.AreEqual("19640311010203", target[0].Value);

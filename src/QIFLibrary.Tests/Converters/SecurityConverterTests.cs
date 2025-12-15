@@ -1,7 +1,6 @@
 ﻿using Tudormobile.QIFLibrary;
 using Tudormobile.QIFLibrary.Converters;
 using Tudormobile.QIFLibrary.Entities;
-using Tudormobile.QIFLibrary.Interfaces;
 
 namespace QIFLibrary.Tests.Converters;
 
@@ -120,3 +119,27 @@ public class SecurityConverterTests
         Assert.AreEqual(date.ToString(), actual.Children["DTASOF"].AsDate().ToString());
     }
 }
+
+/// <inheritdoc/>
+public static partial class OFXPropertyConverterExtensions
+{
+    /// <summary>
+    /// Converts OFX property to a security list.
+    /// </summary>
+    /// <param name="converter">Converter to extend.</param>
+    /// <param name="root">Root property.</param>
+    /// <returns>Security list.</returns>
+    public static SecurityList? GetSecurityList(this OFXPropertyConverter converter, OFXProperty root)
+        => ((IPropertyConverter<SecurityList>)new SecurityConverter()).Convert(root);
+
+    /// <summary>
+    /// Converts OFX property to security.
+    /// </summary>
+    /// <param name="converter">Converter to extend.</param>
+    /// <param name="root">Root property.</param>
+    /// <returns>Security.</returns>
+    public static Security? GetSecurity(this OFXPropertyConverter converter, OFXProperty root)
+        => new SecurityConverter().Convert(root);
+
+}
+

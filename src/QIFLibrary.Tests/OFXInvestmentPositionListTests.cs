@@ -1,10 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tudormobile.QIFLibrary;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Tudormobile.QIFLibrary;
 using Tudormobile.QIFLibrary.Entities;
 
 namespace QIFLibrary.Tests

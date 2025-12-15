@@ -479,4 +479,22 @@ public class QIFRecordBuilderTests
 
         Assert.AreSame(builder, returnedBuilder);
     }
+
+    [TestMethod]
+    public void Add_NullLine_DoesNotThrow()
+    {
+        var builder = new QIFRecordBuilder(QIFDocumentType.Bank);
+        builder.Add(null!);  // Should not crash
+        var result = builder.Build();
+        Assert.IsNotNull(result);
+    }
+
+    [TestMethod]
+    public void Add_EmptyLine_DoesNotThrow()
+    {
+        var builder = new QIFRecordBuilder(QIFDocumentType.Bank);
+        builder.Add("");  // Should not crash
+        var result = builder.Build();
+        Assert.IsNotNull(result);
+    }
 }

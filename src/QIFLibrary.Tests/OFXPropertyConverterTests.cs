@@ -2,7 +2,6 @@
 using Tudormobile.QIFLibrary;
 using Tudormobile.QIFLibrary.Converters;
 using Tudormobile.QIFLibrary.Entities;
-using Tudormobile.QIFLibrary.Interfaces;
 
 namespace QIFLibrary.Tests;
 
@@ -14,7 +13,7 @@ public class OFXPropertyConverterTests
     {
         var target = new OFXPropertyConverter();
         var prop = new OFXProperty("some name");
-        Assert.ThrowsExactly<NotSupportedException>(() => target.Convert<String>(prop));   // <-- throws
+        Assert.ThrowsExactly<NotSupportedException>(() => OFXPropertyConverter.Convert<string>(prop));   // <-- throws
     }
 
     [TestMethod]
@@ -23,7 +22,7 @@ public class OFXPropertyConverterTests
         var name = "some name";
         var target = new OFXPropertyConverter();
         var prop = new OFXProperty(name);
-        var actual = target.Convert<String>(prop, new TestConverter());
+        var actual = OFXPropertyConverter.Convert(prop, new TestConverter());
         Assert.AreEqual(name, actual);
     }
 
@@ -48,7 +47,7 @@ public class OFXPropertyConverterTests
         Assert.AreEqual(name, result!.Name);
         Assert.AreEqual(id, result.Id);
 
-        result = target.Convert<Institution>(p);
+        result = OFXPropertyConverter.Convert<Institution>(p);
         Assert.AreEqual(name, result!.Name);
         Assert.AreEqual(id, result!.Id);
     }
@@ -73,7 +72,7 @@ public class OFXPropertyConverterTests
         Assert.AreEqual(name, result!.Name);
         Assert.AreEqual(id, result.Id);
 
-        result = target.Convert<Institution>(p);
+        result = OFXPropertyConverter.Convert<Institution>(p);
         Assert.AreEqual(name, result!.Name);
         Assert.AreEqual(id, result!.Id);
     }

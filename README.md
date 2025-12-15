@@ -11,7 +11,7 @@ using Tudormobile.QIFLibrary;
 
 var filename = "test.qif";
 var doc = QIFDocument.ParseFile(filename);
-Console.WriteLine($"Document contains ${doc.Records.Count} records.");
+Console.WriteLine($"Document contains {doc.Records.Count} records.");
 ```
 
 - Creates a QIF Document model from a file.

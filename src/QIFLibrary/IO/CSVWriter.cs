@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Tudormobile.QIFLibrary.IO;
+﻿namespace Tudormobile.QIFLibrary.IO;
 
 /// <summary>
 /// Provides mechanisms to write CSV data.
@@ -41,7 +35,7 @@ public class CSVWriter
     /// </summary>
     /// <param name="records">Records to write.</param>
     public void WriteRecords(IEnumerable<CSVDocument.ICSVRecord> records)
-        => writeLines(records.Select(x => toCSV(x)));
+        => WriteLines(records.Select(x => ToCSV(x)));
 
     /// <summary>
     /// Write comments to output.
@@ -51,7 +45,7 @@ public class CSVWriter
     /// Any commas that appear in the comments are replaced with a space.
     /// </remarks>
     public void WriteComments(IEnumerable<string> comments)
-        => writeLines(comments.Select(c => c.Replace(',', ' ')));
+        => WriteLines(comments.Select(c => c.Replace(',', ' ')));
 
     /// <summary>
     /// Write a record to output.
@@ -65,10 +59,10 @@ public class CSVWriter
     /// <param name="comment">Comment to write.</param>
     public void WriteComment(string comment) => WriteComments([comment]);
 
-    private static string toCSV(CSVDocument.ICSVRecord record)
-        => string.Join(",", record.Values.Select(x => sanitize(x)));
+    private static string ToCSV(CSVDocument.ICSVRecord record)
+        => string.Join(",", record.Values.Select(x => Sanitize(x)));
 
-    private void writeLines(IEnumerable<string> linesToWrite)
+    private void WriteLines(IEnumerable<string> linesToWrite)
     {
         _writer.NewLine = "\r\n";
         foreach (var line in linesToWrite)
@@ -77,7 +71,7 @@ public class CSVWriter
         }
     }
 
-    private static string sanitize(string input)
+    private static string Sanitize(string input)
     {
         if (input.Contains(',') || input.Contains('\"'))
         {

@@ -23,3 +23,7 @@ csharp_style_expression_bodied_methods = false:silent
 csharp_style_expression_bodied_constructors = false:silent
 csharp_style_expression_bodied_operators = false:silent
 
+csharp_style_prefer_primary_constructors = true:none
+dotnet_diagnostic.IDE0130.severity = none
+
+

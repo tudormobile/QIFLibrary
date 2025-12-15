@@ -8,7 +8,7 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            var doc = createRequest();
+            var doc = CreateRequest();
             //makeDoc();
             //var doc = OFXDocument.ParseFile("C:\\Users\\bill\\Downloads\\Chase6020_Activity20230101_20231231_20241104.QFX");
             var writer = new StringWriter();
@@ -17,7 +17,7 @@ namespace ConsoleApp1
             var final = writer.ToString();
         }
 
-        private static OFXDocument createRequest()
+        private static OFXDocument CreateRequest()
         {
             var ticker = "MSFT";
             var name = "Microsoft";
@@ -80,7 +80,7 @@ namespace ConsoleApp1
             return doc;
         }
 
-        private static void makeDoc()
+        private static void MakeDoc()
         {
             var doc = new OFXDocument().DefaultHeaders();
             var set = new OFXMessageSet(OFXMessageSetTypes.SIGNON, OFXMessageDirection.RESPONSE);

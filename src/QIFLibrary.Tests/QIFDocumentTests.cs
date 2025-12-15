@@ -140,4 +140,22 @@ Q107
         }
     }
 
+    [TestMethod]
+    public void Parse_NullStream_ThrowsArgumentNullException()
+    {
+        Assert.ThrowsExactly<ArgumentNullException>(() => QIFDocument.Parse((Stream)null!));
+    }
+
+    [TestMethod]
+    public void ParseFile_NullPath_ThrowsArgumentException()
+    {
+        Assert.ThrowsExactly<ArgumentNullException>(() => QIFDocument.ParseFile(null!));
+    }
+
+    [TestMethod]
+    public void ParseFile_EmptyPath_ThrowsArgumentException()
+    {
+        Assert.ThrowsExactly<ArgumentException>(() => QIFDocument.ParseFile(""));
+    }
+
 }
