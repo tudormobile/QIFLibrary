@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+/output.xml
+output/
+
 # Test Assets
 [Tt]est[Aa]ssets/
 
