@@ -12,7 +12,7 @@ public class CSVDocument
     private readonly Lazy<IList<String>> _comments;
 
     /// <summary>
-    /// HTTP COntent Type
+    /// HTTP Content Type
     /// </summary>
     public static readonly string CONTENT_TYPE = "text/csv";
 

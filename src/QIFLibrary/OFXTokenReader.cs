@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace Tudormobile.QIFLibrary;
 
 /// <summary>
-/// Provides mechnism for reading OFX data into tokens.
+/// Provides mechanism for reading OFX data into tokens.
 /// </summary>
 /// <remarks>
 /// Limitation: tokens cannot exceed 4k.
@@ -39,7 +35,7 @@ public class OFXTokenReader
     }
 
     /// <summary>
-    /// Previous the next token without consuming it.
+    /// Previews the next token without consuming it.
     /// </summary>
     /// <returns>A preview of the next token.</returns>
     public OFXToken Peek()
@@ -67,7 +63,7 @@ public class OFXTokenReader
     public Task<OFXToken> ReadAsync() => Task.FromResult(Read());
 
     /// <summary>
-    /// Reads tokens asychronously.
+    /// Reads tokens asynchronously.
     /// </summary>
     /// <returns>A task that represents the asynchronous read operation.</returns>
     public async IAsyncEnumerable<OFXToken> ReadTokensAsync()
@@ -109,17 +105,17 @@ public class OFXTokenReader
         /// <summary>
         /// Start of an OFX tag.
         /// </summary>
-        /// <remarks>This tag name, such s 'OFX', is contained in the data.</remarks>
+        /// <remarks>This tag name, such as 'OFX', is contained in the data.</remarks>
         StartTag,
 
         /// <summary>
         /// End of an OFX tag.
         /// </summary>
-        /// <remarks>This tag name, such s 'OFX', is contained in the data.</remarks>
+        /// <remarks>This tag name, such as 'OFX', is contained in the data.</remarks>
         EndTag,
 
         /// <summary>
-        /// Start of an OFX tag.
+        /// Whitespace between tokens.
         /// </summary>
         /// <remarks>This whitespace is contained in the data.</remarks>
         WhiteSpace,

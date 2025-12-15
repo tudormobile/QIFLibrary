@@ -20,7 +20,7 @@ public class QIFReader
     public static QIFReader FromStream(Stream stream) => new QIFReader(new StreamReader(stream));
 
     /// <summary>
-    /// Reads a record asychronously.
+    /// Reads a record asynchronously.
     /// </summary>
     /// <returns>A task that represents the asynchronous read operation.</returns>
     public async Task<QIFRecord> ReadRecordAsync()

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Tudormobile.QIFLibrary.Entities;
+﻿namespace Tudormobile.QIFLibrary.Entities;
 
 /// <summary>
 /// Represents a financial transaction.
@@ -56,7 +50,7 @@ public class Transaction
     /// <param name="id">Unique identifier for the transaction.</param>
     public Transaction(string? id = null)
     {
-        Id = id ?? new Guid().ToString();
+        Id = id ?? Guid.NewGuid().ToString();
     }
 
     /// <summary>

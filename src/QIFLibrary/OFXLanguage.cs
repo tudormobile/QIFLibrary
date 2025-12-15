@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Tudormobile.QIFLibrary;
+﻿namespace Tudormobile.QIFLibrary;
 
 /// <summary>
 /// OFX language codes.
@@ -31,7 +25,7 @@ public enum OFXLanguage
     /// </summary>
     SPA,
     /// <summary>
-    /// Japaneese.
+    /// Japanese.
     /// </summary>
     JPN
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Tudormobile.QIFLibrary;
+﻿namespace Tudormobile.QIFLibrary;
 
 /// <summary>
 /// Types of positions.
@@ -12,7 +6,7 @@ namespace Tudormobile.QIFLibrary;
 public enum OFXPositionTypes
 {
     /// <summary>
-    /// Unknown or unitialized type.
+    /// Unknown or uninitialized type.
     /// </summary>
     UNKNOWN = 0,
 
