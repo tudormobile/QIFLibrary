@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Tudormobile.QIFLibrary.Interfaces
+﻿namespace Tudormobile.QIFLibrary
 {
     /// <summary>
     /// Provides mechanism for converting OFX properies to entities.
@@ -35,13 +29,13 @@ namespace Tudormobile.QIFLibrary.Interfaces
         /// <param name="root">Root of the search.</param>
         /// <param name="key">Key to match.</param>
         /// <returns>Matching property if found; otherwise (null).</returns>
-        protected OFXProperty? digForProperty(OFXProperty root, string key)
+        protected OFXProperty? DigForProperty(OFXProperty root, string key)
         {
             OFXProperty? result = null;
             if (root.Name == key) return root;
             foreach (var p in root.Children)
             {
-                result = digForProperty(p, key);
+                result = DigForProperty(p, key);
                 if (result != null) return result;
             }
             return result;

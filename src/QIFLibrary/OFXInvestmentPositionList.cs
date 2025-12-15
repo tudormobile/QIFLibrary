@@ -9,21 +9,21 @@ namespace Tudormobile.QIFLibrary;
 /// </summary>
 public class OFXInvestmentPositionList : OFXProperty
 {
-    private PositionList _positions;
+    private readonly PositionList _positions;
 
     /// <summary>
     /// Create an initialize a new instance.
     /// </summary>
     /// <param name="positions">Positions in the list.</param>
-    public OFXInvestmentPositionList(PositionList positions) :base("INVPOSLIST")
+    public OFXInvestmentPositionList(PositionList positions) : base("INVPOSLIST")
     {
         _positions = positions;
     }
 
     /// <inheritdoc/>
-    public override OFXPropertyCollection Children => generateProperties();
+    public override OFXPropertyCollection Children => GenerateProperties();
 
-    private OFXPropertyCollection generateProperties()
+    private OFXPropertyCollection GenerateProperties()
     {
         var list = new OFXPropertyCollection();
         var converter = new PositionConverter();

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Tudormobile.QIFLibrary;
+﻿namespace Tudormobile.QIFLibrary;
 
 /// <summary>
 /// Base class for QIF Records.
@@ -19,7 +12,7 @@ public class QIFRecord(DateTime date, Decimal amount, String memo, String status
     /// <summary>
     /// An empty (invalid) QIF record.
     /// </summary>
-    public static QIFRecord Empty = new QIFRecord(DateTime.MinValue, 0, String.Empty, String.Empty);
+    public static readonly QIFRecord Empty = new(DateTime.MinValue, 0, String.Empty, String.Empty);
 
     /// <summary>
     /// Date of the item.

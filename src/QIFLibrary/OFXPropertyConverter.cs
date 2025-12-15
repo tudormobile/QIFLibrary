@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tudormobile.QIFLibrary.Converters;
+﻿using Tudormobile.QIFLibrary.Converters;
 using Tudormobile.QIFLibrary.Entities;
-using Tudormobile.QIFLibrary.Interfaces;
 
 namespace Tudormobile.QIFLibrary;
 
@@ -21,7 +15,7 @@ public class OFXPropertyConverter
     /// <param name="root">Root property.</param>
     /// <returns>Converted type.</returns>
     /// <exception cref="NotSupportedException">Throws if property cannot be converted to the indicated type.</exception>
-    public T? Convert<T>(OFXProperty root) where T : class
+    public static T? Convert<T>(OFXProperty root) where T : class
     {
         var runtimeType = typeof(T);
 
@@ -37,7 +31,7 @@ public class OFXPropertyConverter
     /// <param name="root">Root property.</param>
     /// <param name="converter">Converter to use.</param>
     /// <returns>Converted type.</returns>
-    public T? Convert<T>(OFXProperty root, IPropertyConverter<T> converter)
+    public static T? Convert<T>(OFXProperty root, IPropertyConverter<T> converter)
         => converter.Convert(root);
 
 }

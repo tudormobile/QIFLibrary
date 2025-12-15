@@ -1,5 +1,4 @@
 ﻿using Tudormobile.QIFLibrary.Entities;
-using Tudormobile.QIFLibrary.Interfaces;
 
 namespace Tudormobile.QIFLibrary.Converters;
 
@@ -17,8 +16,8 @@ public class InvestmentTransactionConverter : PropertyConverterBase<InvestmentTr
     {
         if (root.HasChildren())
         {
-            var secidProp = digForProperty(root, "SECID");
-            var invProp = digForProperty(root, "INVTRAN");
+            var secidProp = DigForProperty(root, "SECID");
+            var invProp = DigForProperty(root, "INVTRAN");
             if (secidProp != null)
             {
                 var secid = secidProp.Children["UNIQUEID"].Value;
@@ -47,7 +46,7 @@ public class InvestmentTransactionConverter : PropertyConverterBase<InvestmentTr
     /// <returns>A new investment transaction list if successful; otherwise (null).</returns>
     InvestmentTransactionList? IPropertyConverter<InvestmentTransactionList>.Convert(OFXProperty root)
     {
-        var p = digForProperty(root, "INVTRANLIST");
+        var p = DigForProperty(root, "INVTRANLIST");
         if (p != null)
         {
             var result = new InvestmentTransactionList()

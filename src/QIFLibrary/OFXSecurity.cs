@@ -11,7 +11,7 @@ namespace Tudormobile.QIFLibrary
         private readonly Security _security;
 
         /// <inheritdoc/>
-        public override OFXPropertyCollection Children => generateProperties();
+        public override OFXPropertyCollection Children => GenerateProperties();
 
         /// <summary>
         /// Creates and initializes a new instance.
@@ -22,7 +22,7 @@ namespace Tudormobile.QIFLibrary
             _security = security;
         }
 
-        private OFXPropertyCollection generateProperties()
+        private OFXPropertyCollection GenerateProperties()
             => [SecurityConverter.ToProperty(_security)];
 
     }

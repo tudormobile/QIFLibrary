@@ -10,10 +10,10 @@ namespace Tudormobile.QIFLibrary;
 /// </remarks>
 public class OFXTokenReader
 {
-    private TextReader _reader;
-    private byte[] _buffer = new byte[4096];
+    private readonly TextReader _reader;
+    private readonly byte[] _buffer = new byte[4096];
     private int _position = 0;
-    private static char[] _trimChars = { '<', '/', '>', ' ' };
+    private static readonly char[] _trimChars = ['<', '/', '>', ' '];
     private OFXToken? _peek;
 
     /// <summary>
@@ -40,7 +40,7 @@ public class OFXTokenReader
     /// <returns>A preview of the next token.</returns>
     public OFXToken Peek()
     {
-        _peek = _peek ?? Read();
+        _peek ??= Read();
         return _peek;
     }
 
@@ -50,7 +50,7 @@ public class OFXTokenReader
     /// <returns>The next token.</returns>
     public OFXToken Read()
     {
-        var result = _peek ?? readImpl();
+        var result = _peek ?? ReadImpl();
         if (IgnoreWhiteSpace && result.TokenType == OFXTokenType.WhiteSpace) return Read();
         _peek = null;
         return result;
@@ -127,7 +127,7 @@ public class OFXTokenReader
         Content,
     }
 
-    private OFXToken readImpl()
+    private OFXToken ReadImpl()
     {
         _position = 0;
 

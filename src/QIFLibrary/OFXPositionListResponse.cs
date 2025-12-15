@@ -52,11 +52,11 @@ public class OFXPositionListResponse : OFXMessage
         Status = status ?? new OFXStatus() { Code = 0, Severity = OFXStatus.StatusSeverity.INFO };
         Cookie = cookie;
 
-        _properties = new Lazy<List<OFXProperty>>(() => generateProperties());
+        _properties = new Lazy<List<OFXProperty>>(() => GenerateProperties());
         Name = "INVSTMTTRNRS";
     }
 
-    private List<OFXProperty> generateProperties()
+    private List<OFXProperty> GenerateProperties()
     {
         var result = new List<OFXProperty>();
         if (!string.IsNullOrEmpty(Cookie)) { result.Add(new OFXProperty("CLTCOOKIE", Cookie)); }

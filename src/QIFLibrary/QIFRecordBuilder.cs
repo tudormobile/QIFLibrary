@@ -2,6 +2,9 @@
 
 internal class QIFRecordBuilder(QIFDocumentType dataType) : IBuilder<QIFRecord>
 {
+    private const string INVESTMENT_ACTION_BUY = "Buy";
+    private const string INVESTMENT_ACTION_SELL = "Sell";
+    private const string INVESTMENT_ACTION_DIV = "Div";
     private readonly Dictionary<Char, String> _details = [];
 
     /// <summary>
@@ -16,9 +19,9 @@ internal class QIFRecordBuilder(QIFDocumentType dataType) : IBuilder<QIFRecord>
         }
         return dataType switch
         {
-            QIFDocumentType.Investment => buildInvestment(),
-            QIFDocumentType.Bank => buildBankRecord(),
-            QIFDocumentType.Category => buildCategory(),
+            QIFDocumentType.Investment => BuildInvestment(),
+            QIFDocumentType.Bank => BuildBankRecord(),
+            QIFDocumentType.Category => BuildCategory(),
             _ => new QIFRecord(Date(), Amount(), Memo(), Status())
         };
     }
@@ -34,26 +37,26 @@ internal class QIFRecordBuilder(QIFDocumentType dataType) : IBuilder<QIFRecord>
         return this;
     }
 
-    private QIFCategoryRecord buildCategory()
-        => new QIFCategoryRecord(Category(), Memo(), Budgeted());
+    private QIFCategoryRecord BuildCategory()
+        => new(Category(), Memo(), Budgeted());
 
-    private QIFBankRecord buildBankRecord()
-        => new QIFBankRecord(Date(), Amount(), Memo(), Status(),
+    private QIFBankRecord BuildBankRecord()
+        => new(Date(), Amount(), Memo(), Status(),
             Payee(),
             Category(),
             Address(),
             Check(), Flagged());
 
-    private QIFInvestment buildInvestment()
+    private QIFInvestment BuildInvestment()
     {
         if (Enum.TryParse<QIFInvestmentType>(InvestAction(), out var investmentType))
         {
             // Investment actions
             return InvestAction() switch
             {
-                "Buy" => new QIFInvestment(Date(), Amount(), Memo(), Status(), Check(), Payee(), Address(), Category(), investmentType, SecurityName(), Price(), Quantity(), Commission(), SplitAmount()),
+                INVESTMENT_ACTION_BUY => new QIFInvestment(Date(), Amount(), Memo(), Status(), Check(), Payee(), Address(), Category(), investmentType, SecurityName(), Price(), Quantity(), Commission(), SplitAmount()),
+                INVESTMENT_ACTION_SELL => new QIFInvestment(Date(), Amount(), Memo(), Status(), Check(), Payee(), Address(), Category(), investmentType, SecurityName(), Price(), Quantity(), Commission(), SplitAmount()),
                 "BuyX" => throw new NotSupportedException(),
-                "Sell" => new QIFInvestment(Date(), Amount(), Memo(), Status(), Check(), Payee(), Address(), Category(), investmentType, SecurityName(), Price(), Quantity(), Commission(), SplitAmount()),
                 "SellX" => throw new NotSupportedException(),
                 "ShtSell" => throw new NotSupportedException(),
                 "CvrShrt" => throw new NotSupportedException(),
@@ -63,7 +66,7 @@ internal class QIFRecordBuilder(QIFDocumentType dataType) : IBuilder<QIFRecord>
                 "CGMidX" => throw new NotSupportedException(),
                 "CGShort" => throw new NotSupportedException(),
                 "CGShortX" => throw new NotSupportedException(),
-                "Div" => new QIFInvestment(Date(), Amount(), Memo(), Status(), Check(), Payee(), Address(), Category(), investmentType, SecurityName(), Price(), Quantity(), Commission(), SplitAmount()),
+                INVESTMENT_ACTION_DIV => new QIFInvestment(Date(), Amount(), Memo(), Status(), Check(), Payee(), Address(), Category(), investmentType, SecurityName(), Price(), Quantity(), Commission(), SplitAmount()),
                 "DivX" => throw new NotSupportedException(),
                 "IntInc" => new QIFInvestment(Date(), Amount(), Memo(), Status(), Check(), Payee(), Address(), Category(), investmentType, SecurityName(), Price(), Quantity(), Commission(), SplitAmount()),
                 "IntIncX" => throw new NotSupportedException(),
@@ -87,7 +90,7 @@ internal class QIFRecordBuilder(QIFDocumentType dataType) : IBuilder<QIFRecord>
                 "ShrsOut" => new QIFInvestment(Date(), Amount(), Memo(), Status(), Check(), Payee(), Address(), Category(), investmentType, SecurityName(), Price(), Quantity(), Commission(), SplitAmount()),
                 "ShrsIn" => new QIFInvestment(Date(), Amount(), Memo(), Status(), Check(), Payee(), Address(), Category(), investmentType, SecurityName(), Price(), Quantity(), Commission(), SplitAmount()),
 
-                _ => throw new NotSupportedException()
+                _ => throw new NotSupportedException($"Investment action '{InvestAction()}' is not supported.")
             };
         }
         return QIFInvestment.Empty;

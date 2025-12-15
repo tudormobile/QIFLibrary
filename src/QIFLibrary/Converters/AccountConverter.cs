@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using Tudormobile.QIFLibrary.Entities;
-using Tudormobile.QIFLibrary.Interfaces;
+﻿using Tudormobile.QIFLibrary.Entities;
 
 namespace Tudormobile.QIFLibrary.Converters;
 
@@ -15,14 +8,14 @@ public class AccountConverter : PropertyConverterBase<Account>
     /// <summary>
     /// Key property for this entity.
     /// </summary>
-    public static string KEY = "INVACCTFROM|INVACCTTO|BANKACCTFROM|BANKACCTTO|CCACCTFROM|CCACCTTO";
+    public static readonly string KEY = "INVACCTFROM|INVACCTTO|BANKACCTFROM|BANKACCTTO|CCACCTFROM|CCACCTTO";
 
     /// <inheritdoc/>
     public override Account? Convert(OFXProperty root)
     {
         foreach (var key in KEY.Split('|'))
         {
-            var p = digForProperty(root, key);
+            var p = DigForProperty(root, key);
             if (p != null)
             {
                 var isBroker = key.StartsWith("INV");

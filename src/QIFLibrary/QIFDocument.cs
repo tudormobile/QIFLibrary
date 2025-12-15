@@ -30,27 +30,27 @@ public sealed class QIFDocument
     /// <param name="utf8Stream">QIF text to parse.</param>
     /// <param name="leaveOpen">Leave the provided stream open [OPTONAL; Default = true].</param>
     /// <returns>A QIFDocument representation of the data.</returns>
-    public static QIFDocument Parse(Stream utf8Stream, bool leaveOpen = true) => parse(new StreamReader(utf8Stream, Encoding.UTF8), leaveOpen);
+    public static QIFDocument Parse(Stream utf8Stream, bool leaveOpen = true) => Parse(new StreamReader(utf8Stream, Encoding.UTF8), leaveOpen);
 
     /// <summary>
     /// Parses data into a QIF Document.
     /// </summary>
     /// <param name="qifData">QIF text to parse.</param>
     /// <returns>A QIFDocument representation of the data.</returns>
-    public static QIFDocument Parse(string qifData) => parse(new StringReader(qifData));
+    public static QIFDocument Parse(string qifData) => Parse(new StringReader(qifData));
 
     /// <summary>
     /// Parses data into a QIF Document.
     /// </summary>
     /// <param name="path">The path to the file to be parsed.</param>
     /// <returns>A QIFDocument representation of the data.</returns>
-    public static QIFDocument ParseFile(string path) => parse(File.OpenText(path));
+    public static QIFDocument ParseFile(string path) => Parse(File.OpenText(path));
 
-    private static QIFDocument parse(TextReader reader, bool leaveOpen = false)
+    private static QIFDocument Parse(TextReader reader, bool leaveOpen = false)
     {
         try
         {
-            var header = dataTypeFromHeader(reader.ReadLine());
+            var header = DataTypeFromHeader(reader.ReadLine());
             var records = new List<QIFRecord>();
             var qifReader = new QIFReader(reader);
 
@@ -70,7 +70,7 @@ public sealed class QIFDocument
         }
     }
 
-    internal static QIFDocumentType dataTypeFromHeader(string? headerLine) => headerLine?.Trim() switch
+    internal static QIFDocumentType DataTypeFromHeader(string? headerLine) => headerLine?.Trim() switch
     {
         "!Type:Cash" => QIFDocumentType.Cash,
         "!Type:Bank" => QIFDocumentType.Bank,

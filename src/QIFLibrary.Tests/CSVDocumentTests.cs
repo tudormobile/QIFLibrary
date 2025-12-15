@@ -52,9 +52,8 @@ public class CSVDocumentTests
             Assert.HasCount(215, target.Records, "Data should have 7 records.");
             Assert.HasCount(11, target.Fields, "Data should have 9 fields.");
 
-            var d = target.Records[0]["Effective Date"];
-
-            var success = target.Records[0].TryGetValue<DateTime>("Effective Date", out DateTime dd);
+            var success = target.Records[0].TryGetValue<DateTime>("Effective Date", out DateTime _);
+            Assert.IsTrue(success, "Should have been able to parse date field.");
         }
     }
 

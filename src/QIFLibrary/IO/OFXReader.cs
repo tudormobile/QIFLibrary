@@ -80,9 +80,10 @@ public class OFXReader
             _ = _tokenReader.Value.Read();      // discard the above
             line = _tokenReader.Value.Peek();   // and peek the next one.
         }
+        _tokenReader.Value.IgnoreWhiteSpace = ignore;
         if (foundHeaders.Count > 0)
         {
-            headers = foundHeaders.ToArray();
+            headers = [.. foundHeaders];
             return true;
         }
         headers = default;
@@ -101,14 +102,14 @@ public class OFXReader
         if (TryMoveToStart(out var startToken))
         {
             var name = startToken!.Data;
-            messageSet = setFromName(name);
+            messageSet = SetFromName(name);
 
             while (TryReadMessage(out var message))
             {
                 messageSet.Messages.Add(message!);
             }
             // for now only
-            TryMoveToEnd(out var endToken, startToken.Data);
+            TryMoveToEnd(out var _, startToken.Data);
             // end for now only
             result = true;
         }
@@ -137,13 +138,13 @@ public class OFXReader
             };
 
             // Read the message until the matching end tag (or EOF)
-            while (!peekEOF() && !peekEndTag(startTag.Data))
+            while (!PeekEOF() && !PeekEndTag(startTag.Data))
             {
                 var tag = _tokenReader.Value.Read();
                 // collect properties
                 if (tag.TokenType == OFXTokenReader.OFXTokenType.StartTag)
                 {
-                    if (tryReadProperty(startTag.Data, tag.Data, out OFXProperty? prop))
+                    if (TryReadProperty(startTag.Data, tag.Data, out OFXProperty? prop))
                     {
                         // check for well-known properties
                         if (prop!.Name == "STATUS")
@@ -185,8 +186,8 @@ public class OFXReader
         do
         {
             token = _tokenReader.Value.Read();
-        } while (token.TokenType != OFXTokenReader.OFXTokenType.EndOfFile && !isMatch(token, OFXTokenReader.OFXTokenType.StartTag, name));
-        return isMatch(token, OFXTokenReader.OFXTokenType.StartTag, name);
+        } while (token.TokenType != OFXTokenReader.OFXTokenType.EndOfFile && !IsMatch(token, OFXTokenReader.OFXTokenType.StartTag, name));
+        return IsMatch(token, OFXTokenReader.OFXTokenType.StartTag, name);
     }
 
     /// <summary>
@@ -200,15 +201,15 @@ public class OFXReader
         do
         {
             token = _tokenReader.Value.Read();
-        } while (token.TokenType != OFXTokenReader.OFXTokenType.EndOfFile && !isMatch(token, OFXTokenReader.OFXTokenType.EndTag, name));
-        return isMatch(token, OFXTokenReader.OFXTokenType.EndTag, name);
+        } while (token.TokenType != OFXTokenReader.OFXTokenType.EndOfFile && !IsMatch(token, OFXTokenReader.OFXTokenType.EndTag, name));
+        return IsMatch(token, OFXTokenReader.OFXTokenType.EndTag, name);
     }
 
-    private bool tryReadProperty(string outerTag, string innerTag, out OFXProperty? prop)
+    private bool TryReadProperty(string outerTag, string innerTag, out OFXProperty? prop)
     {
         bool result = false;
         prop = new OFXProperty(innerTag);
-        while (!peekEOF() && !peekEndTag(outerTag))
+        while (!PeekEOF() && !PeekEndTag(outerTag))
         {
             // consume stuff
             var tag = _tokenReader.Value.Read();
@@ -223,7 +224,7 @@ public class OFXReader
             }
             else if (tag.TokenType == OFXTokenReader.OFXTokenType.StartTag)
             {
-                if (tryReadProperty(outerTag, tag.Data, out var p))
+                if (TryReadProperty(outerTag, tag.Data, out var p))
                 {
                     prop.Children.Add(p!);
                     result = true;
@@ -234,25 +235,25 @@ public class OFXReader
         return result;
     }
 
-    private bool peekEOF()
+    private bool PeekEOF()
         => _tokenReader.Value.Peek().TokenType == OFXTokenReader.OFXTokenType.EndOfFile;
 
-    private bool peekEndTag(string name)
+    private bool PeekEndTag(string name)
         => _tokenReader.Value.Peek().TokenType == OFXTokenReader.OFXTokenType.EndTag &&
            _tokenReader.Value.Peek().Data == name;
 
-    private bool isMatch(OFXTokenReader.OFXToken token, OFXTokenReader.OFXTokenType tokenType, string? name = null)
+    private static bool IsMatch(OFXTokenReader.OFXToken token, OFXTokenReader.OFXTokenType tokenType, string? name = null)
         => token.TokenType == tokenType && (string.IsNullOrEmpty(name) || token.Data == name);
 
-    private OFXMessageSet setFromName(string name)
+    private static OFXMessageSet SetFromName(string name)
     {
         var index = name.IndexOf("MSGSR");
         int v = 0;
-        var valid = index > 0 && name.Length == index + 8 && int.TryParse(name.Substring(name.Length - 1), out v);
+        var valid = index > 0 && name.Length == index + 8 && int.TryParse(name[^1..], out v);
         if (valid)
         {
-            var t = Enum.TryParse(typeof(OFXMessageSetTypes), name.Substring(0, index), out var foundType) ? (OFXMessageSetTypes)foundType : OFXMessageSetTypes.UNKNOWN;
-            var d = name[name.Length - 3] switch
+            var t = Enum.TryParse(typeof(OFXMessageSetTypes), name[..index], out var foundType) ? (OFXMessageSetTypes)foundType : OFXMessageSetTypes.UNKNOWN;
+            var d = name[^3] switch
             {
                 'Q' => OFXMessageDirection.REQUEST,
                 'S' => OFXMessageDirection.RESPONSE,
