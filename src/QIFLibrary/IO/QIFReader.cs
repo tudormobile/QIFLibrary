@@ -1,7 +1,7 @@
 ﻿namespace Tudormobile.QIFLibrary.IO;
 
 /// <summary>
-/// Reads data in Quicken Interchange Format (QIF).
+/// Reads data in Quicken Interchange Format (QIF/QFX).
 /// </summary>
 public class QIFReader
 {

@@ -4,7 +4,7 @@ using Tudormobile.QIFLibrary.IO;
 namespace Tudormobile.QIFLibrary;
 
 /// <summary>
-/// Provides mechanism for reading and writing data in Quicken Interchange Format (QIF).
+/// Provides mechanism for reading and writing data in Quicken Interchange Format (QIF/QFX).
 /// </summary>
 public sealed class QIFDocument
 {
