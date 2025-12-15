@@ -76,7 +76,7 @@ public class QIFReader : IDisposable
     public void Dispose()
     {
         Dispose(true);
-        GC.SuppressFinalize(this);  // ❌ No finalizer defined
+        GC.SuppressFinalize(this);
     }
 
     /// <summary>
